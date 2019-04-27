@@ -76,6 +76,56 @@
 #define GPIO_PWM_OP						   (0x0300A000)
 #endif
 
+/*********** OrangePi RK3399 *************/
+#ifdef CONFIG_ORANGEPI_RK3399
+
+#define GPIO1_BASE 							0xff730000
+#define GPIO2_BASE 							0xff780000
+#define GPIO4_BASE 							0xff790000
+#define GPIO_NUM                          	(0x40)
+#define GPIO_BIT(x)                        	(1UL << (x))
+#define GPIO_SWPORTA_DR_OFFSET 				0x00
+#define GPIO_SWPORTA_DDR_OFFSET 			0x04
+
+#define PMUGRF_BASE 	     0xff320000	 
+#define PMUGRF_GPIO1A_IOMUX  0x00010
+#define PMUGRF_GPIO1B_IOMUX  0x00014
+#define PMUGRF_GPIO1C_IOMUX  0x00018
+#define PMUGRF_GPIO1D_IOMUX  0x0001c
+
+#define GRF_BASE 					0xff77e000
+#define GRF_GPIO2A_IOMUX_OFFSET 			0x00
+#define GRF_GPIO2B_IOMUX_OFFSET 			0x04
+#define GRF_GPIO2C_IOMUX_OFFSET 			0x08
+#define GRF_GPIO2D_IOMUX_OFFSET 			0x0c
+
+#define GRF_GPIO4A_IOMUX_OFFSET 			0x20
+#define GRF_GPIO4B_IOMUX_OFFSET 			0x24
+#define GRF_GPIO4C_IOMUX_OFFSET 			0x28
+#define GRF_GPIO4D_IOMUX_OFFSET 			0x2c
+
+
+#define CRU_BASE 					0xff760000
+#define PMUCRU_BASE 	0xff750000
+#define CRU_CLKGATE_CON31_OFFSET 			0x037c    //bit 3 4 5
+#define PMUCRU_CLKGATE_CON1_OFFSET 			0x0104
+
+#define MEM_INFO                           (2048)
+#define MAP_SIZE_L                         (4*1024)
+
+extern volatile unsigned int *gpio2_base;
+extern volatile unsigned int *grf_base;
+extern volatile unsigned int *cru_base;
+extern volatile unsigned int *pmucru_base;
+extern volatile unsigned int *pmugrf_base;
+extern volatile unsigned int *gpio1_base;
+extern volatile unsigned int *gpio4_base;
+
+#endif /* CONFIG_ORANGEPI_RK3399 */
+//csy 2019.1.8
+
+
+
 /****************** Global data *********************/
 /* Current version */
 #define PI_MAKER_ORANGEPI  4
@@ -158,5 +208,8 @@ extern int ORANGEPI_PIN_MASK[12][32];
 extern int ORANGEPI_PIN_MASK[9][32];
 #elif CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_H3_ZEROPLUS2
 extern int ORANGEPI_PIN_MASK[12][32];
+#elif CONFIG_ORANGEPI_RK3399
+extern int ORANGEPI_PIN_MASK[5][32];
+
 #endif
 #endif
