@@ -2384,6 +2384,7 @@ int wiringPiSetup (void)
 	if ((int32_t)(unsigned long)OrangePi_gpioC == -1)
 		return wiringPiFailure(WPI_ALMOST, 
 				"wiringPiSetup: mmap (GPIO) failed: %s\n", strerror(errno));
+#endif
 #else /* CONFIG_ORANGEPI_RK3399  */
 		gpio2_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, GPIO2_BASE);
 		if ((int32_t)(unsigned long)gpio2_base == -1)
@@ -2416,7 +2417,6 @@ int wiringPiSetup (void)
 		
 
 
-#endif
 #endif  /* CONFIG_ORANGEPI_RK3399  */
 #endif
 
