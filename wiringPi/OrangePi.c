@@ -1511,11 +1511,11 @@ int OrangePi_digitalRead(int pin)
 #elif CONFIG_ORANGEPI_RK3399
 	unsigned int phyaddr;
 	if(bank == 1)
-		phyaddr = GPIO1_BASE + GPIO_SWPORTA_DR_OFFSET;			
+		phyaddr = GPIO1_BASE + GPIO_EXT_PORTA_OFFSET;			
 	else if(bank == 2)
-		phyaddr = GPIO2_BASE + GPIO_SWPORTA_DR_OFFSET;			
+		phyaddr = GPIO2_BASE + GPIO_EXT_PORTA_OFFSET;			
 	else if(bank == 4)
-		phyaddr = GPIO4_BASE + GPIO_SWPORTA_DR_OFFSET;			
+		phyaddr = GPIO4_BASE + GPIO_EXT_PORTA_OFFSET;			
 	else;
 
 #endif

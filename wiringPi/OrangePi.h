@@ -86,6 +86,7 @@
 #define GPIO_BIT(x)                        	(1UL << (x))
 #define GPIO_SWPORTA_DR_OFFSET 				0x00
 #define GPIO_SWPORTA_DDR_OFFSET 			0x04
+#define GPIO_EXT_PORTA_OFFSET				0x50
 
 #define PMUGRF_BASE 	     0xff320000	 
 #define PMUGRF_GPIO1A_IOMUX  0x00010
