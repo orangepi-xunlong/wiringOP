@@ -1574,6 +1574,9 @@ int isOrangePi(void)
 	/* Non-support */
 	char *OrangePi_string = "none";
 #endif
+	//printf("OrangePi String is %s\n", OrangePi_string);
+
+	return 1;
 
 	if ((cpuFd = fopen("/proc/cpuinfo", "r")) == NULL)
 		piGpioLayoutOops ("Unable to open /proc/cpuinfo") ;

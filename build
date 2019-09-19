@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 # build
 #	Simple wiringPi build and install script
@@ -41,6 +41,37 @@ check_make_ok() {
     echo ""
     exit 1
   fi
+}
+
+select_boards()
+{
+    local cnt=0
+    local choice
+    local call=${1}
+
+    boards=("OrangePi_PC2" "OrangePi_A64" "OrangePi_ZERO" "OrangePi_H3" "OrangePi_LITE2" "OrangePi_H3_ZEROPLUS2" "OrangePi_3")
+
+    printf "All available boards:\n"
+    for var in ${boards[@]} ; do
+        printf "%4d. %s\n" $cnt ${boards[$cnt]}
+        ((cnt+=1))
+    done
+
+    while true ; do
+        read -p "Choice: " choice
+        if [ -z "${choice}" ] ; then
+            continue
+        fi
+
+        if [ -z "${choice//[0-9]/}" ] ; then
+            if [ $choice -ge 0 -a $choice -lt $cnt ] ; then
+                export PLATFORM="${boards[$choice]}"
+		echo $PLATFORM
+                break
+            fi
+        fi
+        printf "Invalid input ...\n"
+    done
 }
 
 sudo=${WIRINGPI_SUDO-sudo}
@@ -102,6 +133,8 @@ if [ x$1 != "x" ]; then
   echo "Usage: $0 [clean | uninstall]"
   exit 1
 fi
+
+  select_boards
 
   echo "wiringPi Build script"
   echo "====================="
