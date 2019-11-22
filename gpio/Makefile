@@ -103,6 +103,11 @@ EXTRA_CFLAGS = -DCONFIG_ORANGEPI_RK3399
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
 
+ifeq ($(PLATFORM), OrangePi_4)
+EXTRA_CFLAGS = -DCONFIG_ORANGEPI_4
+EXTRA_CFLAGS += -DCONFIG_ORANGEPI
+endif
+
 # May not need to  alter anything below this line
 ###############################################################################
 
@@ -145,6 +150,10 @@ ifeq ($(PLATFORM), OrangePi_H3_ZEROPLUS2)
 endif
 
 ifeq ($(PLATFORM), OrangePi_RK3399)
+  SRC += OrangePi.c
+endif
+
+ifeq ($(PLATFORM), OrangePi_4)
   SRC += OrangePi.c
 endif
 

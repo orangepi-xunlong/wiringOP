@@ -77,7 +77,7 @@
 #endif
 
 /*********** OrangePi RK3399 *************/
-#ifdef CONFIG_ORANGEPI_RK3399
+#if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4
 
 #define GPIO1_BASE 							0xff730000
 #define GPIO2_BASE 							0xff780000

@@ -775,7 +775,7 @@ int piGpioLayout (void)
       break ;
 
 	
-#ifdef CONFIG_ORANGEPI_RK3399
+#if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4
   strcpy(line, "Hardware		 : Rockchip rk3399 Family");	
 #endif
 
@@ -793,7 +793,7 @@ int piGpioLayout (void)
 
   fclose (cpuFd) ;
 
-#ifdef CONFIG_ORANGEPI_RK3399
+#if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4
 	  strcpy(line, "Revision  : 0000");
 #endif
 
@@ -959,7 +959,7 @@ void piBoardId (int *model, int *rev, int *mem, int *maker, int *warranty)
       break ;
 
   fclose (cpuFd) ;
-#ifdef CONFIG_ORANGEPI_RK3399
+#if (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4)
 	strcpy(line, "Revision	: 0000");
 #endif
 
@@ -2360,7 +2360,7 @@ int wiringPiSetup (void)
 		return wiringPiFailure(WPI_ALMOST, 
 				"wiringPiSetup: mmap (GPIO) failed: %s\n", strerror(errno));
 #else
-#ifndef CONFIG_ORANGEPI_RK3399
+#if ! (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4)
 	/* GPIO */
 #ifdef CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_3
     gpio = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_BASE);
