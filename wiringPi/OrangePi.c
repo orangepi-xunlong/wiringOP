@@ -1378,8 +1378,8 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 #elif (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4)
 			writeR(0xffff0180, cru_phyaddr);
 			regval = readR(grf_phyaddr);
-			regval |= 0xffff << 16;
-			regval &= ~(0x3) << (offset << 1);
+			regval |= 0x3 << ((offset << 1) | 0x10);
+			regval &= ~(0x3 << (offset << 1));
 			writeR(regval, grf_phyaddr);
 			regval = readR(gpio_phyaddr);
 			regval &= ~(1 << index);
@@ -1403,8 +1403,8 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 #elif (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4)
 			writeR(0xffff0180, cru_phyaddr);
 			regval = readR(grf_phyaddr);
-			regval |= 0xffff << 16;
-			regval &= ~(0x3) << (offset << 1);
+			regval |= 0x3 << ((offset << 1) | 0x10);
+			regval &= ~(0x3 << (offset << 1));
 			writeR(regval, grf_phyaddr);
 			regval = readR(gpio_phyaddr);
 			regval |= 1 << index;
