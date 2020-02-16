@@ -30,8 +30,8 @@ ifneq ($V,1)
 Q ?= @
 endif
 
-#DEBUG	= -g -O0
-DEBUG	= -O2
+DEBUG	= -g -O0
+#DEBUG	= -O2
 CC	= gcc
 INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
 CFLAGS	= $(DEBUG) -Wall -Wextra $(INCLUDE) -Winline -pipe
@@ -108,6 +108,10 @@ EXTRA_CFLAGS = -DCONFIG_ORANGEPI_4
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
 
+ifeq ($(PLATFORM), OrangePi_4B)
+EXTRA_CFLAGS = -DCONFIG_ORANGEPI_4B
+EXTRA_CFLAGS += -DCONFIG_ORANGEPI
+endif
 # May not need to  alter anything below this line
 ###############################################################################
 
@@ -154,6 +158,10 @@ ifeq ($(PLATFORM), OrangePi_RK3399)
 endif
 
 ifeq ($(PLATFORM), OrangePi_4)
+  SRC += OrangePi.c
+endif
+
+ifeq ($(PLATFORM), OrangePi_4B)
   SRC += OrangePi.c
 endif
 

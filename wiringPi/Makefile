@@ -34,8 +34,8 @@ endif
 STATIC=libwiringPi.a
 DYNAMIC=libwiringPi.so.$(VERSION)
 
-#DEBUG	= -g -O0
-DEBUG	= -O2
+DEBUG	= -g -O0
+#DEBUG	= -O2
 CC	= gcc
 INCLUDE	= -I.
 DEFS	= -D_GNU_SOURCE
@@ -112,6 +112,10 @@ EXTRA_CFLAGS = -DCONFIG_ORANGEPI_4
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
 
+ifeq ($(PLATFORM), OrangePi_4B)
+EXTRA_CFLAGS = -DCONFIG_ORANGEPI_4B
+EXTRA_CFLAGS += -DCONFIG_ORANGEPI
+endif
 ###############################################################################
 
 SRC	=	wiringPi.c						\
@@ -174,6 +178,10 @@ SRC += OrangePi.c
 endif
 
 ifeq ($(PLATFORM), OrangePi_4)
+SRC += OrangePi.c
+endif
+
+ifeq ($(PLATFORM), OrangePi_4B)
 SRC += OrangePi.c
 endif
 

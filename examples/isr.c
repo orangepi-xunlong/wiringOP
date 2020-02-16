@@ -50,14 +50,14 @@ static volatile int globalCounter [8] ;
  *********************************************************************************
  */
 
-void myInterrupt0 (void) { ++globalCounter [0] ; }
-void myInterrupt1 (void) { ++globalCounter [1] ; }
-void myInterrupt2 (void) { ++globalCounter [2] ; }
-void myInterrupt3 (void) { ++globalCounter [3] ; }
-void myInterrupt4 (void) { ++globalCounter [4] ; }
-void myInterrupt5 (void) { ++globalCounter [5] ; }
-void myInterrupt6 (void) { ++globalCounter [6] ; }
-void myInterrupt7 (void) { ++globalCounter [7] ; }
+void myInterrupt0 (void) { ++globalCounter [0] ; delay(100);if(digitalRead(0)==LOW){ printf ("key 1 press\n");fflush (stdout) ;}}
+void myInterrupt1 (void) { ++globalCounter [1] ; delay(100);if(digitalRead(1)==LOW){ printf ("key 2 press\n");fflush (stdout) ;}}
+void myInterrupt2 (void) { ++globalCounter [2] ; delay(100);if(digitalRead(2)==LOW){ printf ("key 3 press\n");fflush (stdout) ;}}
+void myInterrupt3 (void) { ++globalCounter [3] ; delay(100);if(digitalRead(3)==LOW){ printf ("key 4 press\n");fflush (stdout) ;}}
+void myInterrupt4 (void) { ++globalCounter [4] ; delay(100);if(digitalRead(4)==LOW){ printf ("key 5 press\n");fflush (stdout) ;}}
+void myInterrupt5 (void) { ++globalCounter [5] ; delay(100);if(digitalRead(5)==LOW){ printf ("key 6 press\n");fflush (stdout) ;}}
+void myInterrupt6 (void) { ++globalCounter [6] ; delay(100);if(digitalRead(6)==LOW){ printf ("key 7 press\n");fflush (stdout) ;}}
+void myInterrupt7 (void) { ++globalCounter [7] ; delay(100);if(digitalRead(7)==LOW){ printf ("key 8 press\n");fflush (stdout) ;}}
 
 
 /*
@@ -68,7 +68,7 @@ void myInterrupt7 (void) { ++globalCounter [7] ; }
 
 int main (void)
 {
-  int gotOne, pin ;
+  int gotOne, pin ,ret;
   int myCounter [8] ;
 
   for (pin = 0 ; pin < 8 ; ++pin) 
@@ -82,28 +82,18 @@ int main (void)
   wiringPiISR (3, INT_EDGE_FALLING, &myInterrupt3) ;
   wiringPiISR (4, INT_EDGE_FALLING, &myInterrupt4) ;
   wiringPiISR (5, INT_EDGE_FALLING, &myInterrupt5) ;
-  wiringPiISR (6, INT_EDGE_FALLING, &myInterrupt6) ;
-  wiringPiISR (7, INT_EDGE_FALLING, &myInterrupt7) ;
+
+  // wiringPiISR (6, INT_EDGE_FALLING, &myInterrupt6) ;
+  // wiringPiISR (7, INT_EDGE_FALLING, &myInterrupt7) ;
+    
+    printf ("Waiting ... \n") ; 
+    fflush (stdout) ;
 
   for (;;)
   {
     gotOne = 0 ;
-    printf ("Waiting ... ") ; fflush (stdout) ;
 
-    for (;;)
-    {
-      for (pin = 0 ; pin < 8 ; ++pin)
-      {
-	if (globalCounter [pin] != myCounter [pin])
-	{
-	  printf (" Int on pin %d: Counter: %5d\n", pin, globalCounter [pin]) ;
-	  myCounter [pin] = globalCounter [pin] ;
-	  ++gotOne ;
-	}
-      }
-      if (gotOne != 0)
-	break ;
-    }
+    sleep(1);
   }
 
   return 0 ;

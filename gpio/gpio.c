@@ -429,7 +429,7 @@ static void doI2Cdetect (UNU int argc, char *argv [])
  *********************************************************************************
  */
 
-static void doSerialTest (UNU int argc, char *argv [])
+static int doSerialTest (UNU int argc, char *argv [])
 {
 	int fd ;
 	int count ;

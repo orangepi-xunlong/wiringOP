@@ -710,7 +710,98 @@ char *physNames[64] =
 };
 #endif
 
+#ifdef CONFIG_ORANGEPI_4B
+int pinToGpioOrangePi [64] =
+{
+	150,  33,      // 0, 1
+	50, 35,      // 2, 3
+	92, 54,      // 4  5
+	55,  56,      // 6, 7
+	149,  -1,      // 8, 9
+	-1,  -1,      //10,11
+	
+	-1,  -1,      //12,13
+	
+	-1,  -1,      //14,15
+	-1, -1,      //16,17
+	-1,  -1,      //18,19
+	-1,  -1,      //20,21
+	-1,  -1,      //22,23
+	-1,  -1,      //24,25
 
+	
+	-1,  -1,      //26,27
+	
+	-1,  -1,    //28,29
+	-1,   -1,    //30,31
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,// ... 63
+};
+
+int physToWpi[64] =
+{
+	-1,		// 0
+	-1, -1,	// 1, 2
+	-1, -1,  //3, 4
+	-1, -1,  //5, 6
+	0, -1,  //7, 8
+	-1, -1, //9,10
+	1, 2, //11,12
+	3, -1, //13,14
+	4, 5, //15,16
+	-1, 6, //17,18
+	-1, -1, //19,20
+	-1, 7, //21,22
+	-1, -1, //23, 24
+	-1,  8,	// 25, 26
+
+	-1,  -1,   //27, 28
+	-1,  -1,	//29, 30
+	-1,  -1,	//31, 32
+	-1, -1, //33, 34
+	-1, -1, //35, 36
+	-1, -1, //37, 38
+	-1, -1, //39, 40
+	// Padding:
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	// ... 56
+	-1, -1, -1, -1, -1, -1, -1,	// ... 63
+};
+
+char *physNames[64] =
+{
+  NULL,
+  "    3.3v", "5v      ",
+  "I2C2_SDA", "5V      ",
+  "I2C2_SCL", "0v      ",
+  "GPIO4_C6", "I2C3_SCL",
+  "      0v", "I2C3_SDA",
+  "GPIO1_A1", "GPIO1_C2",
+  "GPIO1_A3", "0v      ",
+  "GPIO2_D4", "GPIO1_C6",
+  "      0v", "GPIO1_C7",
+  "UART4_TX", "0v      ",
+  "UART4_RX", "GPIO1_D0",
+  "SPI1_CLK", "SPI1_CS ",
+  "      0v", "GPIO4_C5",
+  "I2C2_SDA", "I2C2_SCL",
+  " I2S0_RX", "0v      ",
+  " I2S0_TX", "I2S_CLK ",
+  "I2S0_SCK", "0v      ",
+  "I2S0_SI0", "I2S0_SO0",
+  "I2S0_SI1", "I2S0_SI2",
+  "      0v", "I2S0_SI3",
+       NULL, NULL,
+       NULL, NULL,
+       NULL, NULL,
+       NULL, NULL,
+       NULL, NULL,
+  	   NULL, NULL,
+       NULL, NULL,
+       NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
+};
+#endif
 
 
 /*
@@ -737,14 +828,15 @@ void OrangePiReadAll(void)
 	printf (" +------+-----+----------+------+---+OrangePi RK3399---+---+------+---------+-----+--+\n");
 #elif CONFIG_ORANGEPI_4
 	printf (" +------+-----+----------+------+---+OrangePi 4---+---+------+---------+-----+--+\n");
-
+#elif CONFIG_ORANGEPI_4B
+	printf (" +------+-----+----------+------+---+OrangePi 4B---+---+------+---------+-----+--+\n");
 #endif
     printf (" | GPIO | wPi |   Name   | Mode | V | Physical | V | Mode | Name     | wPi | GPIO |\n");
     printf (" +------+-----+----------+------+---+----++----+---+------+----------+-----+------+\n");
 
-#if defined CONFIG_ORANGEPI_H3 || defined CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4
+#if defined CONFIG_ORANGEPI_H3 || defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_4B
     for (pin = 1 ; pin <= 42 ; pin += 2)
-#else CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_H3_ZEROPLUS2 || CONFIG_ORANGEPI_3
+#elif CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_H3_ZEROPLUS2 || CONFIG_ORANGEPI_3
 	for (pin = 1 ; pin <= 26 ; pin += 2)
 #endif
         readallPhys(pin);
@@ -767,7 +859,8 @@ void OrangePiReadAll(void)
 	printf (" +------+-----+----------+------+---+OrangePi RK3399---+---+------+---------+-----+--+\n");
 #elif CONFIG_ORANGEPI_4
 	printf (" +------+-----+----------+------+---+OrangePi 4---+---+------+---------+-----+--+\n");
-
+#elif CONFIG_ORANGEPI_4B
+	printf (" +------+-----+----------+------+---+OrangePi 4B---+---+------+---------+-----+--+\n");
 
 #endif
     wiringPiDebug = tmp;

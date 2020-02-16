@@ -329,8 +329,14 @@ int wiringPiTryGpioMem  = FALSE ;
 // sysFds:
 //	Map a file descriptor from the /sys/class/gpio/gpioX/value
 
-static int sysFds [64] =
+static int sysFds [160] =
 {
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -775,7 +781,7 @@ int piGpioLayout (void)
       break ;
 
 	
-#if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4
+#if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_4B
   strcpy(line, "Hardware		 : Rockchip rk3399 Family");	
 #endif
 
@@ -793,7 +799,7 @@ int piGpioLayout (void)
 
   fclose (cpuFd) ;
 
-#if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4
+#if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_4B
 	  strcpy(line, "Revision  : 0000");
 #endif
 
@@ -959,7 +965,7 @@ void piBoardId (int *model, int *rev, int *mem, int *maker, int *warranty)
       break ;
 
   fclose (cpuFd) ;
-#if (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4)
+#if (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_4B)
 	strcpy(line, "Revision	: 0000");
 #endif
 
@@ -2030,7 +2036,9 @@ int wiringPiISR (int pin, int mode, void (*function)(void))
     else
       modeS = "both" ;
 
-    sprintf (pinS, "%d", bcmGpioPin) ;
+    
+    //gpio edge 命令行接受参数为wpi编码
+    sprintf (pinS, "%d", pin) ;
 
     if ((pid = fork ()) < 0)	// Fail
       return wiringPiFailure (WPI_FATAL, "wiringPiISR: fork failed: %s\n", strerror (errno)) ;
@@ -2060,7 +2068,7 @@ int wiringPiISR (int pin, int mode, void (*function)(void))
   if (sysFds [bcmGpioPin] == -1)
   {
     sprintf (fName, "/sys/class/gpio/gpio%d/value", bcmGpioPin) ;
-    if ((sysFds [bcmGpioPin] = open (fName, O_RDWR)) < 0)
+    if ((sysFds [bcmGpioPin] = open (fName, O_RDONLY)) < 0)
       return wiringPiFailure (WPI_FATAL, "wiringPiISR: unable to open %s: %s\n", fName, strerror (errno)) ;
   }
 
@@ -2360,7 +2368,7 @@ int wiringPiSetup (void)
 		return wiringPiFailure(WPI_ALMOST, 
 				"wiringPiSetup: mmap (GPIO) failed: %s\n", strerror(errno));
 #else
-#if ! (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4)
+#if ! (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_4B)
 	/* GPIO */
 #ifdef CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_3
     gpio = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_BASE);
