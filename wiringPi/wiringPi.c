@@ -2362,7 +2362,7 @@ int wiringPiSetup (void)
 #else
 #if ! (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4)
 	/* GPIO */
-#ifdef CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_3
+#if (CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_3)
     gpio = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_BASE);
 #else
 	gpio = (uint32_t *)mmap(0, BLOCK_SIZE * 10, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_BASE);

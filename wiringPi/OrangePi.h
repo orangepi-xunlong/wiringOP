@@ -53,7 +53,7 @@
 #endif
 
 /************** OrangePi H3 ***********************/
-#if CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_H3_ZEROPLUS2
+#if CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_H3_ZEROPLUS2 || CONFIG_ORANGEPI_ZERO
 #define GPIOA_BASE                         (0x01C20000)
 #define GPIO_NUM                           (0x40)
 #define GPIO_BASE_MAP                      (0x01C20800)

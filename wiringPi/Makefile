@@ -39,7 +39,7 @@ DEBUG	= -O2
 CC	= gcc
 INCLUDE	= -I.
 DEFS	= -D_GNU_SOURCE
-CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC
+CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wextra -Winline $(INCLUDE) -pipe -fPIC
 #CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Wconversion -Winline $(INCLUDE) -pipe -fPIC
 
 LIBS    = -lm -lpthread -lrt -lcrypt

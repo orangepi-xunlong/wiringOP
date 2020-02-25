@@ -44,7 +44,6 @@ static void myAnalogWrite (struct wiringPiNodeStruct *node, UNU int pin, int val
   write (node->fd, b, 2) ;
 }
 
-
 /*
  * myAnalogRead:
  *********************************************************************************

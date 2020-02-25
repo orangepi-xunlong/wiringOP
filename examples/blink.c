@@ -7,16 +7,16 @@ int main (void)
 
   wiringPiSetup () ;
 
-  for (i=0; i<28; i++)
+  for (i=0; i<17; i++)
   	pinMode (i, OUTPUT) ;
 
   for (;;)
   {
-    for (i=0; i<28; i++)
+    for (i=0; i<17; i++)
     	digitalWrite (i, HIGH) ;	// On
     delay (500) ;		// mS
 
-    for (i=0; i<28; i++)
+    for (i=0; i<17; i++)
         digitalWrite (i, LOW) ;	// Off
     delay (500) ;
   }

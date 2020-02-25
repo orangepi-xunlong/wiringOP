@@ -445,12 +445,12 @@ static void doSerialTest (UNU int argc, char *argv [])
 
 	if ((fd = serialOpen (port, 115200)) < 0)	{
 		fprintf (stderr, "Unable to open serial device: %s\n", strerror (errno)) ;
-		return 1 ;
+		return;
 	}
 
 	if (wiringPiSetup () == -1)	{
 		fprintf (stdout, "Unable to start wiringPi: %s\n", strerror (errno)) ;
-		return 1 ;
+		return;
 	}
 
 	nextTime = millis () + 300 ;
@@ -473,7 +473,7 @@ static void doSerialTest (UNU int argc, char *argv [])
 	}
 
 	printf ("\n") ;
-	return 0 ;
+	return;
 }
 
 
@@ -1401,7 +1401,6 @@ static void doPwmClock (int argc, char *argv [])
 
 static void doVersion (char *argv [])
 {
-  int model, rev, mem, maker, warranty ;
   struct stat statBuf ;
   char name [80] ;
   FILE *fd ;

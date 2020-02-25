@@ -181,7 +181,7 @@ void readallPhys (int physPin)
     else
       pin = physToWpi [physPin] ;
 
-   printf (" | %4s", alts [getAlt (pin)]) ;
+   printf (" | %4s", alts [getAlt(pin)]) ;
     printf (" | %d", digitalRead (pin)) ;
   }
 
