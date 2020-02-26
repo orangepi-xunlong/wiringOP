@@ -7,27 +7,28 @@
 #ifdef CONFIG_ORANGEPI_PC2
 int physToWpi[64] =
 {
-    -1,        // 0
-    -1,  -1,   // 1, 2
-    8,   -1,   // 3, 4
-    9,   -1,   // 5, 6
-    7,   15,   // 7, 8
-    -1,  16,   // 9, 10
-    0,    1,   //11, 12
-    2,   -1,   //13, 14
-    3,    4,   //15, 16
-    -1,   5,   //17, 18
-    12,  -1,   //19, 20
-    13,   6,   //21, 22
-    14,  10,   //23, 24
-    -1,  11,   //25, 26
-    30,  31,   //27, 28
-    21,  -1,   //29, 30
-    22,  26,   //31, 32
-    23,  -1,   //33, 34
-    24,  27,   //35, 36
-    25,  28,   //37, 38
-    -1,  29,   //39, 40
+  -1,       // 0
+  -1, -1,   // 1, 2
+   0, -1,  //3, 4
+   1, -1,  //5, 6
+   2,  3,  //7, 8
+  -1,  4, //9,10
+   5,  6, //11,12
+   7, -1, //13,14
+   8,  9, //15,16
+  -1, 10, //17,18
+  11, -1, //19,20
+  12, 13, //21,22
+  14, 15, //23, 24
+  -1, 16,  // 25, 26
+  17, 18,   //27, 28
+  19,  -1,  //29, 30
+  20, 21,  //31, 32
+  22, -1, //33, 34
+  23, 24, //35, 36
+  25, 26, //37, 38
+  -1, 27, //39, 40
+
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
     -1, -1, -1, -1, -1, -1, -1, -1 // 56-> 63
 };
@@ -38,24 +39,24 @@ char *physNames[64] =
 
  "    3.3v", "5v      ",
  "   SDA.0", "5V      ",
- "   SCL.0", "0v      ",
- "  GPIO.7", "TxD3    ",
- "      0v", "RxD3    ",
- "    RxD2", "GPIO.1  ",
- "    TxD2", "0v      ",
- "    CTS2", "GPIO.4  ",
- "    3.3v", "GPIO.5  ",
- "    MOSI", "0v      ",
- "    MISO", "RTS2    ",
- "    SCLK", "CE0     ",
- "      0v", "GPIO.11 ",
+ "   SCL.0", "GND     ",
+ "    PWM1", "PC05    ",
+ "     GND", "PC06    ",
+ "   RxD.2", "PD14    ",
+ "   TxD.2", "GND     ",
+ "   CTS.2", "PC04    ",
+ "    3.3v", "PC07    ",
+ "  MOSI.1", "GND     ",
+ "  MISO.1", "RTS.2   ",
+ "  SCLK.1", "CS.1    ",
+ "     GND", "PA21    ",
  "   SDA.1", "SCL.1   ",
- " GPIO.21", "0v      ",
- " GPIO.22", "RTS1    ",
- " GPIO.23", "0v      ",
- " GPIO.24", "CTS1    ",
- " GPIO.25", "TxD1    ",
- "      0v", "RxD1    ",
+ "    PA07", "GND     ",
+ "    PA08", "RTS.1   ",
+ "    PA09", "GND     ",
+ "    PA10", "CTS.1   ",
+ "    PD11", "TxD.1   ",
+ "     GND", "RxD.1   ",
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
@@ -740,11 +741,11 @@ void OrangePiReadAll(void)
     printf (" | GPIO | wPi |   Name   | Mode | V | Physical | V | Mode | Name     | wPi | GPIO |\n");
     printf (" +------+-----+----------+------+---+----++----+---+------+----------+-----+------+\n");
 
-#if defined CONFIG_ORANGEPI_H3 || defined CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4
-    for (pin = 1 ; pin <= 42 ; pin += 2)
+#if defined CONFIG_ORANGEPI_H3 || defined CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_PRIME
+    for (pin = 1 ; pin <= 40; pin += 2)
 
-#elif CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_H3_ZEROPLUS2 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZERO
-	for (pin = 1 ; pin <= 26 ; pin += 2)
+#elif CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_H3_ZEROPLUS2 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_H5_ZEROPLUS2 || CONFIG_ORANGEPI_R1
+	for (pin = 1 ; pin <= 26; pin += 2)
 #endif
         readallPhys(pin);
 

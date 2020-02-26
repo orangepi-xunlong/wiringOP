@@ -39,6 +39,7 @@
 #define GPIOL_BASE                         (0x01F02c00)
 #define GPIOL_BASE_MAP                     (0x01F02000)  
 #define MAP_SIZE_L                         (4096 * 2)
+#define GPIO_PWM_OP			   (0x01C21000)
 #endif
 
 /************** OrangePi A64 ***********************/
@@ -50,6 +51,7 @@
 #define GPIOL_BASE                         (0x01F02c00)
 #define GPIOL_BASE_MAP                     (0x01F02000)  
 #define MAP_SIZE_L                         (4096 * 2)
+#define GPIO_PWM_OP			   (0x01C21000)
 #endif
 
 /************** OrangePi H3 ***********************/
@@ -61,7 +63,7 @@
 #define GPIOL_BASE                         (0x01F02c00)
 #define GPIOL_BASE_MAP                     (0x01F02000)  
 #define MAP_SIZE_L                         (4096 * 2)
-#define GPIO_PWM_OP						   (0x01C21000)
+#define GPIO_PWM_OP			   (0x01C21000)
 #endif
 
 /*********** OrangePi LITE2/OnePlus/PC3 *************/
