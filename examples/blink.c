@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <wiringPi.h>
 
-//#define NUM 17
-#define NUM 28
+#define NUM 17
+//#define NUM 28
 
 int main (void)
 {

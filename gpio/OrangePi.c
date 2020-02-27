@@ -37,26 +37,26 @@ char *physNames[64] =
 {
     NULL,
 
- "    3.3v", "5v      ",
- "   SDA.0", "5v      ",
+ "    3.3V", "5V      ",
+ "   SDA.0", "5V      ",
  "   SCL.0", "GND     ",
- "    PWM1", "PC05    ",
+ "   PWM.1", "PC05    ",
  "     GND", "PC06    ",
- "   RxD.2", "PD14    ",
- "   TxD.2", "GND     ",
+ "   RXD.2", "PD14    ",
+ "   TXD.2", "GND     ",
  "   CTS.2", "PC04    ",
- "    3.3v", "PC07    ",
+ "    3.3V", "PC07    ",
  "  MOSI.1", "GND     ",
  "  MISO.1", "RTS.2   ",
- "  SCLK.1", "CS.1    ",
+ "  SCLK.1", "CE.1    ",
  "     GND", "PA21    ",
  "   SDA.1", "SCL.1   ",
  "    PA07", "GND     ",
  "    PA08", "RTS.1   ",
  "    PA09", "GND     ",
  "    PA10", "CTS.1   ",
- "    PD11", "TxD.1   ",
- "     GND", "RxD.1   ",
+ "    PD11", "TXD.1   ",
+ "     GND", "RXD.1   ",
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
@@ -101,18 +101,18 @@ char *physNames[64] =
 {
     NULL,
 
- "    3.3v", "5v      ",
- "   SDA.0", "5v      ",
+ "    3.3V", "5V      ",
+ "   SDA.0", "5V      ",
  "   SCL.0", "GND     ",
- "    PWM1", "PC05    ",
+ "   PWM.1", "PC05    ",
  "     GND", "PC06    ",
- "   RxD.2", "PD14    ",
- "   TxD.2", "GND     ",
+ "   RXD.2", "PD14    ",
+ "   TXD.2", "GND     ",
  "   CTS.2", "PC04    ",
- "    3.3v", "PC07    ",
+ "    3.3V", "PC07    ",
  "  MOSI.1", "GND     ",
  "  MISO.1", "RTS.2   ",
- "  SCLK.1", "CS.1    ",
+ "  SCLK.1", "CE.1    ",
  "     GND", "PC08    ",
  "   SDA.1", "SCL.1   ",
  "    PA07", "GND     ",
@@ -168,18 +168,18 @@ char *physNames[64] =
 {
       NULL,
 
-  "    3.3v", "5v      ",
-  "   SDA.0", "5v      ",
+  "    3.3V", "5V      ",
+  "   SDA.0", "5V      ",
   "   SCL.0", "GND     ",
-  "     PA6", "TxD.1   ",
-  "     GND", "RxD.1   ",
+  "     PA6", "TXD.1   ",
+  "     GND", "RXD.1   ",
   "   RXD.2", "PA07    ",
   "   TXD.2", "GND     ",
   "   CTS.2", "SDA.1   ",
-  "    3.3v", "SCL.1   ",
+  "    3.3V", "SCL.1   ",
   "  MOSI.1", "GND     ",
   "  MISO.1", "RTS.2   ",
-  "  SCLK.1", "CS.1    ",
+  "  SCLK.1", "CE.1    ",
   "     GND", "PA10    ",
 
        NULL, NULL,
@@ -208,26 +208,26 @@ char *physNames[64] =
 {
     NULL,
 
- "    3.3v", "5v      ",
+ "    3.3V", "5V      ",
  "   SDA.0", "5V      ",
- "   SCL.0", "0v      ",
- "  GPIO.7", "TxD2    ",
- "      0v", "RxD2    ",
- "    RxD1", "GPIO.1  ",
- "    TxD1", "0v      ",
- "    CTS1", "GPIO.4  ",
- "    3.3v", "GPIO.5  ",
- " SPI2_DI", "0v      ",
- "SPI2_DIO", "RTS1    ",
- "SPI2_CLK", "SPI2_CS0",
- "      0v", "SPI2_CS1",
+ "   SCL.0", "GND     ",
+ "  GPIO.7", "TXD.2   ",
+ "     GND", "RXD.2   ",
+ "   RXD.1", "GPIO.1  ",
+ "   TXD.1", "GND     ",
+ "   CTS.1", "GPIO.4  ",
+ "    3.3V", "GPIO.5  ",
+ "   SDI.2", "GND     ",
+ "  SDIO.2", "RTS1    ",
+ "  SCLK.2", "CE.0    ",
+ "     GND", "CE.1    ",
  "   SDA.1", "SCL.1   ",
- " GPIO.21", "0v      ",
- " GPIO.22", "RTS2    ",
- " GPIO.23", "0v      ",
- " GPIO.24", "CTS2    ",
+ " GPIO.21", "GND     ",
+ " GPIO.22", "RTS.2   ",
+ " GPIO.23", "GND     ",
+ " GPIO.24", "CTS.2   ",
  " GPIO.25", "SCL.2   ",
- "      0v", "SDA.2   ",
+ "     GND", "SDA.2   ",
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
@@ -271,26 +271,26 @@ char *physNames [64] =
 {
   NULL,
 
- "    3.3v", "5v      ",
+ "    3.3V", "5V      ",
  "   SDA.1", "5V      ",
- "   SCL.1", "0v      ",
+ "   SCL.1", "GND     ",
  "  GPIO.7", "S_TX    ",
- "      0v", "S_RX    ",
- "    RxD3", "GPIO.1  ",
- "    TxD3", "0v      ",
+ "     GND", "S_RX    ",
+ "    RXD3", "GPIO.1  ",
+ "    TXD3", "GND     ",
  "    CTS3", "GPIO.4  ",
- "    3.3v", "GPIO.5  ",
- "    MOSI", "0v      ",
+ "    3.3V", "GPIO.5  ",
+ "    MOSI", "GND     ",
  "    MISO", "RTS3    ",
  "    SCLK", "CE0     ",
- "      0v", "GPIO.11 ",
+ "     GND", "GPIO.11 ",
  "   SDA.2", "SCL.2   ",
- " GPIO.21", "0v      ",
+ " GPIO.21", "GND     ",
  " GPIO.22", "RTS2    ",
- " GPIO.23", "0v      ",
+ " GPIO.23", "GND     ",
  " GPIO.24", "CTS2    ",
- " GPIO.25", "TxD2    ",
- "      0v", "RxD2    ",
+ " GPIO.25", "TXD2    ",
+ "     GND", "RXD2    ",
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
@@ -365,38 +365,38 @@ char *physNames[64] =
 {
   NULL,
 
- "    3.3v", "5v      ",
+ "    3.3V", "5V      ",
  "   SDA.0", "5V      ",
- "   SCL.0", "0v      ",
- "     PA6", "TxD3    ",
- "      0v", "RxD3    ",
- "    RxD2", "PD14    ",
- "    TxD2", "0v      ",
- "    CTS2", "PC04    ",
- "    3.3v", "PC07    ",
- "    MOSI", "0v      ",
- "    MISO", "RTS2    ",
- "    SCLK", "CE0     ",
- "      0v", "PA21    ",
+ "   SCL.0", "GND     ",
+ "     PA6", "TXD.3   ",
+ "     GND", "RXD.3   ",
+ "   RXD.2", "PD14    ",
+ "   TXD.2", "GND     ",
+ "   CTS.2", "PC04    ",
+ "    3.3V", "PC07    ",
+ "  MOSI.0", "GND     ",
+ "  MISO.0", "RTS.2   ",
+ "  SCLK.0", "CE.0    ",
+ "     GND", "PA21    ",
  "   SDA.1", "SCL.1   ",
- "    PA07", "0v      ",
- "    PA08", "RTS1    ",
- "    PA09", "0v      ",
- "    PA10", "CTS1    ",
- "    PA20", "TxD1    ",
- "      0v", "RxD1    ",
+ "    PA07", "GND     ",
+ "    PA08", "RTS.1   ",
+ "    PA09", "GND     ",
+ "    PA10", "CTS.1   ",
+ "    PA20", "TXD.1   ",
+ "     GND", "RXD.1   ",
  "    PA04", "PA05    ",
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
-  	   NULL, NULL,
+       NULL, NULL,
        NULL, NULL,
    NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
 };
 #endif
 
-#ifdef CONFIG_ORANGEPI_H3_ZEROPLUS2
+#if CONFIG_ORANGEPI_ZEROPLUS2_H3 || CONFIG_ORANGEPI_ZEROPLUS2_H5
 int physToWpi [64] = //return wiringPI pin
 {
   -1,       // 0
@@ -432,19 +432,19 @@ char *physNames[64] =
 {
       NULL,
 
-  "    3.3v", "5v      ",
-  "   SDA.0", "5v      ",
-  "   SCL.0", "0v      ",
-  "     PA6", "TxD2    ",
-  "      0v", "RxD2    ",
-  "   S-TWI", "PD11    ",
-  "   S-SDA", "0v      ",
-  "    CTS2", "SDA.1   ",
-  "    3.3v", "SCL.1   ",
-  "  MOSI.1", "0v      ",
-  "  MISO.1", "RTS2    ",
-  "  SCLK.1", "CS.1    ",
-  "      0v", "PD14    ",
+  "    3.3V", "5V      ",
+  "   SDA.0", "5V      ",
+  "   SCL.0", "GND     ",
+  "     PA6", "TXD.2   ",
+  "     GND", "RXD.2   ",
+  "   S-SCL", "PD11    ",
+  "   S-SDA", "GND     ",
+  "   CTS.2", "SDA.1   ",
+  "    3.3V", "SCL.1   ",
+  "  MOSI.1", "GND     ",
+  "  MISO.1", "RTS.2   ",
+  "  SCLK.1", "CE.1    ",
+  "     GND", "PD14    ",
 
        NULL, NULL,
        NULL, NULL,
@@ -465,7 +465,7 @@ char *physNames[64] =
        NULL, NULL,
        NULL,
 };
-#endif
+#endif /* ZERO_PLUS2 */
 
 
 #ifdef CONFIG_ORANGEPI_ZERO
@@ -502,15 +502,15 @@ char *physNames[64] =
 {
       NULL,
 
- "    3.3v", "5v      ",
+ "    3.3V", "5V      ",
  "   SDA.0", "5V      ",
- "   SCL.0", "0v      ",
+ "   SCL.0", "GND     ",
  "   PWM.1", "TXD.1   ",
- "     GND", "RxD.1   ",
- "   RxD.2", "PA07    ",
- "   TxD.2", "GND     ",
+ "     GND", "RXD.1   ",
+ "   RXD.2", "PA07    ",
+ "   TXD.2", "GND     ",
  "   CTS.2", "SDA.1   ",
- "    3.3v", "SCK.1   ",
+ "    3.3V", "SCK.1   ",
  "  MOSI.1", "GND     ",
  "  MISO.1", "RTS.2   ",
  "  SCLK.1", "CS.1    ",
@@ -565,19 +565,19 @@ char *physNames [64] =
 {
   	   NULL,
 
- "    3.3v", "5v      ",
+ "    3.3V", "5V      ",
  "   SDA.1", "5V      ",
- "   SCL.1", "0v      ",
+ "   SCL.1", "GND     ",
  "    PWM1", "PD21    ",
- "      0v", "PD22    ",
- "    RxD3", "PC09    ",
- "    TxD3", "0v      ",
+ "     GND", "PD22    ",
+ "    RXD3", "PC09    ",
+ "    TXD3", "GND     ",
  "    CTS3", "PC08    ",
- "    3.3v", "PC07    ",
- "  MOSI.0", "0v      ",
+ "    3.3V", "PC07    ",
+ "  MOSI.0", "GND     ",
  "  MISO.0", "RTS3    ",
  "  SCLK.0", "CE.0    ",
- "      0v", "PH03    ",
+ "     GND", "PH03    ",
 
 	   NULL, NULL,
        NULL, NULL,
@@ -628,19 +628,19 @@ char *physNames [64] =
 {
   	   NULL,
 
- "    3.3v", "5v      ",
+ "    3.3V", "5V      ",
  "   SDA.0", "5V      ",
- "   SCL.0", "0v      ",
+ "   SCL.0", "GND     ",
  "    PWM0", "PL02    ",
- "      0v", "PL03    ",
- "    RxD3", "PD18    ",
- "    TxD3", "0v      ",
+ "     GND", "PL03    ",
+ "    RXD3", "PD18    ",
+ "    TXD3", "GND     ",
  "    PL10", "PD15    ",
- "    3.3v", "PD16    ",
- "  MOSI.1", "0v      ",
+ "    3.3V", "PD16    ",
+ "  MOSI.1", "GND     ",
  "  MISO.1", "PD21    ",
  "  SCLK.1", "CE.1    ",
- "      0v", "PL08    ",
+ "     GND", "PL08    ",
 
 	   NULL, NULL,
        NULL, NULL,
@@ -721,26 +721,26 @@ int physToWpi[64] =
 char *physNames[64] =
 {
   NULL,
-  "    3.3v", "5v      ",
+  "    3.3V", "5V      ",
   "   SDA.0", "5V      ",
-  "   SCL.0", "0v      ",
+  "   SCL.0", "GND     ",
   "   GPIO4", "Tx      ",
-  "      0v", "Rx      ",
+  "     GND", "Rx      ",
   "  GPIO17", "GPIO18  ",
-  "  GPIO27", "0v      ",
+  "  GPIO27", "GND     ",
   "  GPIO22", "GPIO23  ",
-  "    3.3v", "GPIO24  ",
-  "    MOSI", "0v      ",
+  "    3.3V", "GPIO24  ",
+  "    MOSI", "GND     ",
   "    MISO", "GPIO25  ",
   "    SCLK", "CS0     ",
-  "      0v", "CS1     ",
+  "     GND", "CS1     ",
   "    DNP1", "DNP2    ",
-  "   GPIO5", "0v      ",
+  "   GPIO5", "GND     ",
   "   GPIO6", "GPIO12  ",
-  "  GPIO13", "0v      ",
+  "  GPIO13", "GND     ",
   "  GPIO19", "GPIO16  ",
   "  GPIO26", "GPIO20  ",
-  "      0v", "GPIO21  ",
+  "     GND", "GPIO21  ",
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
@@ -813,26 +813,26 @@ int physToWpi[64] =
 char *physNames[64] =
 {
   NULL,
-  "    3.3v", "5v      ",
+  "    3.3V", "5V      ",
   "I2C2_SDA", "5V      ",
-  "I2C2_SCL", "0v      ",
+  "I2C2_SCL", "GND     ",
   "    PWM1", "I2C3_SCL",
-  "      0v", "I2C3_SDA",
+  "     GND", "I2C3_SDA",
   "GPIO1_A1", "GPIO1_C2",
-  "GPIO1_A3", "0v      ",
+  "GPIO1_A3", "GND     ",
   "GPIO2_D4", "GPIO1_C6",
-  "    3.3v", "GPIO1_C7",
-  "SPI1_TXD", "0v      ",
+  "    3.3V", "GPIO1_C7",
+  "SPI1_TXD", "GND     ",
   "SPI1_RXD", "GPIO1_D0",
   "SPI1_CLK", "SPI1_CS ",
-  "      0v", "GPIO4_C5",
+  "     GND", "GPIO4_C5",
   "I2C2_SDA", "I2C2_SCL",
-  " I2S0_RX", "0v      ",
+  " I2S0_RX", "GND     ",
   " I2S0_TX", "I2S_CLK ",
-  "I2S0_SCK", "0v      ",
+  "I2S0_SCK", "GND     ",
   "I2S0_SI0", "I2S0_SO0",
   "I2S0_SI1", "I2S0_SI2",
-  "      0v", "I2S0_SI3",
+  "     GND", "I2S0_SI3",
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
@@ -861,10 +861,14 @@ void OrangePiReadAll(void)
     printf (" +------+-----+----------+------+---+   PRIME  +---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_ZEROPLUS
     printf (" +------+-----+----------+------+---+ ZEROPLUS +---+------+----------+-----+------+\n");
+#elif CONFIG_ORANGEPI_ZEROPLUS2_H5
+    printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_2G_IOT
     printf (" +-----+-----+----------+------+---+OrangePi 2G-IOT+---+---+------+---------+-----+--+\n");
-#elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_H3_ZEROPLUS2 
+#elif CONFIG_ORANGEPI_H3
     printf (" +------+-----+----------+------+---+OrangePiH3+---+------+----------+-----+------+\n");
+#elif CONFIG_ORANGEPI_ZEROPLUS2_H3
+    printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_ZERO
     printf (" +------+-----+----------+------+---+OrangePi Zero+---+---+------+---------+-----+--+\n");
 #elif CONFIG_ORANGEPI_A64
@@ -880,10 +884,10 @@ void OrangePiReadAll(void)
     printf (" | GPIO | wPi |   Name   | Mode | V | Physical | V | Mode | Name     | wPi | GPIO |\n");
     printf (" +------+-----+----------+------+---+----++----+---+------+----------+-----+------+\n");
 
-#if defined CONFIG_ORANGEPI_H3 || defined CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_PRIME
+#if defined CONFIG_ORANGEPI_H3 || defined CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_PRIME || CONFIG_ORANGEPI_A64
     for (pin = 1 ; pin <= 40; pin += 2)
 
-#elif CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_H3_ZEROPLUS2 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_H5_ZEROPLUS2 || CONFIG_ORANGEPI_R1
+#elif CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_ZEROPLUS2_H3 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_R1 || CONFIG_ORANGEPI_ZEROPLUS2_H5
 	for (pin = 1 ; pin <= 26; pin += 2)
 #endif
         readallPhys(pin);
@@ -896,10 +900,14 @@ void OrangePiReadAll(void)
     printf (" +------+-----+----------+------+---+   PRIME  +---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_ZEROPLUS
     printf (" +------+-----+----------+------+---+ ZEROPLUS +---+------+----------+-----+------+\n");
+#elif CONFIG_ORANGEPI_ZEROPLUS2_H5
+    printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_2G_IOT
     printf (" +------+-----+----------+------+---+OrangePi 2G-IOT+---+------+----------+-----+-----+\n");
-#elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_H3_ZEROPLUS2
+#elif CONFIG_ORANGEPI_H3
     printf (" +------+-----+----------+------+---+OrangePiH3+---+------+----------+-----+------+\n");
+#elif CONFIG_ORANGEPI_ZEROPLUS2_H3
+    printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_ZERO
     printf (" +------+-----+----------+------+---+OrangePi Zero+---+------+----------+-----+-----+\n");
 #elif CONFIG_ORANGEPI_A64
@@ -910,7 +918,6 @@ void OrangePiReadAll(void)
 	printf (" +------+-----+----------+------+---+OrangePi RK3399---+---+------+---------+-----+--+\n");
 #elif CONFIG_ORANGEPI_4
 	printf (" +------+-----+----------+------+---+OrangePi 4---+---+------+---------+-----+--+\n");
-
 
 #endif
     wiringPiDebug = tmp;

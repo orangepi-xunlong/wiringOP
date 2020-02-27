@@ -40,7 +40,7 @@
 //	Variables as they need to be passed as pointers later on
 
 static const char       *spiDev0  = "/dev/spidev0.0" ;
-static const char       *spiDev1  = "/dev/spidev0.1" ;
+static const char       *spiDev1  = "/dev/spidev1.0" ;
 static const uint8_t     spiBPW   = 8 ;
 static const uint16_t    spiDelay = 0 ;
 

@@ -2377,7 +2377,7 @@ int wiringPiSetup (void)
 		return wiringPiFailure (WPI_ALMOST, "wiringPiSetup: mmap (PWM) failed: %s\n", strerror (errno)) ;
 
 	
-#if CONFIG_ORANGEPI_A64 || CONFIG_ORANGEPI_H3_ZEROPLUS2 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_H5_ZEROPLUS2
+#if CONFIG_ORANGEPI_A64 || CONFIG_ORANGEPI_ZEROPLUS2_H3 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZEROPLUS2_H5
 	/* GPIOC connect CPU with Modem */
 	OrangePi_gpioC = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, 
 			MAP_SHARED, fd, GPIOL_BASE_MAP);

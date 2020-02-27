@@ -599,7 +599,7 @@ int ORANGEPI_PIN_MASK[9][32] =  //[BANK]  [INDEX]
 };
 #endif
 
-#ifdef CONFIG_ORANGEPI_H3_ZEROPLUS2
+#if CONFIG_ORANGEPI_ZEROPLUS2_H3 || CONFIG_ORANGEPI_ZEROPLUS2_H5
 int pinToGpioOrangePi [64] =
 {
   12, 11, 6, 0, 1, 352, 107, 353, 3,    // From the Original Wiki - GPIO 0 through 7:   wpi  0 -  7
@@ -611,8 +611,6 @@ int pinToGpioOrangePi [64] =
   -1, -1, -1, -1, -1,           // B+                       wpi 21, 22, 23, 24, 25
   -1, -1,           //                       wpi 26, 27
   -1, -1,					//PA4, PA5(PWM0)		    wpi 28, 29
-
-   -1, -1,               // B+                       wpi 30, 31
 
 // Padding:
 
@@ -1185,11 +1183,11 @@ const char *piModelNames[6] =
     "Compute Module",
 #ifdef CONFIG_ORANGEPI_2G_IOT
 	"OrangePi 2G-IOT",
-#elif CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_H5_ZEROPLUS2 || CONFIG_ORANGEPI_PRIME
+#elif CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_ZEROPLUS2_H5 || CONFIG_ORANGEPI_PRIME
 	"OrangePi H5 family",
 #elif CONFIG_ORANGEPI_A64
 	"OrangePi Win/Winplus",
-#elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_H3_ZEROPLUS2
+#elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_ZEROPLUS2_H3
 	"OrangePi H3 family",
 #elif CONFIG_ORANGEPI_ZERO
 	"OrangePi H2+ family",
@@ -1854,13 +1852,13 @@ int isOrangePi(void)
 #ifdef CONFIG_ORANGEPI_2G_IOT
 	/* Support: OrangePi 2G-IOT and OrangePi i96 */
 	char *OrangePi_string = "rda8810";
-#elif CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_H5_ZEROPLUS2 || CONFIG_ORANGEPI_PRIME
+#elif CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_ZEROPLUS2_H5 || CONFIG_ORANGEPI_PRIME
 	/* Support: OrangePi PC2 */
 	char *OrangePi_string = "sun50iw2";
 #elif CONFIG_ORANGEPI_A64
 	/* Support: OrangePi Win/Win plus */
 	char *OrangePi_string = "sun50iw1";
-#elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_H3_ZEROPLUS2
+#elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_ZEROPLUS2_H3
 	/* Support: OrangePi Win/Win plus */
 	char *OrangePi_string = "sun8i";
 #elif CONFIG_ORANGEPI_ZERO

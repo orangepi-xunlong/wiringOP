@@ -13,8 +13,8 @@
 #include <string.h>
 #include "w25q64.h"
 
-#define SPI_CHANNEL 0 // /dev/spidev0.0
-//#define SPI_CHANNEL 1 // /dev/spidev0.1
+//#define SPI_CHANNEL 0 // /dev/spidev0.0
+#define SPI_CHANNEL 1 // /dev/spidev0.1
 
 //
 // 書込みデータのダンプリスト
