@@ -30,7 +30,7 @@
 
 #endif /* CONFIG_ORANGEPI_2G_IOT */
 
-#ifdef CONFIG_ORANGEPI_PC2
+#if CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_H5_ZEROPLUS2 || CONFIG_ORANGEPI_PRIME
 /************** OrangePi H5 ***********************/
 #define GPIOA_BASE                         (0x01C20000)
 #define GPIO_NUM                           (0x40)
@@ -75,7 +75,7 @@
 #define GPIOL_BASE                         (0x07022000)
 #define GPIOL_BASE_MAP                     (0x07022000)  
 #define MAP_SIZE_L                         (4096 * 1)
-#define GPIO_PWM_OP						   (0x0300A000)
+#define GPIO_PWM_OP			   (0x0300A000)
 #endif
 
 /*********** OrangePi RK3399 *************/
@@ -203,13 +203,13 @@ extern const char *piModelNames[6];
 
 #ifdef CONFIG_ORANGEPI_2G_IOT
 extern int ORANGEPI_PIN_MASK[4][32];
-#elif CONFIG_ORANGEPI_PC2
+#elif CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_PRIME
 extern int ORANGEPI_PIN_MASK[9][32];
 #elif CONFIG_ORANGEPI_A64
 extern int ORANGEPI_PIN_MASK[12][32];
 #elif CONFIG_ORANGEPI_H3
 extern int ORANGEPI_PIN_MASK[9][32];
-#elif CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_H3_ZEROPLUS2
+#elif CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_H3_ZEROPLUS2 || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_H5_ZEROPLUS2
 extern int ORANGEPI_PIN_MASK[12][32];
 #elif CONFIG_ORANGEPI_RK3399
 extern int ORANGEPI_PIN_MASK[5][32];

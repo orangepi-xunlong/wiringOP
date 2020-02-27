@@ -1,22 +1,24 @@
 #include <stdio.h>
 #include <wiringPi.h>
 
+#define NUM 17
+
 int main (void)
 {
   int i = 0;
 
   wiringPiSetup () ;
 
-  for (i=0; i<28; i++)
+  for (i = 0; i < NUM; i++)
   	pinMode (i, OUTPUT) ;
 
-  for (;;)
+  for ( ;; )
   {
-    for (i=0; i<28; i++)
+    for (i = 0; i < NUM; i++)
     	digitalWrite (i, HIGH) ;	// On
     delay (500) ;		// mS
 
-    for (i=0; i<28; i++)
+    for (i = 0; i < NUM; i++)
         digitalWrite (i, LOW) ;	// Off
     delay (500) ;
   }

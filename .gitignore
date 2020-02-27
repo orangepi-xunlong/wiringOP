@@ -6,3 +6,4 @@ debian-template/wiringPi
 debian-template/wiringpi-*.deb
 gpio/gpio
 examples/speed
+examples/blink
