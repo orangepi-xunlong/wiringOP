@@ -38,7 +38,7 @@ char *physNames[64] =
     NULL,
 
  "    3.3v", "5v      ",
- "   SDA.0", "5V      ",
+ "   SDA.0", "5v      ",
  "   SCL.0", "GND     ",
  "    PWM1", "PC05    ",
  "     GND", "PC06    ",
@@ -721,7 +721,7 @@ void OrangePiReadAll(void)
 	int tmp = wiringPiDebug;
     wiringPiDebug = FALSE;
 #ifdef CONFIG_ORANGEPI_PC2
-    printf (" +------+-----+----------+------+---+OrangePi PC2+---+---+------+---------+-----+--+\n");
+    printf (" +------+-----+----------+------+---+  OPi PC2 +---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_2G_IOT
     printf (" +-----+-----+----------+------+---+OrangePi 2G-IOT+---+---+------+---------+-----+--+\n");
 #elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_H3_ZEROPLUS2 
@@ -752,7 +752,7 @@ void OrangePiReadAll(void)
     printf (" +------+-----+----------+------+---+----++----+---+------+----------+-----+------+\n");
     printf (" | GPIO | wPi |   Name   | Mode | V | Physical | V | Mode | Name     | wPi | GPIO |\n");
 #ifdef CONFIG_ORANGEPI_PC2
-    printf (" +------+-----+----------+------+---+OrangePi PC2+---+------+----------+-----+-----+\n");
+    printf (" +------+-----+----------+------+---+  OPi PC2 +---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_2G_IOT
     printf (" +------+-----+----------+------+---+OrangePi 2G-IOT+---+------+----------+-----+-----+\n");
 #elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_H3_ZEROPLUS2
