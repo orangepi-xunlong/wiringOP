@@ -42,6 +42,7 @@ LIBS    = -lwiringPi -lwiringPiDev -lpthread -lrt -lm -lcrypt
 ifeq ($(PLATFORM),)
   #PLATFORM = OrangePi_2G-IOT
   #PLATFORM = OrangePi_PC2
+  #PLATFORM = OrangePi_PRIME
   #PLATFORM = OrangePi_ZEROPLUS
   #PLATFORM = OrangePi_A64
   #PLATFORM = OrangePi_H5
@@ -61,6 +62,11 @@ endif
 
 ifeq ($(PLATFORM), OrangePi_PC2)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_PC2
+EXTRA_CFLAGS += -DCONFIG_ORANGEPI
+endif
+
+ifeq ($(PLATFORM), OrangePi_PRIME)
+EXTRA_CFLAGS = -DCONFIG_ORANGEPI_PRIME
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
 
@@ -124,6 +130,10 @@ ifeq ($(PLATFORM), OrangePi_2G-IOT)
 endif
 
 ifeq ($(PLATFORM), OrangePi_PC2)
+  SRC += OrangePi.c
+endif
+
+ifeq ($(PLATFORM), OrangePi_PRIME)
   SRC += OrangePi.c
 endif
 

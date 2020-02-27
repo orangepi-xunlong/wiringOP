@@ -49,7 +49,7 @@ select_boards()
     local choice
     local call=${1}
 
-    boards=("OrangePi_PC2" "OrangePi_ZEROPLUS" "OrangePi_A64" "OrangePi_ZERO" "OrangePi_H3" "OrangePi_LITE2" "OrangePi_H3_ZEROPLUS2" "OrangePi_3" "OrangePi_RK3399" "OrangePi_ONEPLUS" "OrangePi_4")
+    boards=("OrangePi_PC2" "OrangePi_ZEROPLUS" "OrangePi_PRIME" "OrangePi_A64" "OrangePi_ZERO" "OrangePi_H3" "OrangePi_LITE2" "OrangePi_H3_ZEROPLUS2" "OrangePi_3" "OrangePi_RK3399" "OrangePi_ONEPLUS" "OrangePi_4")
 
     printf "All available boards:\n"
     for var in ${boards[@]} ; do
