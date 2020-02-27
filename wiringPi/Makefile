@@ -85,7 +85,7 @@ EXTRA_CFLAGS = -DCONFIG_ORANGEPI_A64
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
 
-ifeq ($(PLATFORM), OrangePi_H3)
+ifneq ($(findstring $(PLATFORM), "OrangePi_ONE_H3" "OrangePi_LITE_H3" "OrangePi_PC" "OrangePi_PLUS" "OrangePi_PCPLUS" "OrangePi_PLUS2E"),)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_H3
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
@@ -95,12 +95,7 @@ EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZERO
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
 
-ifeq ($(PLATFORM), OrangePi_LITE2)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_LITE2
-EXTRA_CFLAGS += -DCONFIG_ORANGEPI
-endif
-
-ifeq ($(PLATFORM), OrangePi_ONEPLUS)
+ifneq ($(findstring $(PLATFORM), "OrangePi_ONEPLUS" "OrangePi_LITE2"),)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_LITE2
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
@@ -171,7 +166,7 @@ ifeq ($(PLATFORM), OrangePi_A64)
 SRC += OrangePi.c
 endif
 
-ifeq ($(PLATFORM), OrangePi_H3)
+ifneq ($(findstring $(PLATFORM), "OrangePi_ONE_H3" "OrangePi_LITE_H3" "OrangePi_PC" "OrangePi_PLUS" "OrangePi_PCPLUS" "OrangePi_PLUS2E"),)
 SRC += OrangePi.c
 endif
 
@@ -179,11 +174,7 @@ ifeq ($(PLATFORM), OrangePi_ZERO)
 SRC += OrangePi.c
 endif
 
-ifeq ($(PLATFORM), OrangePi_LITE2)
-SRC += OrangePi.c
-endif
-
-ifeq ($(PLATFORM), OrangePi_ONEPLUS)
+ifneq ($(findstring $(PLATFORM), "OrangePi_ONEPLUS" "OrangePi_LITE2"),)
 SRC += OrangePi.c
 endif
 
@@ -309,3 +300,5 @@ wpiExtensions.o: mcp23s17.h sr595.h pcf8574.h pcf8591.h mcp3002.h mcp3004.h
 wpiExtensions.o: mcp4802.h mcp3422.h max31855.h max5322.h ads1115.h sn3218.h
 wpiExtensions.o: drcSerial.h pseudoPins.h bmp180.h htu21d.h ds18b20.h
 wpiExtensions.o: wpiExtensions.h
+
+

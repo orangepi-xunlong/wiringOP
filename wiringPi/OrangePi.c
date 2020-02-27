@@ -513,7 +513,7 @@ int pinToGpioOrangePi [64] =
   19, 18, 7, 8,           // Rev 2: New GPIOs 8 though 11         wpi 17 - 20
   200,  9, 10, 201, 20,           // B+                       wpi 21, 22, 23, 24, 25
   198, 199,           //                       wpi 26, 27
-  4, 5,					//PA4, PA5(PWM0)		    wpi 28, 29
+  -1, -1,					//PA4, PA5(PWM0)		    wpi 28, 29
 
    -1, -1,               // B+                       wpi 30, 31
 
@@ -1189,7 +1189,7 @@ const char *piModelNames[6] =
 	"OrangePi Win/Winplus",
 #elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_ZEROPLUS2_H3
 	"OrangePi H3 family",
-#elif CONFIG_ORANGEPI_ZERO
+#elif CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_R1
 	"OrangePi H2+ family",
 #endif
 };
@@ -1861,7 +1861,7 @@ int isOrangePi(void)
 #elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_ZEROPLUS2_H3
 	/* Support: OrangePi Win/Win plus */
 	char *OrangePi_string = "sun8i";
-#elif CONFIG_ORANGEPI_ZERO
+#elif CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_R1
 	/* Support: OrangePi zero */
 	char *OrangePi_string = "sun8i";
 #elif CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_3
