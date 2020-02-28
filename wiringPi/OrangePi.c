@@ -407,26 +407,26 @@ int ORANGEPI_PIN_MASK[12][32] =  //[BANK]  [INDEX]
 };
 #endif /* ZEROPLUS */
 
-#ifdef CONFIG_ORANGEPI_A64
+#ifdef CONFIG_ORANGEPI_WIN
 int pinToGpioOrangePi [64] =
 {
-	229,  100,    // 0, 1
-	228,  231,    // 2, 3
-	361,   68,    // 4  5
-	230,  362,    // 6, 7
-	227,  226,    // 8, 9
-	96,   102,    //10,11
-	98,    99,    //12,13
-	97,   354,    //14,15
-	355,   -1,    //16,17
-	-1,    -1,    //18,19
-	-1,    36,    //20,21
-	37,    38,    //22,23
-	39,   101,    //24,25
-	34,    35,    //26,27
-	32,    33,    //28,29
-	143,  142,    //30,31
+	227, 226,    // 0, 1
+  	362, 354,    // 2, 3
+	355, 229,    // 4  5
+	100, 228,    // 6, 7
+	231, 361,    // 8, 9
+	 68,  98,    //10,11
+	 99, 230,    //12,13
+	 97,  96,    //14,15
+	102, 143,    //16,17
+	142,  36,    //18,19
+	 37,  34,    //20,21
+	 38,  39,    //22,23
+	 35, 101,    //24,25
+	 32,  33,    //26,27
 
+	-1, -1,    //28,29
+	-1, -1,    //30,31
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,// ... 63
 };
@@ -458,31 +458,32 @@ int physToGpioOrangePi[64] =
 	-1, -1, -1, -1, -1, -1, -1, -1 // 56-> 63
 };
 
-int physToPinOrangePi [64] = 
+int physToPinOrangePi [64] =
 {
   -1,        // 0
   -1,  -1,   // 1, 2
-   8,  -1,   // 3, 4
-   9,  -1,   // 5, 6
-   7,  15,   // 7, 8
-  -1,  16,   // 9, 10
-   0,   1,   //11, 12
-   2,  -1,   //13, 14
-   3,   4,   //15, 16
-  -1,   5,   //17, 18
-  12,  -1,   //19, 20
-  13,   6,   //21, 22
-  14,  10,   //23, 24
-  -1,  11,   //25, 26
-  30,  31,   //27, 28
-  21,  -1,   //29, 30
-  22,  26,   //31, 32
-  23,  -1,   //33, 34
-  24,  27,   //35, 36
-  25,  28,   //37, 38
-  -1,  29,   //39, 40
-   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
-   -1, -1, -1, -1, -1, -1, -1, -1 // 56-> 63
+   0,  -1,   // 3, 4
+   1,  -1,   // 5, 6
+   2,   3,   // 7, 8
+  -1,   4,   // 9, 10
+   5,   6,   //11, 12
+   7,  -1,   //13, 14
+   8,   9,   //15, 16
+  -1,  10,   //17, 18
+  11,  -1,   //19, 20
+  12,  13,   //21, 22
+  14,  15,   //23, 24
+  -1,  16,   //25, 26
+  17,  18,   //27, 28
+  19,  -1,   //29, 30
+  20,  21,   //31, 32
+  22,  -1,   //33, 34
+  23,  24,   //35, 36
+  25,  26,   //37, 38
+  -1,  27,   //39, 40
+
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
+  -1, -1, -1, -1, -1, -1, -1, -1 // 56-> 63
 };
 
 int ORANGEPI_PIN_MASK[12][32] =  //[BANK]  [INDEX]
@@ -1185,7 +1186,7 @@ const char *piModelNames[6] =
 	"OrangePi 2G-IOT",
 #elif CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_ZEROPLUS2_H5 || CONFIG_ORANGEPI_PRIME
 	"OrangePi H5 family",
-#elif CONFIG_ORANGEPI_A64
+#elif CONFIG_ORANGEPI_WIN
 	"OrangePi Win/Winplus",
 #elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_ZEROPLUS2_H3
 	"OrangePi H3 family",
@@ -1855,7 +1856,7 @@ int isOrangePi(void)
 #elif CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_ZEROPLUS2_H5 || CONFIG_ORANGEPI_PRIME
 	/* Support: OrangePi PC2 */
 	char *OrangePi_string = "sun50iw2";
-#elif CONFIG_ORANGEPI_A64
+#elif CONFIG_ORANGEPI_WIN
 	/* Support: OrangePi Win/Win plus */
 	char *OrangePi_string = "sun50iw1";
 #elif CONFIG_ORANGEPI_H3 || CONFIG_ORANGEPI_ZEROPLUS2_H3

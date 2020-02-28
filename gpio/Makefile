@@ -44,7 +44,7 @@ ifeq ($(PLATFORM),)
   #PLATFORM = OrangePi_PC2
   #PLATFORM = OrangePi_PRIME
   #PLATFORM = OrangePi_ZEROPLUS
-  #PLATFORM = OrangePi_A64
+  #PLATFORM = OrangePi_WIN
   #PLATFORM = OrangePi_H5
   #PLATFORM = OrangePi_ZERO
   #PLATFORM = OrangePi_R1
@@ -82,8 +82,8 @@ EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZEROPLUS
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
 
-ifeq ($(PLATFORM), OrangePi_A64)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_A64
+ifneq ($(findstring $(PLATFORM), "OrangePi_WIN" "OrangePi_WINPLUS"),)
+EXTRA_CFLAGS = -DCONFIG_ORANGEPI_WIN
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
 
@@ -143,7 +143,7 @@ ifeq ($(PLATFORM), OrangePi_ZEROPLUS)
   SRC += OrangePi.c
 endif
 
-ifeq ($(PLATFORM), OrangePi_A64)
+ifneq ($(findstring $(PLATFORM), "OrangePi_WIN" "OrangePi_WINPLUS"),)
   SRC += OrangePi.c
 endif
 

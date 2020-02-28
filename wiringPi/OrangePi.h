@@ -43,7 +43,7 @@
 #endif
 
 /************** OrangePi A64 ***********************/
-#ifdef CONFIG_ORANGEPI_A64
+#ifdef CONFIG_ORANGEPI_WIN
 #define GPIOA_BASE                         (0x01C20000)
 #define GPIO_NUM                           (0x40)
 #define GPIO_BASE_MAP                      (0x01C20800)
@@ -205,7 +205,7 @@ extern const char *piModelNames[6];
 extern int ORANGEPI_PIN_MASK[4][32];
 #elif CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_PRIME
 extern int ORANGEPI_PIN_MASK[9][32];
-#elif CONFIG_ORANGEPI_A64
+#elif CONFIG_ORANGEPI_WIN
 extern int ORANGEPI_PIN_MASK[12][32];
 #elif CONFIG_ORANGEPI_H3
 extern int ORANGEPI_PIN_MASK[9][32];

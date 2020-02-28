@@ -266,7 +266,7 @@ int physToWpi[64] =
 };
 #endif
 
-#ifdef CONFIG_ORANGEPI_A64
+#ifdef CONFIG_ORANGEPI_WIN
 char *physNames [64] =
 {
   NULL,
@@ -274,30 +274,31 @@ char *physNames [64] =
  "    3.3V", "5V      ",
  "   SDA.1", "5V      ",
  "   SCL.1", "GND     ",
- "  GPIO.7", "S_TX    ",
- "     GND", "S_RX    ",
- "    RXD3", "GPIO.1  ",
- "    TXD3", "GND     ",
- "    CTS3", "GPIO.4  ",
- "    3.3V", "GPIO.5  ",
- "    MOSI", "GND     ",
- "    MISO", "RTS3    ",
- "    SCLK", "CE0     ",
- "     GND", "GPIO.11 ",
+ "    PL10", "PL02    ",
+ "     GND", "PL03    ",
+ "   RXD.3", "PD04    ",
+ "   TXD.3", "GND     ",
+ "   CTS.3", "PL09    ",
+ "    3.3V", "PC04    ",
+ "  MOSI.1", "GND     ",
+ "  MISO.1", "RTS.3   ",
+ "  SCLK.1", "CE.1    ",
+ "     GND", "PD06    ",
  "   SDA.2", "SCL.2   ",
- " GPIO.21", "GND     ",
- " GPIO.22", "RTS2    ",
- " GPIO.23", "GND     ",
- " GPIO.24", "CTS2    ",
- " GPIO.25", "TXD2    ",
- "     GND", "RXD2    ",
+ "    PB04", "GND     ",
+ "    PB05", "RTS.2   ",
+ "    PB06", "GND     ",
+ "    PB07", "CTS.2   ",
+ "    PD05", "TXD.2   ",
+ "     GND", "RXD.2   ",
+
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
-  "GPIO.17", "GPIO.18",
-  "GPIO.19", "GPIO.20",
+       NULL, NULL,
+       NULL, NULL,
    NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
 };
 
@@ -305,27 +306,28 @@ int physToWpi [64] =
 {
   -1,        // 0
   -1,  -1,   // 1, 2
-   8,  -1,   // 3, 4
-   9,  -1,   // 5, 6
-   7,  15,   // 7, 8
-  -1,  16,   // 9, 10
-   0,   1,   //11, 12
-   2,  -1,   //13, 14
-   3,   4,   //15, 16
-  -1,   5,   //17, 18
-  12,  -1,   //19, 20
-  13,   6,   //21, 22
-  14,  10,   //23, 24
-  -1,  11,   //25, 26
-  30,  31,   //27, 28
-  21,  -1,   //29, 30
-  22,  26,   //31, 32
-  23,  -1,   //33, 34
-  24,  27,   //35, 36
-  25,  28,   //37, 38
-  -1,  29,   //39, 40
-   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
-   -1, -1, -1, -1, -1, -1, -1, -1 // 56-> 63
+   0,  -1,   // 3, 4
+   1,  -1,   // 5, 6
+   2,   3,   // 7, 8
+  -1,   4,   // 9, 10
+   5,   6,   //11, 12
+   7,  -1,   //13, 14
+   8,   9,   //15, 16
+  -1,  10,   //17, 18
+  11,  -1,   //19, 20
+  12,  13,   //21, 22
+  14,  15,   //23, 24
+  -1,  16,   //25, 26
+  17,  18,   //27, 28
+  19,  -1,   //29, 30
+  20,  21,   //31, 32
+  22,  -1,   //33, 34
+  23,  24,   //35, 36
+  25,  26,   //37, 38
+  -1,  27,   //39, 40
+
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
+  -1, -1, -1, -1, -1, -1, -1, -1 // 56-> 63
 };
 #endif
 
@@ -878,7 +880,7 @@ void OrangePiReadAll(void)
     printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_ZERO
     printf (" +------+-----+----------+------+---+  OPi H2  +---+------+----------+-----+------+\n");
-#elif CONFIG_ORANGEPI_A64
+#elif CONFIG_ORANGEPI_WIN
     printf (" +------+-----+----------+------+---+ OPi Win  +---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_LITE2 
     printf (" +------+-----+----------+------+---+  OPi H6  +---+------+----------+-----+------+\n");
@@ -894,7 +896,7 @@ void OrangePiReadAll(void)
     printf (" | GPIO | wPi |   Name   | Mode | V | Physical | V | Mode | Name     | wPi | GPIO |\n");
     printf (" +------+-----+----------+------+---+----++----+---+------+----------+-----+------+\n");
 
-#if defined CONFIG_ORANGEPI_H3 || defined CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_PRIME || CONFIG_ORANGEPI_A64
+#if defined CONFIG_ORANGEPI_H3 || defined CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_PRIME || CONFIG_ORANGEPI_WIN
     for (pin = 1 ; pin <= 40; pin += 2)
 
 #elif CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_ZEROPLUS2_H3 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_R1 || CONFIG_ORANGEPI_ZEROPLUS2_H5
@@ -921,7 +923,7 @@ void OrangePiReadAll(void)
     printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_ZERO
     printf (" +------+-----+----------+------+---+  OPi H2  +---+------+----------+-----+------+\n");
-#elif CONFIG_ORANGEPI_A64
+#elif CONFIG_ORANGEPI_WIN
     printf (" +------+-----+----------+------+---+ OPi Win  +---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_LITE2 
     printf (" +------+-----+----------+------+---+  OPi H6  +---+------+----------+-----+------+\n");
