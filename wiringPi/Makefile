@@ -90,7 +90,7 @@ EXTRA_CFLAGS = -DCONFIG_ORANGEPI_H3
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
 
-ifeq ($(PLATFORM), OrangePi_ZERO)
+ifneq ($(findstring $(PLATFORM), "OrangePi_ZERO" "OrangePi_R1"),)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZERO
 EXTRA_CFLAGS += -DCONFIG_ORANGEPI
 endif
@@ -170,7 +170,7 @@ ifneq ($(findstring $(PLATFORM), "OrangePi_ONE_H3" "OrangePi_LITE_H3" "OrangePi_
 SRC += OrangePi.c
 endif
 
-ifeq ($(PLATFORM), OrangePi_ZERO)
+ifneq ($(findstring $(PLATFORM), "OrangePi_ZERO" "OrangePi_R1"),)
 SRC += OrangePi.c
 endif
 
