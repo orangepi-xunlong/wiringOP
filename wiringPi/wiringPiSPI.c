@@ -97,7 +97,7 @@ int wiringPiSPIDataRW (int channel, unsigned char *data, int len)
  */
 
 void getDevice(char* spidev, int channel, int port) {
-    sprintf(spidev, "/dev/spidev/%i.%i", channel, port);
+    sprintf(spidev, "/dev/spidev%i.%i", channel, port);
 }
 
 int wiringPiSPISetupMode (int channel, int port, int speed, int mode)
@@ -110,6 +110,7 @@ int wiringPiSPISetupMode (int channel, int port, int speed, int mode)
   static char spidev[14];
 
   getDevice(spidev, channel, port);
+  printf("Opening device %s\n", spidev); 
 
   if ((fd = open (spidev, O_RDWR)) < 0)
     return wiringPiFailure (WPI_ALMOST, "Unable to open SPI device: %s\n", strerror (errno)) ;
