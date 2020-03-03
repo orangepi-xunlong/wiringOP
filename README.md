@@ -1,15 +1,15 @@
 ## How to download wiringOP
 
 ```
-root@orangepi:~# git clone https://github.com/orangepi-xunlong/wiringOP.git
+git clone https://github.com/orangepi-xunlong/wiringOP.git
 ```
 
 ## How to build wiringOP
 
 ```
-root@orangepi:~# cd wiringOP
-root@orangepi:~/wiringOP# ./build clean
-root@orangepi:~/wiringOP# ./build 
+cd wiringOP
+./build clean
+./build 
 All available boards:
    0. OrangePi_R1
    1. OrangePi_ZERO
@@ -245,13 +245,13 @@ Choice:  12  //Select the number of the board
  |  226 |   1 |    SCL.1 | ALT2 | 0 |  5 || 6  |   |      | GND      |     |      |
  |  362 |   2 |     PL10 |  OFF | 0 |  7 || 8  | 0 | ALT2 | PL02     | 3   | 354  |
  |      |     |      GND |      |   |  9 || 10 | 0 | ALT2 | PL03     | 4   | 355  |
- |  229 |   5 |    RXD.3 |  OFF | 0 | 11 || 12 | 0 | OFF  | PD04     | 6   | 100  |
- |  228 |   7 |    TXD.3 |  OFF | 0 | 13 || 14 |   |      | GND      |     |      |
+ |  229 |   5 |    RXD.3 | ALT2 | 0 | 11 || 12 | 0 | OFF  | PD04     | 6   | 100  |
+ |  228 |   7 |    TXD.3 | ALT2 | 0 | 13 || 14 |   |      | GND      |     |      |
  |  231 |   8 |    CTS.3 |  OUT | 0 | 15 || 16 | 0 | OFF  | PL09     | 9   | 361  |
  |      |     |     3.3V |      |   | 17 || 18 | 0 | OFF  | PC04     | 10  | 68   |
- |   98 |  11 |   MOSI.1 |  OFF | 0 | 19 || 20 |   |      | GND      |     |      |
- |   99 |  12 |   MISO.1 |  OFF | 0 | 21 || 22 | 0 | OFF  | RTS.3    | 13  | 230  |
- |   97 |  14 |   SCLK.1 |  OFF | 0 | 23 || 24 | 0 | OFF  | CE.1     | 15  | 96   |
+ |   98 |  11 |   MOSI.1 | ALT4 | 0 | 19 || 20 |   |      | GND      |     |      |
+ |   99 |  12 |   MISO.1 | ALT4 | 0 | 21 || 22 | 0 | OFF  | RTS.3    | 13  | 230  |
+ |   97 |  14 |   SCLK.1 | ALT4 | 0 | 23 || 24 | 0 | ALT4 | CE.1     | 15  | 96   |
  |      |     |      GND |      |   | 25 || 26 | 0 | OFF  | PD06     | 16  | 102  |
  |  143 |  17 |    SDA.2 | ALT3 | 0 | 27 || 28 | 0 | ALT3 | SCL.2    | 18  | 142  |
  |   36 |  19 |     PB04 |  OFF | 0 | 29 || 30 |   |      | GND      |     |      |
