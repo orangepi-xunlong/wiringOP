@@ -25,9 +25,6 @@ VERSION=$(shell cat ../VERSION)
 DESTDIR?=/usr
 PREFIX?=/local
 
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
-
 LDCONFIG?=ldconfig
 
 ifneq ($V,1)

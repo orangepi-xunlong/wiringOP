@@ -25,9 +25,6 @@
 DESTDIR?=/usr
 PREFIX?=/local
 
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
-
 ifneq ($V,1)
 Q ?= @
 endif
