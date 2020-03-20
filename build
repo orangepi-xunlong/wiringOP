@@ -115,14 +115,19 @@ fi
 
 if [ x$1 = "xdebian" ]; then
   here=`pwd`
+  echo "removing old libs"
   cd debian-template/wiringPi
   rm -rf usr
+  echo "building wiringPi"
   cd $here/wiringPi
   make install-deb
+  echo "building devLib"
   cd $here/devLib
   make install-deb INCLUDE='-I. -I../wiringPi'
+  echo "building gpio"
   cd $here/gpio
   make install-deb INCLUDE='-I../wiringPi -I../devLib' LDFLAGS=-L../debian-template/wiringPi/usr/lib
+  echo "Building deb package"
   cd $here/debian-template
   fakeroot dpkg-deb --build wiringPi
   mv wiringPi.deb  wiringpi-`cat $here/VERSION`-1.deb
