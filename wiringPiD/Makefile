@@ -69,11 +69,11 @@ tags:	$(SRC)
 install: wiringpid
 	$Q echo "[Install]"
 	$Q mkdir -p		$(DESTDIR)$(PREFIX)/sbin
-	$Q cp wiringpid		$(DESTDIR)$(PREFIX)/sbin
+	$Q cp wiringpid		$(DESTDIR)$(PREFIX)/sbin/
 	$Q chown root.root	$(DESTDIR)$(PREFIX)/sbin/wiringpid
 
 #	$Q mkdir -p		$(DESTDIR)$(PREFIX)/man/man8
-#	$Q cp gpio.1		$(DESTDIR)$(PREFIX)/man/man8
+#	$Q cp gpio.1		$(DESTDIR)$(PREFIX)/man/man8/
 
 .PHONY:	install-deb
 install-deb:	gpio
