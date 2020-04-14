@@ -31,3 +31,7 @@ Andre Crone
 
 Rik Teerling
   Pointing out some silly mistooks in the I2C code...
+
+Dolf Andringa
+  Support for multiple SpiDev devices/ports
+  Debian build support
