@@ -45,6 +45,7 @@ CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wextra -Winline $(INCLUDE) -pipe -fPIC
 LIBS    = -lm -lpthread -lrt -lcrypt
 
 ifeq ($(PLATFORM),)
+  $(warning	WARNING: PLATFORM is not set!)
   #PLATFORM = OrangePi_2G-IOT
   #PLATFORM = OrangePi_PC2
   #PLATFORM = OrangePi_PRIME
@@ -204,6 +205,7 @@ OBJ	=	$(SRC:.c=.o)
 
 all:		$(DYNAMIC)
 
+$(info 	building for platform $(PLATFORM))
 
 .PHONY:	static
 static:	
