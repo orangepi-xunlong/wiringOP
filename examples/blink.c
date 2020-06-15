@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <wiringPi.h>
 
-//#define NUM 17
-#define NUM 28
+//#define NUM 17   //26pin
+//#define NUM 19   //for orangepi4
+#define NUM 28     //40pin
 
 int main (void)
 {

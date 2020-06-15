@@ -887,7 +887,6 @@ void OrangePiReadAll(void)
 #elif CONFIG_ORANGEPI_3
     printf (" +------+-----+----------+------+---+   OPi 3  +---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_RK3399
-#elif CONFIG_ORANGEPI_RK3399
     printf (" +------+-----+----------+------+---+OPi RK3399+---+------+----------+-----+------+\n");
 #elif CONFIG_ORANGEPI_4
     printf (" +------+-----+----------+------+---+OrangePi 4+---+---+--+----------+-----+------+\n");

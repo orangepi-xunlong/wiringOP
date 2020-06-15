@@ -49,29 +49,46 @@ select_boards()
     local choice
     local call=${1}
 
-    boards=("OrangePi_R1" "OrangePi_ZERO" "OrangePi_PC" "OrangePi_PLUS" "OrangePi_PCPLUS" "OrangePi_PLUS2E" "OrangePi_ONE_H3" "OrangePi_LITE_H3" "OrangePi_ZEROPLUS2_H3" "OrangePi_PC2" "OrangePi_PRIME" "OrangePi_ZEROPLUS" "OrangePi_ZEROPLUS2_H5" "OrangePi_WIN" "OrangePi_WINPLUS" "OrangePi_3" "OrangePi_LITE2" "OrangePi_ONEPLUS" "OrangePi_4" "OrangePi_RK3399") 
+    boards=("orangepir1" "orangepizero" "orangepipc" "orangepipcplus" "orangepiplus2e" "orangepione" "orangepilite" "orangepiplus" "orangepizeroplus" "orangepizeroplus2h3" "orangepipc2" "orangepiprime" "orangepizeroplus2h5" "orangepiwin" "orangepiwinplus" "orangepi3" "orangepilite2" "orangepioneplus" "orangepi4" "orangepirk3399")
 
-    printf "All available boards:\n"
-    for var in ${boards[@]} ; do
-        printf "%4d. %s\n" $cnt ${boards[$cnt]}
-        ((cnt+=1))
-    done
+    if [[ -f /etc/orangepi-release ]]; then 
 
-    while true ; do
-        read -p "Choice: " choice
-        if [ -z "${choice}" ] ; then
-            continue
-        fi
+	source /etc/orangepi-release
+	export BOARD="${BOARD}"
+	
+    elif [[ -f /etc/armbian-release ]]; then
 
-        if [ -z "${choice//[0-9]/}" ] ; then
-            if [ $choice -ge 0 -a $choice -lt $cnt ] ; then
-                export PLATFORM="${boards[$choice]}"
-		echo $PLATFORM
-                break
-            fi
-        fi
-        printf "Invalid input ...\n"
-    done
+	source /etc/armbian-release
+
+	[[ $BOARD == orangepi-r1 ]] && BOARD=orangepir1
+	[[ $BOARD == orangepi-rk3399 ]] && BOARD=orangepirk3399
+	[[ $BOARD == orangepizeroplus2-h3 ]] && BOARD=orangepizeroplus2h3
+	[[ $BOARD == orangepizeroplus2-h5 ]] && BOARD=orangepizeroplus2h5
+
+	export BOARD="${BOARD}"
+
+    else
+
+	printf "All available boards:\n"
+    	for var in ${boards[@]} ; do
+       		 printf "%4d. %s\n" $cnt ${boards[$cnt]}
+			((cnt+=1))
+    	done
+
+    	while true ; do
+        	read -p "Choice: " choice
+        	if [ -z "${choice}" ] ; then
+            		continue
+        	fi
+        	if [ -z "${choice//[0-9]/}" ] ; then
+            		if [ $choice -ge 0 -a $choice -lt $cnt ] ; then
+						export BOARD="${boards[$choice]}"
+						break
+            		fi
+        	fi
+        	printf "Invalid input ...\n"
+    	done
+    fi
 }
 
 sudo=${WIRINGPI_SUDO-sudo}
