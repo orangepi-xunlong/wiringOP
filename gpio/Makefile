@@ -40,42 +40,42 @@ LDFLAGS	= -L$(DESTDIR)$(PREFIX)/lib
 LIBS    = -lwiringPi -lwiringPiDev -lpthread -lrt -lm -lcrypt
 
 ifeq ($(BOARD),)
-  BOARD = orangepioneplus
+  BOARD = orangepioneplus-h6
 endif
 
 ifeq ($(BOARD), orangepi2giot)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_2G_IOT
 endif
 
-ifneq ($(findstring $(BOARD), "orangepione" "orangepilite" "orangepipc" "orangepiplus" "orangepipcplus" "orangepiplus2e"),)
+ifneq ($(findstring $(BOARD), "orangepione-h3" "orangepilite-h3" "orangepipc-h3" "orangepiplus-h3" "orangepipcplus-h3" "orangepiplus2e-h3"),)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_H3
 endif
 
-ifeq ($(BOARD), orangepipc2)
+ifeq ($(BOARD), orangepipc2-h5)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_PC2
 endif
 
-ifeq ($(BOARD), orangepiprime)
+ifeq ($(BOARD), orangepiprime-h5)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_PRIME
 endif
 
-ifeq ($(BOARD), orangepizeroplus)
+ifeq ($(BOARD), orangepizeroplus-h5)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZEROPLUS
 endif
 
-ifneq ($(findstring $(BOARD), "orangepiwin" "orangepiwinplus"),)
+ifneq ($(findstring $(BOARD), "orangepiwin-a64" "orangepiwinplus-a64"),)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_WIN
 endif
 
-ifneq ($(findstring $(BOARD), "orangepizero" "orangepir1"),)
+ifneq ($(findstring $(BOARD), "orangepizero-h2" "orangepir1-h2"),)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZERO
 endif
 
-ifneq ($(findstring $(BOARD), "orangepioneplus" "orangepilite2"),)
+ifneq ($(findstring $(BOARD), "orangepioneplus-h6" "orangepilite2-h6"),)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_LITE2
 endif
 
-ifeq ($(BOARD), orangepi3)
+ifeq ($(BOARD), orangepi3-h6)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_3
 endif
 
