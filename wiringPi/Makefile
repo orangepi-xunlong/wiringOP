@@ -84,6 +84,10 @@ ifeq ($(BOARD), orangepi3-h6)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_3
 endif
 
+ifeq ($(BOARD), orangepizero2-h616)
+EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZERO2
+endif
+
 ifeq ($(BOARD), orangepizeroplus2h3) 
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZEROPLUS2_H3
 endif

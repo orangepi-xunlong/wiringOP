@@ -78,6 +78,18 @@
 #define GPIO_PWM_OP			   (0x0300A000)
 #endif
 
+/*********** OrangePi H616 *************/
+#if CONFIG_ORANGEPI_ZERO2
+#define GPIOA_BASE                         (0x0300B000)
+#define GPIO_NUM                           (0x40)
+#define GPIO_BASE_MAP                      (0x0300B000)
+#define MEM_INFO                           (1024)
+#define GPIOL_BASE                         (0x07022000)
+#define GPIOL_BASE_MAP                     (0x07022000)  
+#define MAP_SIZE_L                         (4096 * 1)
+#define GPIO_PWM_OP			   (0x0300A000)
+#endif
+
 /*********** OrangePi RK3399 *************/
 #if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4
 

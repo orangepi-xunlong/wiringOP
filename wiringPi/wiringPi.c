@@ -2360,10 +2360,12 @@ int wiringPiSetup (void)
 		return wiringPiFailure(WPI_ALMOST, 
 				"wiringPiSetup: mmap (GPIO) failed: %s\n", strerror(errno));
 #else
+
 #if ! (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4)
+
 	/* GPIO */
-#if (CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_3)
-    gpio = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_BASE);
+#if CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZERO2
+	gpio = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_BASE);
 #else
 	gpio = (uint32_t *)mmap(0, BLOCK_SIZE * 10, PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_BASE);
 #endif
@@ -2375,7 +2377,6 @@ int wiringPiSetup (void)
 	pwm = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, GPIO_PWM) ;
 	if (pwm == MAP_FAILED)
 		return wiringPiFailure (WPI_ALMOST, "wiringPiSetup: mmap (PWM) failed: %s\n", strerror (errno)) ;
-
 	
 #if CONFIG_ORANGEPI_WIN || CONFIG_ORANGEPI_ZEROPLUS2_H3 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZEROPLUS2_H5
 	/* GPIOC connect CPU with Modem */
@@ -2385,6 +2386,7 @@ int wiringPiSetup (void)
 		return wiringPiFailure(WPI_ALMOST, 
 				"wiringPiSetup: mmap (GPIO) failed: %s\n", strerror(errno));
 #endif
+
 #else /* CONFIG_ORANGEPI_RK3399  */
 		gpio2_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, GPIO2_BASE);
 		if ((int32_t)(unsigned long)gpio2_base == -1)
@@ -2414,9 +2416,6 @@ int wiringPiSetup (void)
 		if ((int32_t)(unsigned long)gpio4_base == -1)
 			return wiringPiFailure(WPI_ALMOST, 
 					"wiringPiSetup: mmap (GPIO4_BASE) failed: %s\n", strerror(errno));
-		
-
-
 #endif  /* CONFIG_ORANGEPI_RK3399  */
 #endif
 
