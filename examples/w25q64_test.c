@@ -1,26 +1,15 @@
-//
-// SPI シリアルフラッシュメモリ W25Q64 操作検証プログラム
-// W25Q64のメモリ領域構造
-//   総バイト数 8388608
-//   メモリ空間 24ビットアドレス指定 0x00000 - 0x7FFFFF 
-//   ブロック数 128 (64KB/ブロック)
-//   セクタ数 2048  ( 4KB/セクタ)
-//   総セクタ数 2048
-
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
 #include "w25q64.h"
 
-//#define SPI_CHANNEL 0 // /dev/spidev0.0
-#define SPI_CHANNEL 1 // /dev/spidev0.1
+#define SPI_CHANNEL 0 // /dev/spidevX.0
+//#define SPI_CHANNEL 1 // /dev/spidevX.0
 
-//
-// 書込みデータのダンプリスト
-// dt(in) : データ格納先頭アドレス
-// n(in)  : 表示データ数
-//
+#define SPI_PORT 0
+//#define SPI_PORT 1
+
 void dump(uint8_t *dt, uint32_t n) {
   uint32_t sz;
   char buf[64];
@@ -64,22 +53,21 @@ void dump(uint8_t *dt, uint32_t n) {
 }
 
 void main() {
-    uint8_t buf[256];     // 取得データ
-    uint8_t wdata[16];    // 書込みデータ
+    uint8_t buf[256];    
+    uint8_t wdata[16];   
     uint8_t i;
-    uint16_t n;           // 取得データ数
+    uint16_t n;          
 
-    // SPI channel 0 を 2MHz で開始。
     // Start SPI channel 0 with 2MHz
-    if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
+
+    //if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
+    if (wiringPiSPISetupMode(SPI_CHANNEL, SPI_PORT, 2000000, 0) < 0) {
     	printf("SPISetup failed:\n");
     }
     
-    // フラッシュメモリ利用開始
     // Start Flush Memory
     W25Q64_begin(SPI_CHANNEL);
     
-    // JEDEC IDの取得テスト
     // JEDEC ID Get
     W25Q64_readManufacturer(buf);
     printf("JEDEC ID : ");
@@ -88,7 +76,6 @@ void main() {
     }
     printf("\n");
     
-    // Unique IDの取得テスト
     // Unique ID Get
     W25Q64_readUniqieID(buf);
     printf("Unique ID : ");
@@ -97,21 +84,18 @@ void main() {
     }
     printf("\n");
     
-    // データの読み込み(アドレス0から256バイト取得)
     // Read 256 byte data from Address=0
     memset(buf,0,256);
     n =  W25Q64_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // 高速データの読み込み(アドレス0から256バイト取得)
     // First read 256 byte data from Address=0
     memset(buf,0,256);
     n =  W25Q64_fastread(0, buf, 256);
     printf("Fast Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // セクタ単位の削除
     // Erase data by Sector
     n = W25Q64_eraseSector(0,true);
     printf("Erase Sector(0): n=%d\n",n);
@@ -119,7 +103,6 @@ void main() {
     n =  W25Q64_read (0, buf, 256);
     dump(buf,256);
  
-    // データ書き込みテスト
     // Write data to Sector=0 Address=10
     for (i=0; i < 26;i++) {
       wdata[i]='A'+i; // A-Z     
@@ -127,14 +110,12 @@ void main() {
     n =  W25Q64_pageWrite(0, 10, wdata, 26);
     printf("page_write(0,10,d,26): n=%d\n",n);
 
-    // データの読み込み(アドレス0から256バイト取得)
     // Read 256 byte data from Address=0
     memset(buf,0,256);
     n =  W25Q64_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // データ書き込みテスト
     // Write data to Sector=0 Address=0
     for (i=0; i < 10;i++) {
       wdata[i]='0'+i; // 0-9     
@@ -142,19 +123,16 @@ void main() {
     n =  W25Q64_pageWrite(0, 0, wdata, 10);
     printf("page_write(0,0,d,10): n=%d\n",n);
 
-    // 高速データの読み込み(アドレス0から256バイト取得)
     // First read 256 byte data from Address=0
     memset(buf,0,256);
     n =  W25Q64_fastread(0,buf, 256);
     printf("Fast Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // ステータスレジスタ1の取得
     // Get fron Status Register1
     buf[0] = W25Q64_readStatusReg1();
     printf("Status Register-1: %x\n",buf[0]);
 
-    // ステータスレジスタ2の取得
     // Get fron Status Register2
     buf[0] = W25Q64_readStatusReg2();
     printf("Status Register-2: %x\n",buf[0]);
