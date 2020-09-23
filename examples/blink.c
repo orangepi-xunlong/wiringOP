@@ -2,7 +2,8 @@
 #include <wiringPi.h>
 
 #define NUM 17   //26pin
-//#define NUM 19   //for orangepi4
+#define NUM 20   //for Orange Pi Zero 2
+//#define NUM 19   //for Orange Pi 4
 //#define NUM 28     //40pin
 
 int main (void)

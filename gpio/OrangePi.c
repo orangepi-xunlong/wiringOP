@@ -688,9 +688,12 @@ int physToWpi [64] =
 	12, 13, 	  
 	14, 15, 	  //23, 24
 	-1, 16, 	  // 25, 26
+	17, -1,
+	18, -1,
+	19, -1,
 	
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
-	-1, -1, -1, -1, -1, -1, -1,   // ... 63
+	-1,  // ... 63
 
 };
 
@@ -711,6 +714,10 @@ char *physNames [64] =
  "  MISO.1", "PC7     ",
  "  SCLK.1", "CE.1    ",
  "     GND", "PC10    ",
+ "     PC1", "        ",
+ "    PI16", "        ",
+ "     PI6", "        ",
+
 
        NULL, NULL,
        NULL, NULL,
@@ -963,8 +970,11 @@ void OrangePiReadAll(void)
 #if defined CONFIG_ORANGEPI_H3 || defined CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_PC2 || CONFIG_ORANGEPI_PRIME || CONFIG_ORANGEPI_WIN
     for (pin = 1 ; pin <= 40; pin += 2)
 
-#elif CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_ZEROPLUS2_H3 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_ZERO2 || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_R1 || CONFIG_ORANGEPI_ZEROPLUS2_H5
+#elif CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_ZEROPLUS2_H3 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZERO || CONFIG_ORANGEPI_ZEROPLUS || CONFIG_ORANGEPI_R1 || CONFIG_ORANGEPI_ZEROPLUS2_H5
 	for (pin = 1 ; pin <= 26; pin += 2)
+
+#elif CONFIG_ORANGEPI_ZERO2
+	for (pin = 1 ; pin <= 32; pin += 2)
 #endif
         readallPhys(pin);
 
