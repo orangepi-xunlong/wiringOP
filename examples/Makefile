@@ -50,7 +50,7 @@ SRC	=	blink.c blink8.c blink12.c					\
 		max31855.c							\
 		rht03.c								\
 		w25q64_test.c oled_demo.c spiSpeed.c				\
-		watchdog.c
+		watchdog.c spidev_test.c
 
 OBJ	=	$(SRC:.c=.o)
 
@@ -162,6 +162,10 @@ w25q64_test:	w25q64_test.o
 watchdog:	watchdog.o
 	$Q echo [link]
 	$Q $(CC) -o $@ watchdog.o $(LDFLAGS) $(LDLIBS)
+
+spidev_test:	spidev_test.o
+	$Q echo [link]
+	$Q $(CC) -o $@ spidev_test.o $(LDFLAGS) $(LDLIBS)
 
 oled_demo:	oled_demo.o
 	$Q echo [link]
