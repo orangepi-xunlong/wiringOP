@@ -512,7 +512,7 @@ char *physNames[64] =
  "    3.3V", "5V      ",
  "   SDA.0", "5V      ",
  "   SCL.0", "GND     ",
- "   PWM.1", "TXD.1   ",
+ "     PA6", "TXD.1   ",
  "     GND", "RXD.1   ",
  "   RXD.2", "PA07    ",
  "   TXD.2", "GND     ",
