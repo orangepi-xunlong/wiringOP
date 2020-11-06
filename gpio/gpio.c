@@ -309,13 +309,13 @@ static void doLoad (int argc, char *argv [])
   if (!moduleLoaded (module1))
   {
     sprintf (cmd, "%s %s%s", findExecutable (MODPROBE), module1, args1) ;
-    system (cmd) ;
+    if ( system (cmd) ){;}
   }
 
   if (!moduleLoaded (module2))
   {
     sprintf (cmd, "%s %s%s", findExecutable (MODPROBE), module2, args2) ;
-    system (cmd) ;
+    if ( system (cmd) ){;}
   }
 
   if (!moduleLoaded (module2))
@@ -369,13 +369,13 @@ static void doUnLoad (int argc, char *argv [])
   if (moduleLoaded (module1))
   {
     sprintf (cmd, "%s %s", findExecutable (RMMOD), module1) ;
-    system (cmd) ;
+    if ( system (cmd) ){;}
   }
 
   if (moduleLoaded (module2))
   {
     sprintf (cmd, "%s %s", findExecutable (RMMOD), module2) ;
-    system (cmd) ;
+    if ( system (cmd) ){;}
   }
 }
 
@@ -1428,7 +1428,7 @@ static void doVersion (char *argv [])
   {
     if ((fd = fopen ("/proc/device-tree/model", "r")) != NULL)
     {
-      fgets (name, 80, fd) ;
+      if ( fgets (name, 80, fd) ){;}
       fclose (fd) ;
       printf ("  *--> %s\n", name) ;
     }

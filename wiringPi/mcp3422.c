@@ -47,7 +47,7 @@ void waitForConversion (int fd, unsigned char *buffer, int n)
 {
   for (;;)
   {
-    read (fd, buffer, n) ;
+    if ( read (fd, buffer, n) ){;}
     if ((buffer [n-1] & 0x80) == 0)
       break ;
     delay (1) ;

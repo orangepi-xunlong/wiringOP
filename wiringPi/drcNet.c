@@ -104,7 +104,7 @@ static int authenticate (int fd, const char *pass)
 {
   char *challenge ;
   char *encrypted ;
-  char salted [1024] ;
+  char salted [1034] ;
 
   if ((challenge = getChallenge (fd)) == NULL)
     return -1 ;
