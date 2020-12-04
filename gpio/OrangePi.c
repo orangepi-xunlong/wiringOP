@@ -691,8 +691,9 @@ int physToWpi [64] =
 	17, -1,
 	18, -1,
 	19, -1,
+	20, -1,
 	
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
 	-1,  // ... 63
 
 };
@@ -717,9 +718,9 @@ char *physNames [64] =
  "     PC1", "        ",
  "    PI16", "        ",
  "     PI6", "        ",
+ "    PH10", "        ",
 
 
-       NULL, NULL,
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
@@ -974,7 +975,7 @@ void OrangePiReadAll(void)
 	for (pin = 1 ; pin <= 26; pin += 2)
 
 #elif CONFIG_ORANGEPI_ZERO2
-	for (pin = 1 ; pin <= 32; pin += 2)
+	for (pin = 1 ; pin <= 34; pin += 2)
 #endif
         readallPhys(pin);
 
