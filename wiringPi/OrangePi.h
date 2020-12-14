@@ -140,6 +140,48 @@ extern volatile unsigned int *gpio4_base;
 //csy 2019.1.8
 
 
+/*********** OrangePi R1PLUS *************/
+#if CONFIG_ORANGEPI_R1PLUS
+
+#define GPIO2_BASE 							0xff230000
+#define GPIO3_BASE 							0xff240000
+#define GPIO_NUM                          	(0x40)
+
+#define GPIO_SWPORTA_DR_OFFSET 				0x00
+#define GPIO_SWPORTA_DDR_OFFSET 			0x04
+#define GPIO_EXT_PORTA_OFFSET				0x50
+
+#define GRF_BASE 							0xff100000
+#define GRF_GPIO2A_IOMUX_OFFSET 			0x20
+#define GRF_GPIO2BL_IOMUX_OFFSET 			0x24
+#define GRF_GPIO2BH_IOMUX_OFFSET 			0x28
+#define GRF_GPIO2CL_IOMUX_OFFSET 			0x2c
+#define GRF_GPIO2CH_IOMUX_OFFSET 			0x30
+#define GRF_GPIO2D_IOMUX_OFFSET 			0x34
+
+#define GRF_GPIO3AL_IOMUX_OFFSET 			0x38
+#define GRF_GPIO3AH_IOMUX_OFFSET 			0x3c
+#define GRF_GPIO3BL_IOMUX_OFFSET 			0x40
+#define GRF_GPIO3BH_IOMUX_OFFSET 			0x44
+#define GRF_GPIO3C_IOMUX_OFFSET 			0x48
+#define GRF_GPIO3D_IOMUX_OFFSET 			0x4c
+
+#define CRU_BASE 							0xff440000
+#define CRU_CLKGATE_CON16_OFFSET 			0x0240    //bit 7 8 9 10 9877
+
+#define MEM_INFO                           (2048)
+#define MAP_SIZE_L                         (4*1024)
+
+extern volatile unsigned int *gpio2_base;
+extern volatile unsigned int *gpio3_base;
+extern volatile unsigned int *cru_base;
+extern volatile unsigned int *grf_base;
+
+
+#endif /* CONFIG_ORANGEPI_R1PLUS */
+//FG 2020.11.26
+
+
 
 /****************** Global data *********************/
 /* Current version */
@@ -225,6 +267,9 @@ extern int ORANGEPI_PIN_MASK[9][32];
 extern int ORANGEPI_PIN_MASK[12][32];
 #elif CONFIG_ORANGEPI_RK3399
 extern int ORANGEPI_PIN_MASK[5][32];
+#elif CONFIG_ORANGEPI_R1PLUS
+extern int ORANGEPI_PIN_MASK[5][32];
+
 
 #endif
 #endif

@@ -49,7 +49,7 @@ select_boards()
     local choice
     local call=${1}
 
-    boards=("orangepir1" "orangepizero" "orangepipc" "orangepipcplus" "orangepiplus2e" "orangepione" "orangepilite" "orangepiplus" "orangepizeroplus2h3" "orangepizeroplus" "orangepipc2" "orangepiprime" "orangepizeroplus2h5" "orangepiwin" "orangepiwinplus" "orangepi3" "orangepilite2" "orangepioneplus" "orangepi4" "orangepirk3399" "orangepizero2")
+    boards=("orangepir1" "orangepizero" "orangepipc" "orangepipcplus" "orangepiplus2e" "orangepione" "orangepilite" "orangepiplus" "orangepizeroplus2h3" "orangepizeroplus" "orangepipc2" "orangepiprime" "orangepizeroplus2h5" "orangepiwin" "orangepiwinplus" "orangepi3" "orangepilite2" "orangepioneplus" "orangepi4" "orangepirk3399" "orangepizero2" "orangepir1plus")
 
     if [[ -f /etc/orangepi-release ]]; then 
 
@@ -79,8 +79,8 @@ select_boards()
         	fi
         	if [ -z "${choice//[0-9]/}" ] ; then
             		if [ $choice -ge 0 -a $choice -lt $cnt ] ; then
-						export BOARD="${boards[$choice]}"
-						break
+				export BOARD="${boards[$choice]}"
+				break
             		fi
         	fi
         	printf "Invalid input ...\n"
@@ -104,6 +104,7 @@ select_boards()
 	[[ $BOARD == orangepilite2 ]] && BOARD=orangepilite2-h6
 	[[ $BOARD == orangepioneplus ]] && BOARD=orangepioneplus-h6
 	[[ $BOARD == orangepizero2 ]] && BOARD=orangepizero2-h616
+	[[ $BOARD == orangepir1plus ]] && BOARD=orangepir1plus-rk3328
 
 	export BOARD="${BOARD}"
 }
