@@ -1338,6 +1338,40 @@ void pinModeAlt (int pin, int mode)
 
   setupCheck ("pinModeAlt") ;
 
+
+#ifdef CONFIG_ORANGEPI
+        if(version == ORANGEPI) {
+                if (wiringPiDebug)
+                        printf("PinModeAlt: pin:%d,mode:%d\n", pin, mode);
+                if ((pin & PI_GPIO_MASK) == 0) {
+                        if (wiringPiMode == WPI_MODE_PINS)
+                                pin = pinToGpio[pin];
+                        else if (wiringPiMode == WPI_MODE_PHYS)
+                                pin = physToGpio[pin];
+                        else if (wiringPiMode != WPI_MODE_GPIO)
+                                  return;
+
+                        if (-1 == pin) {
+                                printf("[%s:L%d] the pin:%d is invaild,please check it over!\n",
+                                                        __func__,  __LINE__, pin);
+                                return;
+                        }
+
+			if ( mode <= 1 || mode >= 8){
+                                printf("[%s:L%d] the mode:%d is invaild,please check it over!\n",
+                                                        __func__,  __LINE__, mode);
+				return;
+			}
+
+			OrangePi_set_gpio_alt(pin, mode);
+
+			return;
+                } else {
+                        return ;
+                }
+        }
+#endif
+
   if ((pin & PI_GPIO_MASK) == 0)		// On-board pin
   {
     /**/ if (wiringPiMode == WPI_MODE_PINS)

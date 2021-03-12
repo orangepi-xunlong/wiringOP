@@ -233,6 +233,7 @@ extern int pwmmode;
 extern unsigned int readR(unsigned int addr);
 extern void writeR(unsigned int val, unsigned int addr);
 extern int OrangePi_set_gpio_mode(int pin, int mode);
+extern int OrangePi_set_gpio_alt(int pin, int mode);
 extern int OrangePi_get_gpio_mode(int pin);
 extern int isOrangePi_2G_IOT(void);
 extern int isOrangePi(void);

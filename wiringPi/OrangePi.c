@@ -1996,6 +1996,34 @@ int OrangePi_set_gpio_mode(int pin, int mode)
     return 0;
 }
 
+int OrangePi_set_gpio_alt(int pin, int mode)
+{
+	unsigned int regval = 0;
+	unsigned int bank   = pin >> 5;
+	unsigned int index  = pin - (bank << 5);
+	unsigned int phyaddr = 0;
+	int offset = ((index - ((index >> 3) << 3)) << 2);
+
+	if (bank == 11) {
+		phyaddr = GPIOL_BASE + ((index >> 3) << 2);
+	}else
+		phyaddr = GPIO_BASE_MAP + (bank * 36) + ((index >> 3) << 2);
+
+	/* Ignore unused gpio */
+	if (ORANGEPI_PIN_MASK[bank][index] != -1) {
+		if (wiringPiDebug)
+			printf("Register[%#x]: %#x index:%d\n", phyaddr, regval, index);
+
+		regval = readR(phyaddr);
+		regval &= ~(7 << offset);
+		regval |=  (mode << offset);
+		writeR(regval, phyaddr);
+	} else
+		printf("Pin alt mode failed!\n");
+
+	return 0;
+}
+
 /*
  * OrangePi Digital write 
  */
