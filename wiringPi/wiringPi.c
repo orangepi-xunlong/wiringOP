@@ -1340,6 +1340,7 @@ void pinModeAlt (int pin, int mode)
 
 
 #ifdef CONFIG_ORANGEPI
+#if !(defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_R1PLUS || CONFIG_ORANGEPI_2G_IOT)
         if(version == ORANGEPI) {
                 if (wiringPiDebug)
                         printf("PinModeAlt: pin:%d,mode:%d\n", pin, mode);
@@ -1371,7 +1372,7 @@ void pinModeAlt (int pin, int mode)
                 }
         }
 #endif
-
+#endif
   if ((pin & PI_GPIO_MASK) == 0)		// On-board pin
   {
     /**/ if (wiringPiMode == WPI_MODE_PINS)

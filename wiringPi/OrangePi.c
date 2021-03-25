@@ -1996,6 +1996,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
     return 0;
 }
 
+#if !(defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_R1PLUS || CONFIG_ORANGEPI_2G_IOT)
 int OrangePi_set_gpio_alt(int pin, int mode)
 {
 	unsigned int regval = 0;
@@ -2023,6 +2024,7 @@ int OrangePi_set_gpio_alt(int pin, int mode)
 
 	return 0;
 }
+#endif
 
 /*
  * OrangePi Digital write 
