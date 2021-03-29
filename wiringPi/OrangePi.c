@@ -1755,7 +1755,7 @@ int OrangePi_get_gpio_mode(int pin)
 }
 
 /*
- * Set GPIO Mode on OrangePi 2G-IOT  
+ * Set GPIO Mode
  */
 int OrangePi_set_gpio_mode(int pin, int mode)
 {
