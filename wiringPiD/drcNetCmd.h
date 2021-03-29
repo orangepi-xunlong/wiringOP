@@ -40,5 +40,5 @@ struct drcNetComStruct
   uint32_t pin ;
   uint32_t cmd ;
   uint32_t data ;
-} comDat ;
+};
 
