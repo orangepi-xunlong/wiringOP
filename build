@@ -49,7 +49,7 @@ select_boards()
     local choice
     local call=${1}
 
-    boards=("orangepir1" "orangepizero" "orangepipc" "orangepipcplus" "orangepiplus2e" "orangepione" "orangepilite" "orangepiplus" "orangepizeroplus2h3" "orangepizeroplus" "orangepipc2" "orangepiprime" "orangepizeroplus2h5" "orangepiwin" "orangepiwinplus" "orangepi3" "orangepilite2" "orangepioneplus" "orangepi4" "orangepirk3399" "orangepizero2" "orangepir1plus")
+    boards=("orangepir1" "orangepizero" "orangepipc" "orangepipcplus" "orangepiplus2e" "orangepione" "orangepilite" "orangepiplus" "orangepizeroplus2h3" "orangepizeroplus" "orangepipc2" "orangepiprime" "orangepizeroplus2h5" "orangepiwin" "orangepiwinplus" "orangepi3" "orangepi3-lts" "orangepilite2" "orangepioneplus" "orangepi4" "orangepirk3399" "orangepizero2" "orangepir1plus")
 
     if [[ -f /etc/orangepi-release ]]; then 
 
@@ -101,6 +101,7 @@ select_boards()
 	[[ $BOARD == orangepiwin ]] && BOARD=orangepiwin-a64
 	[[ $BOARD == orangepiwinplus ]] && BOARD=orangepiwinplus-a64
 	[[ $BOARD == orangepi3 ]] && BOARD=orangepi3-h6
+	[[ $BOARD == orangepi3-lts ]] && BOARD=orangepi3-h6
 	[[ $BOARD == orangepilite2 ]] && BOARD=orangepilite2-h6
 	[[ $BOARD == orangepioneplus ]] && BOARD=orangepioneplus-h6
 	[[ $BOARD == orangepizero2 ]] && BOARD=orangepizero2-h616
