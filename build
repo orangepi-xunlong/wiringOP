@@ -76,6 +76,7 @@ select_boards()
 		"orangepizero2"
 		"orangepizero2-lts"
 		"orangepizero2-b"
+		"orangepir1plus-lts"
 		"orangepir1plus")
 
 	if [[ -f /etc/orangepi-release ]]; then
@@ -136,6 +137,7 @@ select_boards()
 	[[ $BOARD == orangepizero2-lts ]] && BOARD=orangepizero2-h616
 	[[ $BOARD == orangepizero2-b ]] && BOARD=orangepizero2-h616
 	[[ $BOARD == orangepir1plus ]] && BOARD=orangepir1plus-rk3328
+	[[ $BOARD == orangepir1plus-lts ]] && BOARD=orangepir1plus-rk3328
 
 	export BOARD="${BOARD}"
 }
