@@ -51,6 +51,7 @@ select_boards()
 
 	boards=("orangepir1"
 		"orangepizero"
+		"orangepizero-lts"
 		"orangepipc"
 		"orangepipch5"
 		"orangepipcplus"
@@ -116,6 +117,7 @@ select_boards()
 
 	[[ $BOARD == orangepir1 ]] && BOARD=orangepir1-h2
 	[[ $BOARD == orangepizero ]] && BOARD=orangepizero-h2
+	[[ $BOARD == orangepizero-lts ]] && BOARD=orangepizero-h2
 	[[ $BOARD == orangepipc ]] && BOARD=orangepipc-h3
 	[[ $BOARD == orangepipch5 ]] && BOARD=orangepipc-h3
 	[[ $BOARD == orangepipcplus ]] && BOARD=orangepipcplus-h3
