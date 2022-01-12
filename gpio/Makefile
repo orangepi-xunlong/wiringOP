@@ -99,6 +99,10 @@ ifeq ($(BOARD), orangepi4)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_4
 endif
 
+ifeq ($(BOARD), orangepi4-lts)
+EXTRA_CFLAGS = -DCONFIG_ORANGEPI_4_LTS
+endif
+
 ifeq ($(BOARD), orangepi800)
 EXTRA_CFLAGS = -DCONFIG_ORANGEPI_800
 endif

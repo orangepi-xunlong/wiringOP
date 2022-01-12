@@ -91,7 +91,7 @@
 #endif
 
 /*********** OrangePi RK3399 *************/
-#if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_800
+#if CONFIG_ORANGEPI_RK3399 || CONFIG_ORANGEPI_4 || CONFIG_ORANGEPI_4_LTS || CONFIG_ORANGEPI_800
 
 #define GPIO1_BASE 							0xff730000
 #define GPIO2_BASE 							0xff780000
@@ -233,7 +233,7 @@ extern int pwmmode;
 extern unsigned int readR(unsigned int addr);
 extern void writeR(unsigned int val, unsigned int addr);
 extern int OrangePi_set_gpio_mode(int pin, int mode);
-#if !(defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_800 || defined CONFIG_ORANGEPI_R1PLUS || CONFIG_ORANGEPI_2G_IOT)
+#if !(defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_4_LTS || defined CONFIG_ORANGEPI_800 || defined CONFIG_ORANGEPI_R1PLUS || CONFIG_ORANGEPI_2G_IOT)
 extern int OrangePi_set_gpio_alt(int pin, int mode);
 #endif
 extern int OrangePi_get_gpio_mode(int pin);
