@@ -1,39 +1,17 @@
 ## How to download wiringOP
 
 ```
-$ sudo apt update
-$ sudo apt install git
-$ git clone https://github.com/orangepi-xunlong/wiringOP.git
+# apt-get update
+# apt-get install -y git
+# git clone https://github.com/orangepi-xunlong/wiringOP.git
 ```
 
 ## How to build wiringOP
 
 ```
-cd wiringOP
-./build clean
-./build 
-All available boards:
-   0. OrangePi_R1
-   1. OrangePi_ZERO
-   2. OrangePi_PC
-   3. OrangePi_PLUS
-   4. OrangePi_PCPLUS
-   5. OrangePi_PLUS2E
-   6. OrangePi_ONE_H3
-   7. OrangePi_LITE_H3
-   8. OrangePi_ZEROPLUS2_H3
-   9. OrangePi_PC2
-  10. OrangePi_PRIME
-  11. OrangePi_ZEROPLUS
-  12. OrangePi_ZEROPLUS2_H5
-  13. OrangePi_WIN
-  14. OrangePi_WINPLUS
-  15. OrangePi_3
-  16. OrangePi_LITE2
-  17. OrangePi_ONEPLUS
-  18. OrangePi_4
-  19. OrangePi_RK3399
-Choice:  12  //Select the number of the board
+# cd wiringOP
+# ./build clean
+# ./build 
 ```
 
 ---
@@ -269,7 +247,7 @@ Choice:  12  //Select the number of the board
 
 ## Allwinner H6
 
-### Orange Pi 3
+### Orange Pi 3/3 LTS
 
 ```
  +------+-----+----------+------+---+   OPi 3  +---+------+----------+-----+------+
@@ -293,7 +271,7 @@ Choice:  12  //Select the number of the board
  +------+-----+----------+------+---+   OPi 3  +---+------+----------+-----+------+
 ```
 
-### Orange Pi Lite2/Oneplus
+### Orange Pi Lite2/OnePlus
 
 ```
  +------+-----+----------+------+---+  OPi H6  +---+------+----------+-----+------+
@@ -319,15 +297,15 @@ Choice:  12  //Select the number of the board
 
 ## Allwinner H616
 
-### Orange Pi Zero 2
+### Orange Pi Zero2/Zero2 LTS/Zero2 B
 
 ```
  +------+-----+----------+------+---+  Zero 2  +---+------+----------+-----+------+
  | GPIO | wPi |   Name   | Mode | V | Physical | V | Mode | Name     | wPi | GPIO |
  +------+-----+----------+------+---+----++----+---+------+----------+-----+------+
  |      |     |     3.3V |      |   |  1 || 2  |   |      | 5V       |     |      |
- |  229 |   0 |    SDA.3 | ALT5 | 0 |  3 || 4  |   |      | 5V       |     |      |
- |  228 |   1 |    SCL.3 | ALT5 | 0 |  5 || 6  |   |      | GND      |     |      |
+ |  229 |   0 |    SDA.3 |  OFF | 0 |  3 || 4  |   |      | 5V       |     |      |
+ |  228 |   1 |    SCL.3 |  OFF | 0 |  5 || 6  |   |      | GND      |     |      |
  |   73 |   2 |      PC9 |  OFF | 0 |  7 || 8  | 0 | ALT2 | TXD.5    | 3   | 226  |
  |      |     |      GND |      |   |  9 || 10 | 0 | ALT2 | RXD.5    | 4   | 227  |
  |   70 |   5 |      PC6 | ALT5 | 0 | 11 || 12 | 0 | OFF  | PC11     | 6   | 75   |
@@ -341,6 +319,7 @@ Choice:  12  //Select the number of the board
  |   65 |  17 |      PC1 |  OFF | 0 | 27 || 28 |   |      |          |     |      |
  |  272 |  18 |     PI16 |  OFF | 0 | 29 || 30 |   |      |          |     |      |
  |  262 |  19 |      PI6 |  OFF | 0 | 31 || 32 |   |      |          |     |      |
+ |  234 |  20 |     PH10 | ALT3 | 0 | 33 || 34 |   |      |          |     |      |
  +------+-----+----------+------+---+----++----+---+------+----------+-----+------+
  | GPIO | wPi |   Name   | Mode | V | Physical | V | Mode | Name     | wPi | GPIO |
  +------+-----+----------+------+---+  Zero 2  +---+------+----------+-----+------+
@@ -379,7 +358,7 @@ Choice:  12  //Select the number of the board
  +------+-----+----------+------+---+OPi RK3399+---+------+----------+-----+------+
  ```
  
- ### Orange Pi 4/4b
+ ### Orange Pi 4/4B/4 LTS
 
  ```
  +------+-----+----------+------+---+OrangePi 4+---+---+--+----------+-----+------+
