@@ -2451,6 +2451,7 @@ int wiringPiSetup (void)
 
 #else /* CONFIG_ORANGEPI_RK3399  */
 	gpio2_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, GPIO2_BASE);
+  gpio = gpio2_base;
 	if ((int32_t)(unsigned long)gpio2_base == -1)
 		return wiringPiFailure(WPI_ALMOST,
 				"wiringPiSetup: mmap (GPIO2_BASE) failed: %s\n", strerror(errno));
