@@ -1535,6 +1535,31 @@ void pullUpDnControl (int pin, int pud)
 
   setupCheck ("pullUpDnControl") ;
 
+#ifdef CONFIG_ORANGEPI
+	if(version == ORANGEPI ) {
+		if (wiringPiDebug)
+			printf("Pin: pin:%d, pud:%d\n", pin, pud);
+		if ((pin & PI_GPIO_MASK) == 0) {
+			if (wiringPiMode == WPI_MODE_PINS)
+				pin = pinToGpio[pin];
+			else if (wiringPiMode == WPI_MODE_PHYS)
+				pin = physToGpio[pin];
+			else if (wiringPiMode != WPI_MODE_GPIO)
+				  return;
+
+			if (-1 == pin) {
+				printf("[%s:L%d] the pin:%d is invalid, please check it over!\n",
+							__func__,  __LINE__, pin);
+				return;
+			}
+
+            OrangePi_set_gpio_pud(pin, pud);
+		}
+	}
+	return ;
+#endif
+
+
   if ((pin & PI_GPIO_MASK) == 0)		// On-Board Pin
   {
     /**/ if (wiringPiMode == WPI_MODE_PINS)

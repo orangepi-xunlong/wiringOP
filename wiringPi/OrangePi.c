@@ -1954,6 +1954,42 @@ int OrangePi_get_gpio_mode(int pin)
 }
 
 /*
+ * Set GPIO Pull up/down
+ */
+void OrangePi_set_gpio_pud(int pin, int pud)
+{
+#if CONFIG_ORANGEPI_LITE2 || CONFIG_ORANGEPI_3 || CONFIG_ORANGEPI_ZERO2
+    //From eutim/OPI.GPIO: https://github.com/eutim/OPI.GPIO/blob/main/source/c_gpio.c
+    int gpio = pin;
+    uint32_t regval = 0;
+    int bank = gpio >> 5;
+    int index = gpio - (bank << 5);
+    int sub = index >> 4;
+    int sub_index = index - 16*sub;
+    uint32_t phyaddr = GPIOA_BASE + (bank * 36) + 0x1C + 4*sub; // +0x1c -> pullUpDn reg
+
+    if (wiringPiDebug)
+        printf("func:%s pin:%d pud:0x%x bank:%d index:%d sub:%d sub_index:%d phyaddr:0x%x\n",__func__, gpio, pud, bank, index, sub, sub_index, phyaddr);
+
+    regval = readR(phyaddr);
+
+    if (wiringPiDebug)
+        printf("pullUpDn before set:0x%x\n", regval);
+    regval &= ~(3 << (sub_index << 1));
+    regval |= (pud << (sub_index << 1));
+    if (wiringPiDebug)
+        printf("pullUpDn to set:0x%x\n", regval);
+    writeR(regval, phyaddr);
+    regval = readR(phyaddr);
+    if (wiringPiDebug)
+        printf("pullUpDn set:0x%x addr:0x%x\n", regval, phyaddr);
+#else
+    if (wiringPiDebug)
+        printf("func:%s Not support on this hardware\n",__func__);
+#endif
+}
+
+/*
  * Set GPIO Mode
  */
 int OrangePi_set_gpio_mode(int pin, int mode)

@@ -233,6 +233,7 @@ extern int pwmmode;
 extern unsigned int readR(unsigned int addr);
 extern void writeR(unsigned int val, unsigned int addr);
 extern int OrangePi_set_gpio_mode(int pin, int mode);
+extern void OrangePi_set_gpio_pud(int pin, int pud);
 #if !(defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_4_LTS || defined CONFIG_ORANGEPI_800 || defined CONFIG_ORANGEPI_R1PLUS || CONFIG_ORANGEPI_2G_IOT)
 extern int OrangePi_set_gpio_alt(int pin, int mode);
 #endif
