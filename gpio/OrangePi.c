@@ -735,9 +735,6 @@ char *physNames [64] =
        NULL, NULL,
        NULL, NULL,
        NULL, NULL,
-       NULL, NULL,
-       NULL, NULL,
-       NULL, NULL,
        NULL,
 };
 #endif
