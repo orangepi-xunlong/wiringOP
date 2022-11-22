@@ -218,6 +218,10 @@ extern volatile unsigned int *grf_base;
 #define PWM_CLK_DIV_48K  11
 #define PWM_CLK_DIV_72K  12
 
+#define SUNXI_PUD_OFF   0
+#define SUNXI_PUD_UP    1
+#define SUNXI_PUD_DOWN  2
+
 extern int pinToGpioOrangePi[64];
 extern int physToGpioOrangePi[64];
 extern int physToPinOrangePi[64];
@@ -233,6 +237,7 @@ extern int pwmmode;
 extern unsigned int readR(unsigned int addr);
 extern void writeR(unsigned int val, unsigned int addr);
 extern int OrangePi_set_gpio_mode(int pin, int mode);
+extern int OrangePi_set_gpio_pullUpDnControl(int pin, int pud);
 #if !(defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_4_LTS || defined CONFIG_ORANGEPI_800 || defined CONFIG_ORANGEPI_R1PLUS || CONFIG_ORANGEPI_2G_IOT)
 extern int OrangePi_set_gpio_alt(int pin, int mode);
 #endif
