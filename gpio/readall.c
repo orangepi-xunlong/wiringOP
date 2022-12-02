@@ -35,10 +35,6 @@
 
 #include <wiringPi.h>
 
-#ifdef CONFIG_ORANGEPI
-#include "OrangePi.h"
-#endif
-
 extern int wpMode ;
 
 #ifndef TRUE
@@ -68,7 +64,6 @@ static void doReadallExternal (void)
   printf ("+------+---------+--------+\n") ;
 }
 
-
 /*
  * doReadall:
  *	Read all the GPIO pins
@@ -79,79 +74,816 @@ static void doReadallExternal (void)
  *********************************************************************************
  */
 
-static char *alts [] =
+static char * alts_common [] =
 {
   "IN", "OUT", "ALT2", "ALT3", "ALT4", "ALT5", "ALT6", "OFF"
-} ;
+};
 
-#ifndef CONFIG_ORANGEPI
-static int physToWpi [64] = 
+static char * alts_rk3588 [] =
 {
-  -1,           // 0
-  -1, -1,       // 1, 2
-   8, -1,
-   9, -1,
-   7, 15,
-  -1, 16,
-   0,  1,
-   2, -1,
-   3,  4,
-  -1,  5,
-  12, -1,
-  13,  6,
-  14, 10,
-  -1, 11,       // 25, 26
-  30, 31,	// Actually I2C, but not used
-  21, -1,
-  22, 26,
-  23, -1,
-  24, 27,
-  25, 28,
-  -1, 29,
-  -1, -1,
-  -1, -1,
-  -1, -1,
-  -1, -1,
-  -1, -1,
-  17, 18,
-  19, 20,
-  -1, -1, -1, -1, -1, -1, -1, -1, -1
-} ;
+  "IN", "OUT", "ALT1", "ALT2", "ALT3", "ALT4", "ALT5", "ALT6", "ALT7", "ALT8", "ALT9", "ALT10", "ALT11", "ALT12", "ALT13", "ALT14",
+};
 
-static char *physNames [64] = 
+static char ** alts = alts_rk3588;
+
+static int physToWpi_PC_2[64] =
 {
-  NULL,
+	-1,     // 0
+	-1, -1, // 1, 2
+	 0, -1, // 3, 4
+	 1, -1, // 5, 6
+   	 2,  3, // 7, 8
+	-1,  4, // 9, 10
+	 5,  6, //11, 12
+	 7, -1, //13, 14
+	 8,  9, //15, 16
+	-1, 10, //17, 18
+	11, -1, //19, 20
+	12, 13, //21, 22
+	14, 15, //23, 24
+	-1, 16, //25, 26
+	17, 18, //27, 28
+	19, -1, //29, 30
+	20, 21, //31, 32
+	22, -1, //33, 34
+	23, 24, //35, 36
+	25, 26, //37, 38
+	-1, 27, //39, 40
 
-  "   3.3v", "5v     ",
-  "  SDA.1", "5v     ",
-  "  SCL.1", "0v     ",
-  "GPIO. 7", "TxD    ",
-  "     0v", "RxD    ",
-  "GPIO. 0", "GPIO. 1",
-  "GPIO. 2", "0v     ",
-  "GPIO. 3", "GPIO. 4",
-  "   3.3v", "GPIO. 5",
-  "   MOSI", "0v     ",
-  "   MISO", "GPIO. 6",
-  "   SCLK", "CE0    ",
-  "     0v", "CE1    ",
-  "  SDA.0", "SCL.0  ",
-  "GPIO.21", "0v     ",
-  "GPIO.22", "GPIO.26",
-  "GPIO.23", "0v     ",
-  "GPIO.24", "GPIO.27",
-  "GPIO.25", "GPIO.28",
-  "     0v", "GPIO.29",
-       NULL, NULL,
-       NULL, NULL,
-       NULL, NULL,
-       NULL, NULL,
-       NULL, NULL,
-  "GPIO.17", "GPIO.18",
-  "GPIO.19", "GPIO.20",
-   NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
-} ;
-#endif
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
+	-1, -1, -1, -1, -1, -1, -1, -1 								// 56-> 63
+};
+
+static char * physNames_PC_2[64] =
+{
+    NULL,
+	"    3.3V", "5V      ",
+	"   SDA.0", "5V      ",
+	"   SCL.0", "GND     ",
+	"   PWM.1", "PC05    ",
+	"     GND", "PC06    ",
+	"   RXD.2", "PD14    ",
+	"   TXD.2", "GND     ",
+	"   CTS.2", "PC04    ",
+	"    3.3V", "PC07    ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "RTS.2   ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "PA21    ",
+	"   SDA.1", "SCL.1   ",
+	"    PA07", "GND     ",
+	"    PA08", "RTS.1   ",
+	"    PA09", "GND     ",
+	"    PA10", "CTS.1   ",
+	"    PD11", "TXD.1   ",
+	"     GND", "RXD.1   ",
+};
+
+static int physToWpi_PRIME[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+	17, 18, //27,28
+	19, -1, //29,30
+	20, 21, //31,32
+	22, -1, //33,34
+	23, 24, //35,36
+	25, 26, //37,38
+	-1, 27, //39,40
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
+	-1, -1, -1, -1, -1, -1, -1, -1 								// 56-> 63
+};
+
+static char * physNames_PRIME[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.0", "5V      ",
+	"   SCL.0", "GND     ",
+	"   PWM.1", "PC05    ",
+	"     GND", "PC06    ",
+	"   RXD.2", "PD14    ",
+	"   TXD.2", "GND     ",
+	"   CTS.2", "PC04    ",
+	"    3.3V", "PC07    ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "RTS.2   ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "PC08    ",
+	"   SDA.1", "SCL.1   ",
+	"    PA07", "GND     ",
+	"    PA08", "PC09    ",
+	"    PA09", "GND     ",
+	"    PA10", "PC10    ",
+	"    PD11", "PC11    ",
+	"     GND", "PC12    ",
+};
+
+static int physToWpi_ZERO_PLUS[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+
+	// Padding:
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+	-1, -1, //41,42
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1, -1, -1, -1, -1, -1, -1,  							  // ... 63
+};
+
+static char * physNames_ZERO_PLUS[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.0", "5V      ",
+	"   SCL.0", "GND     ",
+	"     PA6", "TXD.1   ",
+	"     GND", "RXD.1   ",
+	"   RXD.2", "PA07    ",
+	"   TXD.2", "GND     ",
+	"   CTS.2", "SDA.1   ",
+	"    3.3V", "SCL.1   ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "RTS.2   ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "PA10    ",
+};
+
+static int physToWpi_ZERO_PLUS_2[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+
+	// Padding:
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+	-1, -1, //41,42
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1, -1, -1, -1, -1, -1, -1,   							  // ... 63
+};
+
+static char * physNames_ZERO_PLUS_2[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.0", "5V      ",
+	"   SCL.0", "GND     ",
+	"     PA6", "TXD.2   ",
+	"     GND", "RXD.2   ",
+	"   S-SCL", "PD11    ",
+	"   S-SDA", "GND     ",
+	"   CTS.2", "SDA.1   ",
+	"    3.3V", "SCL.1   ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "RTS.2   ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "PD14    ",
+};
+
+static int physToWpi_H3[64] =
+{
+	-1,	    // 0
+	-1, -1,	// 1,  2
+	 0, -1, // 3,  4
+	 1, -1, // 5,  6
+	 2,  3, // 7,  8
+	-1,  4, // 9, 10
+	 5,  6, //11, 12
+	 7, -1, //13, 14
+	 8,  9, //15, 16
+	-1, 10, //17, 18
+	11, -1, //19, 20
+	12, 13, //21, 22
+	14, 15, //23, 24
+	-1, 16,	//25, 26
+	17, 18, //27, 28
+	19, -1,	//29, 30
+	20, 21,	//31, 32
+	22, -1, //33, 34
+	23, 24, //35, 36
+	25, 26, //37, 38
+	-1, 27, //39, 40
+	28, 29, //41, 42
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	// ... 56
+	-1, -1, -1, -1, -1, -1, -1, 						    // ... 63
+};
+
+static char * physNames_H3[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.0", "5V      ",
+	"   SCL.0", "GND     ",
+	"     PA6", "TXD.3   ",
+	"     GND", "RXD.3   ",
+	"   RXD.2", "PD14    ",
+	"   TXD.2", "GND     ",
+	"   CTS.2", "PC04    ",
+	"    3.3V", "PC07    ",
+	"  MOSI.0", "GND     ",
+	"  MISO.0", "RTS.2   ",
+	"  SCLK.0", "CE.0    ",
+	"     GND", "PA21    ",
+	"   SDA.1", "SCL.1   ",
+	"    PA07", "GND     ",
+	"    PA08", "RTS.1   ",
+	"    PA09", "GND     ",
+	"    PA10", "CTS.1   ",
+	"    PA20", "TXD.1   ",
+	"     GND", "RXD.1   ",
+	"    PA04", "PA05    ",
+};
+
+static int physToWpi_ZERO[64] =
+{
+	-1,       // 0
+	-1, -1,   // 1, 2
+ 	 0, -1,   // 3, 4
+	 1, -1,   // 5, 6
+	 2,  3,   // 7, 8
+	-1,  4,   // 9, 10
+	 5,  6,   //11, 12
+	 7, -1,   //13, 14
+	 8,  9,   //15, 16
+	-1, 10,   //17, 18
+	11, -1,   //19, 20
+	12, 13,   //21, 22
+	14, 15,   //23, 24
+	-1, 16,   //25, 26
+
+	// Padding:
+	-1, -1,   //27, 28
+	-1, -1,   //29, 30
+	-1, -1,   //31, 32
+	-1, -1,   //33, 34
+	-1, -1,   //35, 36
+	-1, -1,   //37, 38
+	-1, -1,   //39, 40
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
+	-1, -1, -1, -1, -1, -1, -1, -1 								// 56-> 63
+};
+
+static char * physNames_ZERO[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.0", "5V      ",
+	"   SCL.0", "GND     ",
+	"     PA6", "TXD.1   ",
+	"     GND", "RXD.1   ",
+	"   RXD.2", "PA07    ",
+	"   TXD.2", "GND     ",
+	"   CTS.2", "SDA.1   ",
+	"    3.3V", "SCK.1   ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "RTS.2   ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "PA10    ",
+};
+
+static int physToWpi_WIN[64] =
+{
+	-1,        // 0
+	-1,  -1,   // 1, 2
+	 0,  -1,   // 3, 4
+	 1,  -1,   // 5, 6
+	 2,   3,   // 7, 8
+	-1,   4,   // 9, 10
+	 5,   6,   //11, 12
+	 7,  -1,   //13, 14
+	 8,   9,   //15, 16
+	-1,  10,   //17, 18
+	11,  -1,   //19, 20
+	12,  13,   //21, 22
+	14,  15,   //23, 24
+	-1,  16,   //25, 26
+	17,  18,   //27, 28
+	19,  -1,   //29, 30
+	20,  21,   //31, 32
+	22,  -1,   //33, 34
+	23,  24,   //35, 36
+	25,  26,   //37, 38
+	-1,  27,   //39, 40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
+	-1, -1, -1, -1, -1, -1, -1, -1 								// 56-> 63
+};
+
+static char * physNames_WIN[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.1", "5V      ",
+	"   SCL.1", "GND     ",
+	"    PL10", "PL02    ",
+	"     GND", "PL03    ",
+	"   RXD.3", "PD04    ",
+	"   TXD.3", "GND     ",
+	"   CTS.3", "PL09    ",
+	"    3.3V", "PC04    ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "RTS.3   ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "PD06    ",
+	"   SDA.2", "SCL.2   ",
+	"    PB04", "GND     ",
+	"    PB05", "RTS.2   ",
+	"    PB06", "GND     ",
+	"    PB07", "CTS.2   ",
+	"    PD05", "TXD.2   ",
+	"     GND", "RXD.2   ",
+};
+
+static int physToWpi_LITE_2[64] = 
+{
+	-1, 		  //0
+	-1, -1, 	  //1,2
+	 0, -1,		  //3,4
+	 1, -1, 	  //5,6
+	 2,  3, 	  //7,8
+	-1,  4, 	  //9,10
+	 5,  6, 	  //11,12
+	 7, -1, 	  //13,14
+	 8,  9, 	  //15,16
+	-1, 10, 	  //17,18
+	11, -1, 	  //19,20
+	12, 13, 	  //21,22
+	14, 15, 	  //23,24
+	-1, 16, 	  //25,26
+
+	// Padding:
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+	-1, -1, //41,42
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1, -1, -1, -1, -1, -1, -1,   							  // ... 63
+};
+
+static char * physNames_LITE_2[64] = 
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.1", "5V      ",
+	"   SCL.1", "GND     ",
+	"     PH4", "PD21    ",
+	"     GND", "PD22    ",
+	"   RXD.3", "PC9     ",
+	"   TXD.3", "GND     ",
+	"   CTS.3", "PC8     ",
+	"    3.3V", "PC7     ",
+	"  MOSI.0", "GND     ",
+	"  MISO.0", "RTS.3   ",
+	"  SCLK.0", "CE.0    ",
+	"     GND", "PH3     ",
+};
+
+static int physToWpi_3[64] = 
+{
+	-1, 		  //0
+	-1, -1, 	  //1,2
+	 0, -1,		  //3,4
+	 1, -1, 	  //5,6
+	 2,  3, 	  //7,8
+	-1,  4, 	  //9,10
+	 5,  6, 	  //11,12
+	 7, -1, 	  //13,14
+	 8,  9, 	  //15,16
+	-1, 10, 	  //17,18
+	11, -1, 	  //19,20
+	12, 13, 	  //21,22
+	14, 15, 	  //23,24
+	-1, 16, 	  //25,26
+
+	// Padding:
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+	-1, -1, //41,42
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1, -1, -1, -1, -1, -1, -1,   							  // ... 63
+
+};
+
+static char * physNames_3[64] = 
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.0", "5V      ",
+	"   SCL.0", "GND     ",
+	"   PWM.0", "PL02    ",
+	"     GND", "PL03    ",
+	"   RXD.3", "PD18    ",
+	"   TXD.3", "GND     ",
+	"    PL10", "PD15    ",
+	"    3.3V", "PD16    ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "PD21    ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "PL08    ",
+};
+
+static int physToWpi_ZERO_2[64] = 
+{
+	-1, 	// 0
+	-1, -1, // 1, 2
+	 0, -1, // 3, 4
+	 1, -1, // 5, 6
+	 2,  3, // 7, 8
+	-1,  4, // 8, 10
+	 5,  6, //11, 12
+	 7, -1, //13, 14  
+	 8,  9, //15, 16
+	-1, 10, //17, 18
+	11, -1, //19, 20
+	12, 13, //21, 22
+	14, 15, //23, 24
+	-1, 16, //25, 26
+	17, -1, //27, 28
+	18, -1, //29, 30
+	19, -1, //31, 32
+	20, -1, //33, 34
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1,  													  // ... 63
+};
+
+static char * physNames_ZERO_2[64] = 
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.3", "5V      ",
+	"   SCL.3", "GND     ",
+	"     PC9", "TXD.5   ",
+	"     GND", "RXD.5   ",
+	"     PC6", "PC11    ",
+	"     PC5", "GND     ",
+	"     PC8", "PC15    ",
+	"    3.3V", "PC14    ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "PC7     ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "PC10    ",
+	"     PC1", "        ",
+	"    PI16", "        ",
+	"     PI6", "        ",
+	"    PH10", "        ",
+};
+
+static int physToWpi_RK3399[64] =
+{
+	-1,		//0
+	-1, -1,	//1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16,	//25,26
+	17,	18, //27,28
+	19, -1,	//29,30
+	20, 21,	//31,32
+	22, -1, //33,34
+	23, 24, //35,36
+	25, 26, //37,38
+	-1, 27, //39,40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	// ... 56
+	-1, -1, -1, -1, -1, -1, -1,										// ... 63
+};
+
+static char * physNames_RK3399[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.0", "5V      ",
+	"   SCL.0", "GND     ",
+	"   GPIO4", "Tx      ",
+	"     GND", "Rx      ",
+	"  GPIO17", "GPIO18  ",
+	"  GPIO27", "GND     ",
+	"  GPIO22", "GPIO23  ",
+	"    3.3V", "GPIO24  ",
+	"    MOSI", "GND     ",
+	"    MISO", "GPIO25  ",
+	"    SCLK", "CS0     ",
+	"     GND", "CS1     ",
+	"    DNP1", "DNP2    ",
+	"   GPIO5", "GND     ",
+	"   GPIO6", "GPIO12  ",
+	"  GPIO13", "GND     ",
+	"  GPIO19", "GPIO16  ",
+	"  GPIO26", "GPIO20  ",
+	"     GND", "GPIO21  ",
+};
+
+static int physToWpi_4[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+
+	// Padding:
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,     								// ... 63
+};
+
+static char * physNames_4[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"I2C2_SDA", "5V      ",
+	"I2C2_SCL", "GND     ",
+	"    PWM1", "I2C3_SCL",
+	"     GND", "I2C3_SDA",
+	"GPIO1_A1", "GPIO1_C2",
+	"GPIO1_A3", "GND     ",
+	"GPIO2_D4", "GPIO1_C6",
+	"    3.3V", "GPIO1_C7",
+	"SPI1_TXD", "GND     ",
+	"SPI1_RXD", "GPIO1_D0",
+	"SPI1_CLK", "SPI1_CS ",
+	"     GND", "GPIO4_C5",
+	"I2C2_SDA", "I2C2_SCL",
+	" I2S0_RX", "GND     ",
+	" I2S0_TX", "I2S_CLK ",
+	"I2S0_SCK", "GND     ",
+	"I2S0_SI0", "I2S0_SO0",
+	"I2S0_SI1", "I2S0_SI2",
+	"     GND", "I2S0_SI3",
+};
+
+static int physToWpi_4_LTS[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+
+	// Padding:
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,    	 								// ... 63
+};
+
+static char * physNames_4_LTS[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"I2C8_SDA", "5V      ",
+	"I2C8_SCL", "GND     ",
+	"    PWM1", "I2C3_SCL",
+	"     GND", "I2C3_SDA",
+	"GPIO1_A1", "GPIO1_C2",
+	"GPIO1_A3", "GND     ",
+	"GPIO2_D4", "GPIO1_C6",
+	"    3.3V", "GPIO1_C7",
+	"SPI1_TXD", "GND     ",
+	"SPI1_RXD", "GPIO1_D0",
+	"SPI1_CLK", "SPI1_CS ",
+	"     GND", "GPIO4_C5",
+};
+
+static int physToWpi_800[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,     								// ... 63
+};
+
+static char * physNames_800[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.4", "5V      ",
+	"   SCL.4", "GND     ",
+	"    PWM1", "RXD.4   ",
+	"     GND", "TXD.4   ",
+	"   TXD.2", "GPIO4_D0",
+	"   RXD.2", "GND     ",
+	"GPIO4_C5", "SDA.2   ",
+	"    3.3V", "SCL.2   ",
+	"SPI2_TXD", "GND     ",
+	"SPI2_RXD", "GPIO4_D1",
+	"SPI2_CLK", "SPI2_CS ",
+	"     GND", "GPIO4_D2",
+};
+
+
+static int physToWpi_R1_PLUS[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0,  1, //3,4
+	 2,  3, //5,6
+	-1, -1, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+
+	// Padding:
+	-1, -1, //15,16
+	-1, -1, //17,18
+	-1, -1, //19,20
+	-1, -1, //21,22
+	-1, -1, //23,24
+	-1, -1, //25,26
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,  									// ... 63
+};
+
+static char * physNames_R1_PLUS[64] =
+{
+	NULL,
+	"5V      ", "GND     ",
+	"SDA.0   ", "SCK.0   ",
+	"TXD.1   ", "RXD.1   ",
+	"        ", "        ",
+	"        ", "GPIO3_C0",
+	"CTS.1   ", "RTS.1   ",
+	"GPIO2_A2", "        ",
+};
+
+static int physToWpi_5[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
+};
+
+static char * physNames_5[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.5", "5V      ",
+	"   SCL.5", "GND     ",
+	"   PWM15", "RXD.0   ",
+	"     GND", "TXD.0   ",
+	" CAN1_RX", "CAN2_TX ",
+	" CAN1_TX", "GND     ",
+	" CAN2_RX", "SDA.1   ",
+	"    3.3V", "SCL.1   ",
+	"SPI4_TXD", "GND     ",
+	"SPI4_RXD", "GPIO2_D4",
+	"SPI4_CLK", "SPI4_CS1",
+	"     GND", "PWM1    ",
+};
+
+static int * physToWpi;
+static char ** physNames;
+
 
 /*
  * readallPhys:
@@ -161,61 +893,62 @@ static char *physNames [64] =
  */
 void readallPhys (int physPin)
 {
-  int pin ;
+	int pin ;
 
-  if (physPinToGpio (physPin) == -1)
-    printf (" |      |    ") ;
-  else
-    printf (" | %4d | %3d", physPinToGpio (physPin), physToWpi [physPin]) ;
+	if (physPinToGpio (physPin) == -1)
+		printf (" |      |    ") ;
+	else
+		printf (" | %4d | %3d", physPinToGpio (physPin), physToWpi [physPin]) ;
 
-  printf (" | %s", physNames [physPin]);
+	printf (" | %s", physNames[physPin]);
+	
 
-  if (physToWpi [physPin] == -1)
-    printf (" |      |  ") ;
-  else
-  {
-    /**/ if (wpMode == WPI_MODE_GPIO)
-      pin = physPinToGpio (physPin) ;
-    else if (wpMode == WPI_MODE_PHYS)
-      pin = physPin ;
-    else
-      pin = physToWpi [physPin] ;
+	if (physToWpi [physPin] == -1)
+	{
+		printf (" |        |  ") ;
+	}
+	else
+	{
+		if (wpMode == WPI_MODE_GPIO)
+			pin = physPinToGpio (physPin) ;
+		else if (wpMode == WPI_MODE_PHYS)
+			pin = physPin ;
+		else
+			pin = physToWpi [physPin] ;
 
-   printf (" | %4s", alts [getAlt(pin)]) ;
-    printf (" | %d", digitalRead (pin)) ;
-  }
+		printf (" | %6s", alts[getAlt(pin)]) ;
+		printf (" | %d", digitalRead (pin)) ;
+	}
 
-// Pin numbers:
+	// Pin numbers:
+	printf (" | %2d", physPin) ;
+	++physPin ;
+	printf (" || %-2d", physPin) ;
 
-  printf (" | %2d", physPin) ;
-  ++physPin ;
-  printf (" || %-2d", physPin) ;
+	// Same, reversed
+	if (physToWpi [physPin] == -1)
+		printf (" |   |       ") ;
+	else
+	{
+		if (wpMode == WPI_MODE_GPIO)
+			pin = physPinToGpio (physPin) ;
+		else if (wpMode == WPI_MODE_PHYS)
+			pin = physPin ;
+		else
+			pin = physToWpi [physPin] ;
 
-// Same, reversed
+		printf (" | %d", digitalRead (pin)) ;
+		printf (" | %-6s", alts [getAlt (pin)]) ;
+	}
 
-  if (physToWpi [physPin] == -1)
-    printf (" |   |     ") ;
-  else
-  {
-    /**/ if (wpMode == WPI_MODE_GPIO)
-      pin = physPinToGpio (physPin) ;
-    else if (wpMode == WPI_MODE_PHYS)
-      pin = physPin ;
-    else
-      pin = physToWpi [physPin] ;
+	printf (" | %-5s", physNames [physPin]) ;
 
-    printf (" | %d", digitalRead (pin)) ;
-    printf (" | %-4s", alts [getAlt (pin)]) ;
-  }
+	if (physToWpi     [physPin] == -1)
+		printf (" |     |     ") ;
+	else
+		printf (" | %-3d | %-4d", physToWpi [physPin], physPinToGpio (physPin)) ;
 
-  printf (" | %-5s", physNames [physPin]) ;
-
-  if (physToWpi     [physPin] == -1)
-    printf (" |     |     ") ;
-  else
-    printf (" | %-3d | %-4d", physToWpi [physPin], physPinToGpio (physPin)) ;
-
-  printf (" |\n") ;
+	printf (" |\n") ;
 }
 
 
@@ -332,6 +1065,215 @@ static void piPlusReadall (int model)
   plus2header (model) ;
 }
 
+/*
+ * ReadAll 
+ */
+void OrangePiReadAll(int model)
+{
+    int pin;
+	int tmp = wiringPiDebug;
+    wiringPiDebug = FALSE;
+
+	switch (model)
+	{
+		case PI_MODEL_PC_2:
+			printf (" +------+-----+----------+------+---+  OPi PC2 +---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_PC_2;
+			physNames =  physNames_PC_2;
+			alts = alts_common;
+			break;
+		case PI_MODEL_PRIME:
+			printf (" +------+-----+----------+------+---+   PRIME  +---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_PRIME;
+			physNames =  physNames_PRIME;
+			alts = alts_common;
+			break;
+		case PI_MODEL_ZERO_PLUS:
+			printf (" +------+-----+----------+------+---+ ZEROPLUS +---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_ZERO_PLUS;
+			physNames =  physNames_ZERO_PLUS;
+			alts = alts_common;
+			break;
+		case PI_MODEL_ZERO_PLUS_2:
+			printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_ZERO_PLUS_2;
+			physNames =  physNames_ZERO_PLUS_2;
+			alts = alts_common;
+			break;
+		case PI_MODEL_H3:
+			printf (" +------+-----+----------+------+---+OrangePiH3+---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_H3;
+			physNames =  physNames_H3;
+			alts = alts_common;
+			break;
+		case PI_MODEL_ZERO:
+			printf (" +------+-----+----------+------+---+  OPi H2  +---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_ZERO;
+			physNames =  physNames_ZERO;
+			alts = alts_common;
+			break;
+		case PI_MODEL_WIN:
+			printf (" +------+-----+----------+------+---+ OPi Win  +---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_WIN;
+			physNames =  physNames_WIN;
+			alts = alts_common;
+			break;
+		case PI_MODEL_LTIE_2:
+			printf (" +------+-----+----------+------+---+  OPi H6  +---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_LITE_2;
+			physNames =  physNames_LITE_2;
+			alts = alts_common;
+			break;
+		case PI_MODEL_3:
+			printf (" +------+-----+----------+------+---+   OPi 3  +---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_3;
+			physNames =  physNames_3;
+			alts = alts_common;
+			break;
+		case PI_MODEL_ZERO_2:
+			printf (" +------+-----+----------+------+---+  Zero 2  +---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_ZERO_2;
+			physNames =  physNames_ZERO_2;
+			alts = alts_common;
+			break;
+		case PI_MODEL_RK3399:
+			printf (" +------+-----+----------+------+---+OPi RK3399+---+------+----------+-----+------+\n");
+			physToWpi =  physToWpi_RK3399;
+			physNames =  physNames_RK3399;
+			alts = alts_common;
+			break;
+		case PI_MODEL_4:
+			printf (" +------+-----+----------+------+---+OrangePi 4+---+---+--+----------+-----+------+\n");
+			physToWpi =  physToWpi_4;
+			physNames =  physNames_4;
+			alts = alts_common;
+			break;
+		case PI_MODEL_4_LTS:
+			printf (" +------+-----+----------+------+---+OPi 4 LTS +---+---+--+----------+-----+------+\n");
+			physToWpi =  physToWpi_4_LTS;
+			physNames =  physNames_4_LTS;
+			alts = alts_common;
+			break;
+		case PI_MODEL_800:
+			physToWpi =  physToWpi_800;
+			physNames =  physNames_800;
+			alts = alts_common;
+			printf (" +------+-----+----------+------+---+  opi800  +---+---+--+----------+-----+------+\n");
+			break;
+		case PI_MODEL_R1_PLUS:
+			printf (" +------+-----+----------+------+---+ R1 Plus  +---+---+--+----------+-----+------+\n");
+			physToWpi =  physToWpi_R1_PLUS;
+			physNames =  physNames_R1_PLUS;
+			alts = alts_common;
+			break;
+		case PI_MODEL_5:
+			printf (" +------+-----+----------+--------+---+   OPI5   +---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_5;
+			physNames =  physNames_5;
+			alts = alts_rk3588;
+			break;
+		default:
+			printf ("Oops - unable to determine board type... model: %d\n", model);
+			break ;
+	}
+
+    printf (" | GPIO | wPi |   Name   |  Mode  | V | Physical | V |  Mode  | Name     | wPi | GPIO |\n");
+    printf (" +------+-----+----------+--------+---+----++----+---+--------+----------+-----+------+\n");
+
+	switch (model)
+	{
+		case PI_MODEL_H3:
+		case PI_MODEL_RK3399:
+		case PI_MODEL_4:
+		case PI_MODEL_PC_2:
+		case PI_MODEL_PRIME:
+		case PI_MODEL_WIN:
+		case PI_MODEL_ZERO_PLUS:
+			for (pin = 1 ; pin <= 40; pin += 2)
+			break;
+		case PI_MODEL_LTIE_2:
+		case PI_MODEL_ZERO_PLUS_2:
+		case PI_MODEL_3:
+		case PI_MODEL_ZERO:
+		case PI_MODEL_800:
+		case PI_MODEL_4_LTS:
+		case PI_MODEL_5:
+			for (pin = 1 ; pin <= 26; pin += 2)
+				readallPhys(pin);
+			break;
+		case PI_MODEL_R1_PLUS:
+			for (pin = 1 ; pin <= 13; pin += 2)
+				readallPhys(pin);
+			break;
+		case PI_MODEL_ZERO_2:
+			for (pin = 1 ; pin <= 34; pin += 2)
+				readallPhys(pin);
+			break;
+		default:
+			printf ("Oops - unable to determine board type... model: %d\n", model);
+			break ;
+	}
+
+    printf (" +------+-----+----------+--------+---+----++----+---+--------+----------+-----+------+\n");
+    printf (" | GPIO | wPi |   Name   |  Mode  | V | Physical | V |  Mode  | Name     | wPi | GPIO |\n");
+
+	switch (model)
+	{
+		case PI_MODEL_PC_2:
+			printf (" +------+-----+----------+------+---+  OPi PC2 +---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_PRIME:
+			printf (" +------+-----+----------+------+---+   PRIME  +---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_ZERO_PLUS:
+			printf (" +------+-----+----------+------+---+ ZEROPLUS +---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_ZERO_PLUS_2:
+			printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_H3:
+			printf (" +------+-----+----------+------+---+OrangePiH3+---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_ZERO:
+			printf (" +------+-----+----------+------+---+  OPi H2  +---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_WIN:
+			printf (" +------+-----+----------+------+---+ OPi Win  +---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_LTIE_2:
+			printf (" +------+-----+----------+------+---+  OPi H6  +---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_3:
+			printf (" +------+-----+----------+------+---+   OPi 3  +---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_ZERO_2:
+			printf (" +------+-----+----------+------+---+  Zero 2  +---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_RK3399:
+			printf (" +------+-----+----------+------+---+OPi RK3399+---+------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_4:
+			printf (" +------+-----+----------+------+---+OrangePi 4+---+---+--+----------+-----+------+\n");
+			break;
+		case PI_MODEL_4_LTS:
+			printf (" +------+-----+----------+------+---+OPi 4 LTS +---+---+--+----------+-----+------+\n");
+			break;
+		case PI_MODEL_800:
+			printf (" +------+-----+----------+------+---+  opi800  +---+---+--+----------+-----+------+\n");
+			break;
+		case PI_MODEL_R1_PLUS:
+			printf (" +------+-----+----------+------+---+ R1 Plus  +---+---+--+----------+-----+------+\n");
+			break;
+		case PI_MODEL_5:
+			printf (" +------+-----+----------+--------+---+   OPI5   +---+--------+----------+-----+------+\n");
+			break;
+		default:
+			printf ("Oops - unable to determine board type... model: %d\n", model);
+			break ;
+	}
+
+    wiringPiDebug = tmp;
+}
 
 /*
  * doReadall:
@@ -342,29 +1284,17 @@ static void piPlusReadall (int model)
 
 void doReadall (void)
 {
-  int model, rev, mem, maker, overVolted ;
+	int model = -1;
 
-  if (wiringPiNodes != NULL)	// External readall
-  {
-    doReadallExternal () ;
-    return ;
-  }
+	if (wiringPiNodes != NULL)	// External readall
+	{
+		doReadallExternal () ;
+		return ;
+	}
 
-  piBoardId (&model, &rev, &mem, &maker, &overVolted) ;
+	piBoardId (&model) ;
 
-  if ((model == PI_MODEL_A) || (model == PI_MODEL_B))
-    abReadall (model, rev) ;
-  else if ((model == PI_MODEL_BP) || (model == PI_MODEL_AP) ||
-	(model == PI_MODEL_2) ||
-	(model == PI_MODEL_3) || (model == PI_MODEL_3P) ||
-	(model == PI_MODEL_ZERO) || (model == PI_MODEL_ZERO_W))
-    piPlusReadall (model) ;
-  else if ((model == PI_MODEL_CM) || (model == PI_MODEL_CM3))
-    allReadall () ;
-  else if ( model == PI_MODEL_ORANGEPI)
-  	OrangePiReadAll();
-  else
-    printf ("Oops - unable to determine board type... model: %d\n", model) ;
+	OrangePiReadAll(model);
 }
 
 

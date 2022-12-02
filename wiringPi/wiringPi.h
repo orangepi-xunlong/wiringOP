@@ -36,24 +36,171 @@
 // GCC warning suppressor
 
 #define	UNU	__attribute__((unused))
+#define MAX_PIN_NUM        (0x40)
+
+#define PI_MODEL_A               0
+#define PI_MODEL_B               1
+#define PI_MODEL_AP              2
+#define PI_MODEL_BP              3
+#define PI_MODEL_2               4
+#define PI_ALPHA                 5
+#define PI_MODEL_CM              6
+#define PI_MODEL_07              7
+#define PI_MODEL_CM3            10
+#define PI_MODEL_ZERO_W         12
+#define PI_MODEL_3P             13
+
+#define PI_VERSION_1            0
+#define PI_VERSION_1_1          1
+#define PI_VERSION_1_2          2
+#define PI_VERSION_2            3
+
+#define PI_MAKER_SONY           0
+#define PI_MAKER_EGOMAN         1
+#define PI_MAKER_EMBEST         2
+#define PI_MAKER_UNKNOWN        3
+
+/*********** Allwinner H3 *************/
+#define H3_GPIO_BASE_ADDR                     0x01C20800U
+#define H3_R_GPIO_BASE_ADDR                   0x01F02000U
+/*********** Allwinner H3 *************/
+
+/*********** Allwinner H6 *************/
+#define H6_GPIO_BASE_ADDR                     0x0300B000U
+#define H6_R_GPIO_BASE_ADDR                   0x07022000U
+/*********** Allwinner H6 *************/
+
+typedef struct {
+	unsigned int gpio_base_addr;
+	unsigned int r_gpio_base_addr;
+	unsigned int * gpio;
+	unsigned int * r_gpio;
+} sunxi_gpio_info;
+
+
+/*********** Rockchip RK3588 *************/
+
+//gpio0~gpio4 register base addr
+#define RK3588_GPIO0_BASE 							0xfd8a0000U
+#define RK3588_GPIO1_BASE 							0xfec20000U
+#define RK3588_GPIO2_BASE 							0xfec30000U
+#define RK3588_GPIO3_BASE 							0xfec40000U
+#define RK3588_GPIO4_BASE 							0xfec50000U
+
+//gpio offset
+#define RK3588_GPIO_SWPORT_DR_L_OFFSET 				0x00U
+#define RK3588_GPIO_SWPORT_DR_H_OFFSET 				0x04U
+#define RK3588_GPIO_SWPORT_DDR_L_OFFSET 			0x08U
+#define RK3588_GPIO_SWPORT_DDR_H_OFFSET 			0x0cU
+#define RK3588_GPIO_EXT_PORT_OFFSET					0x70U
+
+//CRU clock-controller base addr
+#define RK3588_CRU_BASE 							0xfd7c0000U
+#define RK3588_CRU_GATE_CON16_OFFSET 			    0x0840U    //for gpio1 bit 14 15 	30 31
+#define RK3588_CRU_GATE_CON17_OFFSET 			    0x0844U    //for gpio2/3/4 - bit 0 1 2 3 4 5 	16 17 18 19 20 21
+
+#define RK3588_PMU1CRU_BASE 						0xfd7f0000U
+#define RK3588_PMU1CRU_GATE_CON5_OFFSET 			0x0814U		//for gpio0 - bit 5 6 	21 22
+
+#define RK3588_GPIO_NUM                          	(0x40)
+#define RK3588_GPIO_BIT(x)                        	(1UL << (x))
+
+//gpio iomux
+#define RK3588_PMU1_IOC_BASE						0xfd5f0000U
+#define RK3588_PMU1_IOC_GPIO0A_IOMUX_SEL_L			0x00U	//gpio0a0~gpio0b3
+#define RK3588_PMU1_IOC_GPIO0A_IOMUX_SEL_H			0x04U	//gpio0a4~gpio0b7
+#define RK3588_PMU1_IOC_GPIO0B_IOMUX_SEL_L			0x08U	//gpio0b0~gpio0b3
+
+#define RK3588_PMU2_IOC_BASE						0xfd5f4000U
+#define RK3588_PMU2_IOC_GPIO0B_IOMUX_SEL_H			0x00U	//gpio0a5~gpio0b7
+#define RK3588_PMU2_IOC_GPIO0C_IOMUX_SEL_L			0x04U	//gpio0a0~gpio0b3
+#define RK3588_PMU2_IOC_GPIO0C_IOMUX_SEL_H			0x08U	//gpio0a4~gpio0b7
+#define RK3588_PMU2_IOC_GPIO0D_IOMUX_SEL_L			0x0cU	//gpio0a0~gpio0b3
+#define RK3588_PMU2_IOC_GPIO0D_IOMUX_SEL_H			0x10U	//gpio0a4~gpio0b6
+
+#define RK3588_BUS_IOC_BASE							0xfd5f8000U
+
+typedef struct {
+	unsigned int * gpio0_base;
+	unsigned int * gpio1_base;
+	unsigned int * gpio2_base;
+	unsigned int * gpio3_base;
+	unsigned int * gpio4_base;
+
+	unsigned int * pmu1_ioc_base;
+	unsigned int * pmu2_ioc_base;
+	unsigned int * bus_ioc_base;
+
+	unsigned int * cur_base;
+	unsigned int * pmu1cur_base;
+} rk3588_soc_info;
+
+/*********** Rockchip RK3588 *************/
+
+
+/*********** Rockchip RK3399 *************/
+
+#define RK3399_GPIO1_BASE 							0xff730000U
+#define RK3399_GPIO2_BASE 							0xff780000U
+#define RK3399_GPIO4_BASE 							0xff790000U
+#define RK3399_GPIO_NUM                          	(0x40)
+#define RK3399_GPIO_BIT(x)                        	(1UL << (x))
+#define RK3399_GPIO_SWPORTA_DR_OFFSET 				0x00U
+#define RK3399_GPIO_SWPORTA_DDR_OFFSET 				0x04U
+#define RK3399_GPIO_EXT_PORTA_OFFSET				0x50U
+
+#define RK3399_PMUGRF_BASE 	     					0xff320000U	 
+#define RK3399_GRF_BASE 							0xff77e000U
+#define RK3399_CRU_BASE 							0xff760000U
+#define RK3399_PMUCRU_BASE 							0xff750000U
+#define RK3399_CRU_CLKGATE_CON31_OFFSET 			0x037cU    //bit 3 4 5
+#define RK3399_PMUCRU_CLKGATE_CON1_OFFSET 			0x0104U
+
+typedef struct {
+	unsigned int * gpio2_base;
+
+	unsigned int * grf_base;
+	unsigned int * cru_base;
+	unsigned int * pmucru_base;
+	unsigned int * pmugrf_base;
+	unsigned int * gpio1_base;
+	unsigned int * gpio4_base;
+} rk3399_soc_info;
+
+/*********** Rockchip RK3399 *************/
+
+
+/*********** Rockchip RK3328 *************/
+
+#define RK3328_GPIO2_BASE 							0xff230000
+#define RK3328_GPIO3_BASE 							0xff240000
+#define RK3328_GPIO_NUM                          	(0x40)
+#define RK3328_GPIO_SWPORTA_DR_OFFSET 				0x00
+#define RK3328_GPIO_SWPORTA_DDR_OFFSET 				0x04
+#define RK3328_GPIO_EXT_PORTA_OFFSET				0x50
+#define RK3328_GRF_BASE 							0xff100000
+#define RK3328_CRU_BASE 							0xff440000
+#define RK3328_CRU_CLKGATE_CON16_OFFSET 			0x0240    //bit 7 8 9 10 9877
+
+typedef struct {
+	unsigned int * gpio2_base;
+	unsigned int * gpio3_base;
+	unsigned int * cru_base;
+	unsigned int * grf_base;
+} rk3328_soc_info;
+
+/*********** Rockchip RK3328 *************/
+
 
 // Mask for the bottom 64 pins which belong to the Raspberry Pi
 //	The others are available for the other devices
 
-#ifndef CONFIG_ORANGEPI
+
 #define	PI_GPIO_MASK	(0xFFFFFFC0)
-#endif
+
 
 // Handy defines
-
-#ifdef CONFIG_ORANGEPI
-#define ORANGEPI      8888
-
 extern int wiringPiDebug;
-
-//#define CONFIG_ORANGEPI 1
-//#define CONFIG_ORANGEPI_H3 1
-#endif
 
 // wiringPi modes
 
@@ -98,34 +245,42 @@ extern int wiringPiDebug;
 // Pi model types and version numbers
 //	Intended for the GPIO program Use at your own risk.
 
-#define	PI_MODEL_A		 0
-#define	PI_MODEL_B		 1
-#define	PI_MODEL_AP		 2
-#define	PI_MODEL_BP		 3
-#define	PI_MODEL_2		 4
-#define	PI_ALPHA		 5
-#define	PI_MODEL_CM		 6
-#define	PI_MODEL_07		 7
-#define	PI_MODEL_3		 8
-#define	PI_MODEL_ZERO		 9
-#define	PI_MODEL_CM3		10
-#define	PI_MODEL_ZERO_W		12
-#define	PI_MODEL_3P 		13
-#define	PI_MODEL_ORANGEPI   14
+/* Allwinner H6 */
+#define	PI_MODEL_3		 		0
+#define	PI_MODEL_LTIE_2			1
 
-#define	PI_VERSION_1		0
-#define	PI_VERSION_1_1		1
-#define	PI_VERSION_1_2		2
-#define	PI_VERSION_2		3
+/* Allwinner H2+ */
+#define	PI_MODEL_ZERO			2
 
-#define	PI_MAKER_SONY		0
-#define	PI_MAKER_EGOMAN		1
-#define	PI_MAKER_EMBEST		2
-#define	PI_MAKER_UNKNOWN	3
+/* Allwinner H3 */
+#define	PI_MODEL_H3				3
+#define	PI_MODEL_ZERO_PLUS_2	4
 
-#ifndef CONFIG_ORANGEPI
+/* Allwinner A64 */
+#define	PI_MODEL_WIN			5
+
+/* Allwinner H5 */
+#define	PI_MODEL_PRIME			6
+#define	PI_MODEL_PC_2			7
+#define	PI_MODEL_ZERO_PLUS		8
+
+/* Allwinner H616 */
+#define	PI_MODEL_ZERO_2			9
+
+
+/* Rockchip RK3399 */
+#define	PI_MODEL_800			15
+#define	PI_MODEL_4				16
+#define	PI_MODEL_4_LTS			17
+#define	PI_MODEL_RK3399			18
+
+/* Rockchip RK3328 */
+#define	PI_MODEL_R1_PLUS		22
+
+/* Rockchip RK3588 */
+#define	PI_MODEL_5				24
+
 extern const char *piModelNames    [16] ;
-#endif
 
 extern const char *piRevisionNames [16] ;
 extern const char *piMakerNames    [16] ;
@@ -236,9 +391,8 @@ extern int  wiringPiSetupPiFaceForGpioProg (void) ;	// Don't use this - for gpio
 
 // On-Board Raspberry Pi hardware specific stuff
 
-extern          int  piGpioLayout        (void) ;
 extern          int  piBoardRev          (void) ;	// Deprecated
-extern          void piBoardId           (int *model, int *rev, int *mem, int *maker, int *overVolted) ;
+extern          void piBoardId           (int *model) ;
 extern          int  wpiPinToGpio        (int wpiPin) ;
 extern          int  physPinToGpio       (int physPin) ;
 extern          void setPadDrive         (int group, int value) ;
@@ -275,6 +429,16 @@ extern void         delay             (unsigned int howLong) ;
 extern void         delayMicroseconds (unsigned int howLong) ;
 extern unsigned int millis            (void) ;
 extern unsigned int micros            (void) ;
+
+extern unsigned int readR(unsigned int addr);
+extern void writeR(unsigned int val, unsigned int addr);
+extern int OrangePi_get_gpio_mode(int pin);
+extern int OrangePi_set_gpio_mode(int pin, int mode);
+extern int OrangePi_digitalRead(int pin);
+extern int OrangePi_digitalWrite(int pin, int value);
+extern int OrangePi_set_gpio_alt(int pin, int mode);
+
+void set_soc_info(void);
 
 #ifdef __cplusplus
 }

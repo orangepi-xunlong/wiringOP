@@ -4,10 +4,10 @@
 #include <string.h>
 #include "w25q64.h"
 
-#define SPI_CHANNEL 0 // /dev/spidevX.0
+#define SPI_CHANNEL 4 // /dev/spidevX.0
 //#define SPI_CHANNEL 1 // /dev/spidevX.0
 
-#define SPI_PORT 0
+#define SPI_PORT 1
 //#define SPI_PORT 1
 
 void dump(uint8_t *dt, uint32_t n) {

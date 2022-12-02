@@ -43,108 +43,6 @@ check_make_ok() {
   fi
 }
 
-select_boards()
-{
-	local cnt=0
-	local choice
-	local call=${1}
-
-	boards=("orangepir1"
-		"orangepizero"
-		"orangepizero-lts"
-		"orangepipc"
-		"orangepipch5"
-		"orangepipcplus"
-		"orangepiplus2e"
-		"orangepione"
-		"orangepioneh5"
-		"orangepilite"
-		"orangepiplus"
-		"orangepizeroplus2h3"
-		"orangepizeroplus"
-		"orangepipc2"
-		"orangepiprime"
-		"orangepizeroplus2h5"
-		"orangepiwin"
-		"orangepiwinplus"
-		"orangepi3"
-		"orangepi3-lts"
-		"orangepilite2"
-		"orangepioneplus"
-		"orangepi4"
-    		"orangepi4-lts"
-		"orangepirk3399"
-		"orangepi800"
-		"orangepizero2"
-		"orangepizero2-lts"
-		"orangepizero2-b"
-		"orangepir1plus-lts"
-		"orangepir1plus")
-
-	if [[ -f /etc/orangepi-release ]]; then
-
-		source /etc/orangepi-release
-
-	elif [[ -f /etc/armbian-release ]]; then
-
-		source /etc/armbian-release
-		[[ $BOARD == orangepi-r1 ]] && BOARD=orangepir1
-		[[ $BOARD == orangepi-rk3399 ]] && BOARD=orangepirk3399
-		[[ $BOARD == orangepizeroplus2-h3 ]] && BOARD=orangepizeroplus2h3
-		[[ $BOARD == orangepizeroplus2-h5 ]] && BOARD=orangepizeroplus2h5
-
-	else
-
-		printf "All available boards:\n"
-		for var in ${boards[@]} ; do
-			printf "%4d. %s\n" $cnt ${boards[$cnt]}
-			((cnt+=1))
-		done
-
-		while true ; do
-		read -p "Choice: " choice
-		if [ -z "${choice}" ] ; then
-			continue
-		fi
-		if [ -z "${choice//[0-9]/}" ] ; then
-			if [ $choice -ge 0 -a $choice -lt $cnt ] ; then
-			export BOARD="${boards[$choice]}"
-			break
-			fi
-		fi
-		printf "Invalid input ...\n"
-		done
-	fi
-
-	[[ $BOARD == orangepir1 ]] && BOARD=orangepir1-h2
-	[[ $BOARD == orangepizero ]] && BOARD=orangepizero-h2
-	[[ $BOARD == orangepizero-lts ]] && BOARD=orangepizero-h2
-	[[ $BOARD == orangepipc ]] && BOARD=orangepipc-h3
-	[[ $BOARD == orangepipch5 ]] && BOARD=orangepipc-h3
-	[[ $BOARD == orangepipcplus ]] && BOARD=orangepipcplus-h3
-	[[ $BOARD == orangepiplus2e ]] && BOARD=orangepiplus2e-h3
-	[[ $BOARD == orangepione ]] && BOARD=orangepione-h3
-	[[ $BOARD == orangepioneh5 ]] && BOARD=orangepione-h3
-	[[ $BOARD == orangepilite ]] && BOARD=orangepilite-h3
-	[[ $BOARD == orangepiplus ]] && BOARD=orangepiplus-h3
-	[[ $BOARD == orangepizeroplus ]] && BOARD=orangepizeroplus-h5
-	[[ $BOARD == orangepipc2 ]] && BOARD=orangepipc2-h5
-	[[ $BOARD == orangepiprime ]] && BOARD=orangepiprime-h5
-	[[ $BOARD == orangepiwin ]] && BOARD=orangepiwin-a64
-	[[ $BOARD == orangepiwinplus ]] && BOARD=orangepiwinplus-a64
-	[[ $BOARD == orangepi3 ]] && BOARD=orangepi3-h6
-	[[ $BOARD == orangepi3-lts ]] && BOARD=orangepi3-h6
-	[[ $BOARD == orangepilite2 ]] && BOARD=orangepilite2-h6
-	[[ $BOARD == orangepioneplus ]] && BOARD=orangepioneplus-h6
-	[[ $BOARD == orangepizero2 ]] && BOARD=orangepizero2-h616
-	[[ $BOARD == orangepizero2-lts ]] && BOARD=orangepizero2-h616
-	[[ $BOARD == orangepizero2-b ]] && BOARD=orangepizero2-h616
-	[[ $BOARD == orangepir1plus ]] && BOARD=orangepir1plus-rk3328
-	[[ $BOARD == orangepir1plus-lts ]] && BOARD=orangepir1plus-rk3328
-
-	export BOARD="${BOARD}"
-}
-
 sudo=${WIRINGPI_SUDO-sudo}
 
 if [ x$1 = "xclean" ]; then
@@ -209,8 +107,6 @@ if [ x$1 != "x" ]; then
   echo "Usage: $0 [clean | uninstall]"
   exit 1
 fi
-
-  select_boards
 
   echo "wiringPi Build script"
   echo "====================="

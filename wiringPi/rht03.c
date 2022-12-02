@@ -30,10 +30,6 @@
 #include "wiringPi.h"
 #include "rht03.h"
 
-#ifdef CONFIG_ORANGEPI
-#include "OrangePi.h"
-#endif
-
 /*
  * maxDetectLowHighWait:
  *	Wait for a transition from low to high on the bus

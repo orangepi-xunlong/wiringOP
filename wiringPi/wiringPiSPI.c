@@ -55,7 +55,7 @@ static int         spiFds [2] ;
 
 int wiringPiSPIGetFd (int channel)
 {
-  return spiFds [channel & 1] ;
+  return spiFds [channel] ;
 }
 
 
@@ -72,7 +72,7 @@ int wiringPiSPIDataRW (int channel, unsigned char *data, int len)
 {
   struct spi_ioc_transfer spi ;
 
-  channel &= 1 ;
+  //channel &= 1 ;
 
 // Mentioned in spidev.h but not used in the original kernel documentation
 //	test program )-:
@@ -104,8 +104,8 @@ int wiringPiSPISetupMode (int channel, int port, int speed, int mode)
 {
   int fd ;
 
-  mode    &= 3 ;	// Mode is 0, 1, 2 or 3
-  channel &= 1 ;	// Channel is 0 or 1
+  //mode    &= 3;
+  //channel &= 7;
 
   static char spidev[14];
 
