@@ -391,7 +391,6 @@ extern int  wiringPiSetupPiFaceForGpioProg (void) ;	// Don't use this - for gpio
 
 // On-Board Raspberry Pi hardware specific stuff
 
-extern          int  piBoardRev          (void) ;	// Deprecated
 extern          void piBoardId           (int *model) ;
 extern          int  wpiPinToGpio        (int wpiPin) ;
 extern          int  physPinToGpio       (int physPin) ;
