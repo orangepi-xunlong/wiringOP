@@ -2029,11 +2029,15 @@ void pullUpDnControl (int pin, int pud)
     else if (wiringPiMode != WPI_MODE_GPIO)
       return ;
 
-    *(gpio + GPPUD)              = pud & 3 ;		delayMicroseconds (5) ;
-    *(gpio + gpioToPUDCLK [pin]) = 1 << (pin & 31) ;	delayMicroseconds (5) ;
-    
-    *(gpio + GPPUD)              = 0 ;			delayMicroseconds (5) ;
-    *(gpio + gpioToPUDCLK [pin]) = 0 ;			delayMicroseconds (5) ;
+	if (pud == PUD_OFF) {
+		OrangePi_set_pull_up_dn(pin, PUD_OFF);
+	}
+	else if (pud == PUD_UP){
+		OrangePi_set_pull_up_dn(pin, PUD_UP);
+	}
+	else if (pud == PUD_DOWN){
+		OrangePi_set_pull_up_dn(pin, PUD_DOWN);
+	}
   }
   else						// Extension module
   {
@@ -4174,4 +4178,70 @@ int OrangePi_digitalRead(int pin)
 	}
 
 	return 0;
+}
+
+void OrangePi_set_pull_up_dn (int pin, int pud)
+{
+	unsigned int bank = pin >> 5;
+	unsigned int index = pin - (bank << 5);
+	unsigned int regval;
+	unsigned int offset0_7;
+	unsigned int phyaddr = 0;
+
+	switch (OrangePiModel)
+	{
+		case PI_MODEL_800: case PI_MODEL_4_LTS:
+		case PI_MODEL_4:   case PI_MODEL_RK3399:
+
+			/* */if ( bank > 1)
+				phyaddr = RK3399_GRF_BASE    + RK3399_GRF_GPIO2_3_4_P_OFFSET  + (((pin - 64) >> 3) << 2);
+			else if ( bank == 1 || pin < 16)
+				phyaddr = RK3399_PMUGRF_BASE + RK3399_PMUGRF_GPIO0_1_P_OFFSET + (((pin - 0)  >> 3) << 2);
+			else {
+				printf("gpio0 Group c,d does not support PU/PD control\n");
+				return ;
+			}
+
+			//offset0_7 = index - ((index >> 3) << 3);
+			offset0_7 = index % 8;
+
+			/* Ignore unused gpio */
+			if (ORANGEPI_PIN_MASK[bank][index] != -1)
+			{
+				if (wiringPiDebug)
+					printf("bank: %d, index: %d\n", bank, index);
+
+				regval = readR(phyaddr);
+				if (wiringPiDebug)
+					printf("read val from register[%#x]: %#x\n", phyaddr, regval);
+
+				/* bit write enable*/
+				regval |= 3 << ( 16 + (offset0_7 << 1));
+
+				/* clear bit */
+				regval &= ~(3 << (offset0_7 << 1));
+
+				/* */if (PUD_UP == pud) {
+					if ( pin < 8 || (bank == 2 && index > 15)) /* gpio0a, gpio2c, gpio2d */
+						regval |= 3 << (offset0_7 << 1);
+					else
+						regval |= 1 << (offset0_7 << 1);
+				}
+				else if(PUD_DOWN == pud) {
+					if ( pin < 8 || (bank == 2 && index > 15)) /* gpio0a, gpio2c, gpio2d */
+						regval |= 1 << (offset0_7 << 1);
+					else
+						regval |= 2 << (offset0_7 << 1);
+				}
+				else if(PUD_OFF == pud) {
+				}
+
+				writeR(regval, phyaddr);
+
+				if (wiringPiDebug)
+					printf("write val: %#x to register[%#x]\n", regval, phyaddr);
+			}
+
+			break;
+	}
 }

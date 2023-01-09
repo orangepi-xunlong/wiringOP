@@ -149,6 +149,9 @@ typedef struct {
 #define RK3399_GPIO_SWPORTA_DDR_OFFSET 				0x04U
 #define RK3399_GPIO_EXT_PORTA_OFFSET				0x50U
 
+#define RK3399_GRF_GPIO2_3_4_P_OFFSET				0x00040U
+#define RK3399_PMUGRF_GPIO0_1_P_OFFSET				0x00040U
+
 #define RK3399_PMUGRF_BASE 	     					0xff320000U	 
 #define RK3399_GRF_BASE 							0xff77e000U
 #define RK3399_CRU_BASE 							0xff760000U
@@ -436,6 +439,7 @@ extern int OrangePi_set_gpio_mode(int pin, int mode);
 extern int OrangePi_digitalRead(int pin);
 extern int OrangePi_digitalWrite(int pin, int value);
 extern int OrangePi_set_gpio_alt(int pin, int mode);
+extern void OrangePi_set_pull_up_dn (int pin, int pud);
 
 void set_soc_info(void);
 
