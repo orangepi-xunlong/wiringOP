@@ -1077,55 +1077,55 @@ void OrangePiReadAll(int model)
 	switch (model)
 	{
 		case PI_MODEL_PC_2:
-			printf (" +------+-----+----------+------+---+  OPi PC2 +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  OPi PC2 +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_PC_2;
 			physNames =  physNames_PC_2;
 			alts = alts_common;
 			break;
 		case PI_MODEL_PRIME:
-			printf (" +------+-----+----------+------+---+   PRIME  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+   PRIME  +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_PRIME;
 			physNames =  physNames_PRIME;
 			alts = alts_common;
 			break;
 		case PI_MODEL_ZERO_PLUS:
-			printf (" +------+-----+----------+------+---+ ZEROPLUS +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+ ZEROPLUS +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_ZERO_PLUS;
 			physNames =  physNames_ZERO_PLUS;
 			alts = alts_common;
 			break;
 		case PI_MODEL_ZERO_PLUS_2:
-			printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+ZEROPLUS 2+---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_ZERO_PLUS_2;
 			physNames =  physNames_ZERO_PLUS_2;
 			alts = alts_common;
 			break;
 		case PI_MODEL_H3:
-			printf (" +------+-----+----------+------+---+OrangePiH3+---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+OrangePiH3+---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_H3;
 			physNames =  physNames_H3;
 			alts = alts_common;
 			break;
 		case PI_MODEL_ZERO:
-			printf (" +------+-----+----------+------+---+  OPi H2  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  OPi H2  +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_ZERO;
 			physNames =  physNames_ZERO;
 			alts = alts_common;
 			break;
 		case PI_MODEL_WIN:
-			printf (" +------+-----+----------+------+---+ OPi Win  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  OPi Win +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_WIN;
 			physNames =  physNames_WIN;
 			alts = alts_common;
 			break;
 		case PI_MODEL_LTIE_2:
-			printf (" +------+-----+----------+------+---+  OPi H6  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  OPi H6  +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_LITE_2;
 			physNames =  physNames_LITE_2;
 			alts = alts_common;
 			break;
 		case PI_MODEL_3:
-			printf (" +------+-----+----------+------+---+   OPi 3  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+   OPi 3  +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_3;
 			physNames =  physNames_3;
 			alts = alts_common;
@@ -1137,19 +1137,19 @@ void OrangePiReadAll(int model)
 			alts = alts_common;
 			break;
 		case PI_MODEL_RK3399:
-			printf (" +------+-----+----------+------+---+OPi RK3399+---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+OPi RK3399+---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_RK3399;
 			physNames =  physNames_RK3399;
 			alts = alts_common;
 			break;
 		case PI_MODEL_4:
-			printf (" +------+-----+----------+------+---+OrangePi 4+---+---+--+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+OrangePi 4+---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_4;
 			physNames =  physNames_4;
 			alts = alts_common;
 			break;
 		case PI_MODEL_4_LTS:
-			printf (" +------+-----+----------+------+---+OPi 4 LTS +---+---+--+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+ OPi 4 LTS+---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_4_LTS;
 			physNames =  physNames_4_LTS;
 			alts = alts_common;
@@ -1158,10 +1158,10 @@ void OrangePiReadAll(int model)
 			physToWpi =  physToWpi_800;
 			physNames =  physNames_800;
 			alts = alts_common;
-			printf (" +------+-----+----------+------+---+  opi800  +---+---+--+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  opi800  +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_R1_PLUS:
-			printf (" +------+-----+----------+------+---+ R1 Plus  +---+---+--+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  R1 Plus +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_R1_PLUS;
 			physNames =  physNames_R1_PLUS;
 			alts = alts_common;
@@ -1188,10 +1188,11 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_PC_2:
 		case PI_MODEL_PRIME:
 		case PI_MODEL_WIN:
-		case PI_MODEL_ZERO_PLUS:
 			for (pin = 1 ; pin <= 40; pin += 2)
+				readallPhys(pin);
 			break;
 		case PI_MODEL_LTIE_2:
+		case PI_MODEL_ZERO_PLUS:
 		case PI_MODEL_ZERO_PLUS_2:
 		case PI_MODEL_3:
 		case PI_MODEL_ZERO:
@@ -1220,49 +1221,49 @@ void OrangePiReadAll(int model)
 	switch (model)
 	{
 		case PI_MODEL_PC_2:
-			printf (" +------+-----+----------+------+---+  OPi PC2 +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  OPi PC2 +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_PRIME:
-			printf (" +------+-----+----------+------+---+   PRIME  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+   PRIME  +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_ZERO_PLUS:
-			printf (" +------+-----+----------+------+---+ ZEROPLUS +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+ ZEROPLUS +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_ZERO_PLUS_2:
-			printf (" +------+-----+----------+------+---+ZEROPLUS 2+---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+ZEROPLUS 2+---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_H3:
-			printf (" +------+-----+----------+------+---+OrangePiH3+---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+OrangePiH3+---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_ZERO:
-			printf (" +------+-----+----------+------+---+  OPi H2  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  OPi H2  +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_WIN:
-			printf (" +------+-----+----------+------+---+ OPi Win  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  OPi Win +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_LTIE_2:
-			printf (" +------+-----+----------+------+---+  OPi H6  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  OPi H6  +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_3:
-			printf (" +------+-----+----------+------+---+   OPi 3  +---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+   OPi 3  +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_ZERO_2:
 			printf (" +------+-----+----------+--------+---+   H616   +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_RK3399:
-			printf (" +------+-----+----------+------+---+OPi RK3399+---+------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+OPi RK3399+---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_4:
-			printf (" +------+-----+----------+------+---+OrangePi 4+---+---+--+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+OrangePi 4+---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_4_LTS:
-			printf (" +------+-----+----------+------+---+OPi 4 LTS +---+---+--+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+ OPi 4 LTS+---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_800:
-			printf (" +------+-----+----------+------+---+  opi800  +---+---+--+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  opi800  +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_R1_PLUS:
-			printf (" +------+-----+----------+------+---+ R1 Plus  +---+---+--+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+  R1 Plus +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_5:
 			printf (" +------+-----+----------+--------+---+   OPI5   +---+--------+----------+-----+------+\n");

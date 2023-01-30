@@ -35,6 +35,7 @@
 #include <sys/stat.h>
 
 #include <wiringPi.h>
+#include <wiringSerial.h>
 #include <wpiExtensions.h>
 
 #include <gertboard.h>

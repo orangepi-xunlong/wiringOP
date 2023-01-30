@@ -61,7 +61,7 @@
 #define PI_MAKER_UNKNOWN        3
 
 /*********** Allwinner H3 *************/
-#define H3_GPIO_BASE_ADDR                     0x01C20800U
+#define H3_GPIO_BASE_ADDR                     0x01C20000U
 #define H3_R_GPIO_BASE_ADDR                   0x01F02000U
 /*********** Allwinner H3 *************/
 
@@ -75,6 +75,8 @@ typedef struct {
 	unsigned int r_gpio_base_addr;
 	unsigned int * gpio;
 	unsigned int * r_gpio;
+	unsigned int gpio_base_offset;
+	unsigned int r_gpio_base_offset;
 } sunxi_gpio_info;
 
 
@@ -439,7 +441,7 @@ extern int OrangePi_set_gpio_mode(int pin, int mode);
 extern int OrangePi_digitalRead(int pin);
 extern int OrangePi_digitalWrite(int pin, int value);
 extern int OrangePi_set_gpio_alt(int pin, int mode);
-extern void OrangePi_set_pull_up_dn (int pin, int pud);
+extern void OrangePi_set_gpio_pullUpDnControl (int pin, int pud);
 
 void set_soc_info(void);
 

@@ -2031,13 +2031,13 @@ void pullUpDnControl (int pin, int pud)
       return ;
 
 	if (pud == PUD_OFF) {
-		OrangePi_set_pull_up_dn(pin, PUD_OFF);
+		OrangePi_set_gpio_pullUpDnControl(pin, PUD_OFF);
 	}
 	else if (pud == PUD_UP){
-		OrangePi_set_pull_up_dn(pin, PUD_UP);
+		OrangePi_set_gpio_pullUpDnControl(pin, PUD_UP);
 	}
 	else if (pud == PUD_DOWN){
-		OrangePi_set_pull_up_dn(pin, PUD_DOWN);
+		OrangePi_set_gpio_pullUpDnControl(pin, PUD_DOWN);
 	}
   }
   else						// Extension module
@@ -2710,6 +2710,8 @@ void set_soc_info(void)
 		case PI_MODEL_ZERO_2:
 			sunxi_gpio_info_t.gpio_base_addr = H6_GPIO_BASE_ADDR;
 			sunxi_gpio_info_t.r_gpio_base_addr = H6_R_GPIO_BASE_ADDR;
+			sunxi_gpio_info_t.gpio_base_offset = 0x0;
+			sunxi_gpio_info_t.r_gpio_base_offset = 0x0;
 			break;
 		case PI_MODEL_ZERO:
 		case PI_MODEL_ZERO_PLUS_2:
@@ -2717,8 +2719,11 @@ void set_soc_info(void)
 		case PI_MODEL_PRIME:
 		case PI_MODEL_PC_2:
 		case PI_MODEL_ZERO_PLUS:
+		case PI_MODEL_H3:
 			sunxi_gpio_info_t.gpio_base_addr = H3_GPIO_BASE_ADDR;
 			sunxi_gpio_info_t.r_gpio_base_addr = H3_R_GPIO_BASE_ADDR;
+			sunxi_gpio_info_t.gpio_base_offset = 0x800;
+			sunxi_gpio_info_t.r_gpio_base_offset = 0xc00;
 			break;
 		default:
 			break;
@@ -3487,9 +3492,9 @@ int OrangePi_get_gpio_mode(int pin)
 			offset = ((index - ((index >> 3) << 3)) << 2);
 
 			if (bank == 11)
-				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + ((index >> 3) << 2);
+				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + ((index >> 3) << 2);
 			else
-				phyaddr = sunxi_gpio_info_t.gpio_base_addr + (bank * 36) + ((index >> 3) << 2);
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + ((index >> 3) << 2);
 
 			/* Ignore unused gpio */
 			if (ORANGEPI_PIN_MASK[bank][index] != -1)
@@ -3722,7 +3727,6 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 				}
 			}
 
-
 			/* Ignore unused gpio */
 			if (ORANGEPI_PIN_MASK[bank][index] != -1)
 			{
@@ -3781,7 +3785,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 					{
 						regval = readR(gpio_phyaddr);
 						printf("Out mode get value: 0x%x\n",regval);
-					}			
+					}
 				} 
 				else 
 				{
@@ -3800,9 +3804,9 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 			offset = ((index - ((index >> 3) << 3)) << 2);
 
 			if (bank == 11)
-				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + ((index >> 3) << 2);
+				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + ((index >> 3) << 2);
 			else
-				phyaddr = sunxi_gpio_info_t.gpio_base_addr + (bank * 36) + ((index >> 3) << 2);
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + ((index >> 3) << 2);
 
 			/* Ignore unused gpio */
 			if (ORANGEPI_PIN_MASK[bank][index] != -1)
@@ -3822,7 +3826,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 					regval = readR(phyaddr);
 					if (wiringPiDebug)
 						printf("Input mode set over reg val: %#x\n",regval);
-				} 
+				}
 				else if(OUTPUT == mode)
 				{
 					/* Set Output */
@@ -3848,7 +3852,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 			break;
 	}
 
-    return 0;
+	return 0;
 }
 
 int OrangePi_set_gpio_alt(int pin, int mode)
@@ -3979,17 +3983,17 @@ int OrangePi_digitalWrite(int pin, int value)
 				phyaddr = RK3399_GPIO4_BASE + RK3399_GPIO_SWPORTA_DR_OFFSET;			
 				cru_phyaddr = RK3399_CRU_BASE + RK3399_CRU_CLKGATE_CON31_OFFSET;
 			}
-				
+
 			/* Ignore unused gpio */
 			if (ORANGEPI_PIN_MASK[bank][index] != -1)
 			{
-			
+
 				writeR(0xffff0180, cru_phyaddr);
-			
+
 				regval = readR(phyaddr);
 				if (wiringPiDebug)
 					printf("befor write reg val: 0x%x,index:%d\n", regval, index);
-				
+
 				if(0 == value)
 				{
 					regval &= ~(1 << index);
@@ -4030,11 +4034,10 @@ int OrangePi_digitalWrite(int pin, int value)
 			if (ORANGEPI_PIN_MASK[bank][index] != -1)
 			{
 				writeR(0xffff9877, cru_phyaddr);
-			
 				regval = readR(phyaddr);
 				if (wiringPiDebug)
 					printf("befor write reg val: 0x%x,index:%d\n", regval, index);
-				
+
 				if(0 == value)
 				{
 					regval &= ~(1 << index);
@@ -4058,15 +4061,16 @@ int OrangePi_digitalWrite(int pin, int value)
 			}
 
 			break;
+
 		default:
 			
 			if (bank == 11)
 			{
-				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + 0x10;
+				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + 0x10;
 			}
 			else
 			{
-				phyaddr = sunxi_gpio_info_t.gpio_base_addr + (bank * 36) + 0x10;
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + 0x10;
 			}
 			
 			/* Ignore unused gpio */
@@ -4156,11 +4160,11 @@ int OrangePi_digitalRead(int pin)
 
 			if (bank == 11) 
 			{
-				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + 0x10;
+				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + 0x10;
 			}
 			else
 			{
-				phyaddr = sunxi_gpio_info_t.gpio_base_addr + (bank * 36) + 0x10;
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + 0x10;
 			}
 			
 			break;
@@ -4181,13 +4185,15 @@ int OrangePi_digitalRead(int pin)
 	return 0;
 }
 
-void OrangePi_set_pull_up_dn (int pin, int pud)
+void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 {
 	unsigned int bank = pin >> 5;
 	unsigned int index = pin - (bank << 5);
 	unsigned int regval;
-	unsigned int offset0_7;
+	unsigned int offset;
 	unsigned int phyaddr = 0;
+	unsigned int bit_enable;
+	unsigned int bit_value = 0;
 
 	switch (OrangePiModel)
 	{
@@ -4203,46 +4209,75 @@ void OrangePi_set_pull_up_dn (int pin, int pud)
 				return ;
 			}
 
-			//offset0_7 = index - ((index >> 3) << 3);
-			offset0_7 = index % 8;
+			//offset = index - ((index >> 3) << 3);
+			offset = (index % 8) << 1;
+			bit_enable = 3 << ( 16 + offset);
 
-			/* Ignore unused gpio */
-			if (ORANGEPI_PIN_MASK[bank][index] != -1)
-			{
-				if (wiringPiDebug)
-					printf("bank: %d, index: %d\n", bank, index);
-
-				regval = readR(phyaddr);
-				if (wiringPiDebug)
-					printf("read val from register[%#x]: %#x\n", phyaddr, regval);
-
-				/* bit write enable*/
-				regval |= 3 << ( 16 + (offset0_7 << 1));
-
-				/* clear bit */
-				regval &= ~(3 << (offset0_7 << 1));
-
-				/* */if (PUD_UP == pud) {
+			/* */if (PUD_UP == pud) {
 					if ( pin < 8 || (bank == 2 && index > 15)) /* gpio0a, gpio2c, gpio2d */
-						regval |= 3 << (offset0_7 << 1);
+						bit_value = 3;
 					else
-						regval |= 1 << (offset0_7 << 1);
-				}
-				else if(PUD_DOWN == pud) {
-					if ( pin < 8 || (bank == 2 && index > 15)) /* gpio0a, gpio2c, gpio2d */
-						regval |= 1 << (offset0_7 << 1);
-					else
-						regval |= 2 << (offset0_7 << 1);
-				}
-				else if(PUD_OFF == pud) {
-				}
-
-				writeR(regval, phyaddr);
-
-				if (wiringPiDebug)
-					printf("write val: %#x to register[%#x]\n", regval, phyaddr);
+						bit_value = 1;
+			}
+			else if (PUD_DOWN == pud) {
+				if ( pin < 8 || (bank == 2 && index > 15)) /* gpio0a, gpio2c, gpio2d */
+					bit_value = 1;
+				else
+					bit_value = 2;
+			}
+			else if (PUD_OFF == pud) {
+					bit_value = 0;
 			}
 
 			break;
+
+		default:
+			//int offset = ((index - ((index >> 4) << 4)) << 1);
+			offset = ((index % 16) << 1);
+
+			if (bank == 11)
+				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + ((index >> 4) << 2) + 0x1c;
+			else
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + ((index >> 4) << 2) + 0x1c;
+
+			bit_enable = 0;
+
+			/* */if (PUD_UP == pud)
+				bit_value = 1;
+			else if (PUD_DOWN == pud)
+				bit_value = 2;
+			else if (PUD_OFF == pud)
+				bit_value = 0;
+
+			break;
+	}
+
+	/* Ignore unused gpio */
+	if (ORANGEPI_PIN_MASK[bank][index] != -1)
+	{
+		if (wiringPiDebug)
+			printf("bank: %d, index: %d\n", bank, index);
+
+		regval = readR(phyaddr);
+		if (wiringPiDebug)
+			printf("read val(%#x) from register[%#x]\n", regval, phyaddr );
+
+		/* clear bit */
+		regval &= ~(3 << offset);
+
+		/* bit write enable*/
+		regval |= bit_enable;
+
+		/* set bit */
+		regval |= (bit_value & 3) << offset;
+
+		if (wiringPiDebug)
+			printf("write val(%#x) to register[%#x]\n", regval, phyaddr);
+
+		writeR(regval, phyaddr);
+		regval = readR(phyaddr);
+
+		if (wiringPiDebug)
+			printf("over reg val: %#x\n", regval);
 	}
 }
