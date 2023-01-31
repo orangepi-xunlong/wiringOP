@@ -3417,7 +3417,7 @@ int OrangePi_get_gpio_mode(int pin)
 				else
 					regval = readR(rk3588_bus_ioc_phyaddr);
 
-				mode = (regval >> (index % 16)) & 0xf;//获取控制模式的那四位的值
+				mode = (regval >> ((index % 4) << 2)) & 0xf;//获取控制模式的那四位的值
 				if(mode == 0){ //如果是gpio模式
 					regval = readR(ddr_phyaddr);	//获取gpio方向寄存器的值
 					return (regval >> (index % 16)) & 0x1;		//index对应的gpio的方向值，0为in，1为out
@@ -3571,7 +3571,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 
 				regval = readR(rk3588_bus_ioc_phyaddr);
 				regval |= 0xffff0000;
-				regval &= ~(0xf << (index % 16));
+				regval &= ~(0xf << ((index % 4) << 2));
 				writeR(regval, rk3588_bus_ioc_phyaddr);
 				regval = readR(rk3588_bus_ioc_phyaddr);
 
