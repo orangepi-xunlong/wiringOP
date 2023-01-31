@@ -2204,27 +2204,56 @@ int OrangePi_set_gpio_pullUpDnControl(int pin, int pud)
 	unsigned int bank = pin >> 5;
 	unsigned int index = pin - (bank << 5);
 	unsigned int phyaddr = 0;
-	unsigned int pullOffset = 0x1C;
+	unsigned int bit_value = -1, bit_enable = 0;
+	unsigned int offset;
 
-	int pud_OP = -1;
+#if (defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_4_LTS || defined CONFIG_ORANGEPI_800)
+	/* */if ( bank > 1)
+		phyaddr = GRF_BASE    + RK3399_GRF_GPIO2_3_4_P_OFFSET  + (((pin - 64) >> 3) << 2);
+	else if ( bank == 1 || pin < 16)
+		phyaddr = PMUGRF_BASE + RK3399_PMUGRF_GPIO0_1_P_OFFSET + (((pin - 0)  >> 3) << 2);
+	else {
+		printf("gpio0 Group c,d does not support PU/PD control\n");
+		return ;
+	}
+
+	//offset = index - ((index >> 3) << 3);
+	offset = (index % 8) << 1;
+	bit_enable = 3 << ( 16 + offset);
+
+	/* */if (PUD_UP == pud) {
+			if ( pin < 8 || (bank == 2 && index > 15)) /* gpio0a, gpio2c, gpio2d */
+				bit_value = 3;
+			else
+				bit_value = 1;
+	}
+	else if (PUD_DOWN == pud) {
+		if ( pin < 8 || (bank == 2 && index > 15)) /* gpio0a, gpio2c, gpio2d */
+			bit_value = 1;
+		else
+			bit_value = 2;
+	}
+	else if (PUD_OFF == pud) {
+			bit_value = 0;
+	}
+#else
+	unsigned int pullOffset = 0x1C;
 	switch (pud)
 	{
 	case PUD_OFF:
-		pud_OP = SUNXI_PUD_OFF;
+		bit_value = SUNXI_PUD_OFF;
 		break;
 	case PUD_UP:
-		pud_OP = SUNXI_PUD_UP;
+		bit_value = SUNXI_PUD_UP;
 		break;
 	case PUD_DOWN:
-		pud_OP = SUNXI_PUD_DOWN;
+		bit_value = SUNXI_PUD_DOWN;
 		break;
 	default:
 		printf("Unknow pull mode\n");
 		return 0;
 	}
-
-#ifdef CONFIG_ORANGEPI_3
-	int offset = ((index - ((index >> 4) << 4)) << 1);
+	offset = ((index - ((index >> 4) << 4)) << 1);
 	pullOffset = 0x1C;
 
 	if (bank == 11)
@@ -2234,29 +2263,33 @@ int OrangePi_set_gpio_pullUpDnControl(int pin, int pud)
 	else
 		phyaddr = pullOffset + GPIO_BASE_MAP + (bank * 36) + ((index >> 4) << 2);
 #endif
-
 	/* Ignore unused gpio */
 	if (ORANGEPI_PIN_MASK[bank][index] != -1)
 	{
-#ifdef CONFIG_ORANGEPI_3
+		if (wiringPiDebug)
+			printf("bank: %d, index: %d\n", bank, index);
+
 		regval = readR(phyaddr);
 		if (wiringPiDebug)
-			printf("Before read reg val: 0x%x offset:%d\n", regval, offset);
+			printf("read val(%#x) from register[%#x]\n", regval, phyaddr);
 
-		if (wiringPiDebug)
-			printf("Register[%#x]: %#x index:%d\n", phyaddr, regval, index);
-
+		/* clear bit */
 		regval &= ~(3 << offset);
-		regval |= (pud_OP & 3) << offset;
+
+		/* bit write enable*/
+		regval |= bit_enable;
+
+		/* set bit */
+		regval |= (bit_value & 3) << offset;
+
 		if (wiringPiDebug)
-			printf("New reg val to be set: %#x\n", regval);
-			writeR(regval, phyaddr);
+			printf("write val(%#x) to register[%#x]\n", regval, phyaddr);
+
+		writeR(regval, phyaddr);
 		regval = readR(phyaddr);
+
 		if (wiringPiDebug)
-			printf("Pull set over reg val: %#x\n", regval);
-#elif
-		printf("Pin pull control is not implemented!\n");
-#endif
+			printf("over reg val: %#x\n", regval);
 	}
 	else
 		printf("Pin pull control failed!\n");
