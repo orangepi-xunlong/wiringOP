@@ -2195,6 +2195,75 @@ int OrangePi_set_gpio_mode(int pin, int mode)
     return 0;
 }
 
+/*
+ * Set GPIO Pull Up/Down
+ */
+int OrangePi_set_gpio_pullUpDnControl(int pin, int pud)
+{
+	unsigned int regval = 0;
+	unsigned int bank = pin >> 5;
+	unsigned int index = pin - (bank << 5);
+	unsigned int phyaddr = 0;
+	unsigned int pullOffset = 0x1C;
+
+	int pud_OP = -1;
+	switch (pud)
+	{
+	case PUD_OFF:
+		pud_OP = SUNXI_PUD_OFF;
+		break;
+	case PUD_UP:
+		pud_OP = SUNXI_PUD_UP;
+		break;
+	case PUD_DOWN:
+		pud_OP = SUNXI_PUD_DOWN;
+		break;
+	default:
+		printf("Unknow pull mode\n");
+		return 0;
+	}
+
+#ifdef CONFIG_ORANGEPI_3
+	int offset = ((index - ((index >> 4) << 4)) << 1);
+	pullOffset = 0x1C;
+
+	if (bank == 11)
+	{
+		phyaddr = pullOffset + GPIOL_BASE + ((index >> 4) << 2);
+	}
+	else
+		phyaddr = pullOffset + GPIO_BASE_MAP + (bank * 36) + ((index >> 4) << 2);
+#endif
+
+	/* Ignore unused gpio */
+	if (ORANGEPI_PIN_MASK[bank][index] != -1)
+	{
+#ifdef CONFIG_ORANGEPI_3
+		regval = readR(phyaddr);
+		if (wiringPiDebug)
+			printf("Before read reg val: 0x%x offset:%d\n", regval, offset);
+
+		if (wiringPiDebug)
+			printf("Register[%#x]: %#x index:%d\n", phyaddr, regval, index);
+
+		regval &= ~(3 << offset);
+		regval |= (pud_OP & 3) << offset;
+		if (wiringPiDebug)
+			printf("New reg val to be set: %#x\n", regval);
+			writeR(regval, phyaddr);
+		regval = readR(phyaddr);
+		if (wiringPiDebug)
+			printf("Pull set over reg val: %#x\n", regval);
+#elif
+		printf("Pin pull control is not implemented!\n");
+#endif
+	}
+	else
+		printf("Pin pull control failed!\n");
+
+	return 0;
+}
+
 #if !(defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_4_LTS || defined CONFIG_ORANGEPI_800 || defined CONFIG_ORANGEPI_R1PLUS || CONFIG_ORANGEPI_2G_IOT)
 int OrangePi_set_gpio_alt(int pin, int mode)
 {
