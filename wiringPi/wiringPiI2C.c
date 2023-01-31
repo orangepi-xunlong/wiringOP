@@ -224,7 +224,7 @@ int wiringPiI2CSetup (const int devId)
 
   rev = piGpioLayout () ;
 
-  if (rev == 1)
+  if (rev == 1 || rev == ORANGEPI)
     device = "/dev/i2c-0" ;
   else
     device = "/dev/i2c-1" ;
