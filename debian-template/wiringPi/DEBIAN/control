@@ -2,7 +2,7 @@ Package: wiringPi
 Version: 2.46
 Section: libraries
 Priority: optional
-Architecture: armhf
+Architecture: arm64
 Depends: libc6
 Maintainer: Boby Lee <leeboby@aliyun.com>
 Description: The wiringPi libraries for the OrangePi, headers and gpio command
