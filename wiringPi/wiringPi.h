@@ -122,6 +122,20 @@ typedef struct {
 
 #define RK3588_BUS_IOC_BASE							0xfd5f8000U
 
+//gpio pull up/down
+#define RK3588_VCCIO1_4_IOC_BASE					0xfd5f9000U
+#define RK3588_VCCIO3_5_IOC_BASE					0xfd5fa000U
+#define RK3588_VCCIO6_IOC_BASE						0xfd5fc000U
+
+#define RK3588_PMU1_IOC_GPIO0A_P					0x0020U
+#define RK3588_PMU1_IOC_GPIO0B_P					0x0024U
+#define RK3588_PMU2_IOC_GPIO0B_P					0x0028U
+#define RK3588_PMU2_IOC_GPIO0C_P					0x002cU
+#define RK3588_PMU2_IOC_GPIO0D_P					0x0030U
+#define RK3588_VCCIO1_4_IOC_GPIO1A_P				0x0110U
+#define RK3588_VCCIO3_5_IOC_GPIO2A_P				0x0120U
+#define RK3588_VCCIO6_IOC_GPIO4A_P					0x0140U
+
 typedef struct {
 	unsigned int * gpio0_base;
 	unsigned int * gpio1_base;
@@ -135,6 +149,10 @@ typedef struct {
 
 	unsigned int * cur_base;
 	unsigned int * pmu1cur_base;
+
+	unsigned int * vccio1_4_ioc_base;
+	unsigned int * vccio3_5_ioc_base;
+	unsigned int * vccio6_ioc_base;
 } rk3588_soc_info;
 
 /*********** Rockchip RK3588 *************/

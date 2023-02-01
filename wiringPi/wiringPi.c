@@ -2985,6 +2985,17 @@ int wiringPiSetup (void)
 			if ((int32_t)(unsigned long)rk3588_soc_info_t.pmu1cur_base == -1)
 				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3588_PMU1CRU_BASE) failed: %s\n", strerror(errno));
 
+			rk3588_soc_info_t.vccio1_4_ioc_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3588_VCCIO1_4_IOC_BASE);
+			if ((int32_t)(unsigned long)rk3588_soc_info_t.pmu1cur_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3588_VCCIO1_4_IOC_BASE) failed: %s\n", strerror(errno));
+
+			rk3588_soc_info_t.vccio3_5_ioc_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3588_VCCIO3_5_IOC_BASE);
+			if ((int32_t)(unsigned long)rk3588_soc_info_t.pmu1cur_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3588_VCCIO3_5_IOC_BASE) failed: %s\n", strerror(errno));
+
+			rk3588_soc_info_t.vccio6_ioc_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3588_VCCIO6_IOC_BASE);
+			if ((int32_t)(unsigned long)rk3588_soc_info_t.pmu1cur_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3588_VCCIO6_IOC_BASE) failed: %s\n", strerror(errno));
 			break;
 
 		default:
@@ -3189,6 +3200,14 @@ unsigned int readR(unsigned int addr)
 				val = *((unsigned int *)((unsigned char *)rk3588_soc_info_t.cur_base + mmap_seek));
 			else if(mmap_base == RK3588_PMU1CRU_BASE)
 				val = *((unsigned int *)((unsigned char *)rk3588_soc_info_t.pmu1cur_base + mmap_seek));
+			else if(mmap_base == RK3588_PMU2_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3588_soc_info_t.pmu2_ioc_base + mmap_seek));
+			else if(mmap_base == RK3588_VCCIO1_4_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3588_soc_info_t.vccio1_4_ioc_base + mmap_seek));
+			else if(mmap_base == RK3588_VCCIO3_5_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3588_soc_info_t.vccio3_5_ioc_base + mmap_seek));
+			else if(mmap_base == RK3588_VCCIO6_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3588_soc_info_t.vccio6_ioc_base + mmap_seek));
 
 			return val;
 			break;
@@ -3290,6 +3309,14 @@ void writeR(unsigned int val, unsigned int addr)
 				*((unsigned int *)((unsigned char *)rk3588_soc_info_t.cur_base + mmap_seek)) = val;
 			else if(mmap_base == RK3588_PMU1CRU_BASE)
 				*((unsigned int *)((unsigned char *)rk3588_soc_info_t.pmu1cur_base + mmap_seek)) = val;
+			else if(mmap_base == RK3588_PMU2_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3588_soc_info_t.pmu2_ioc_base + mmap_seek)) = val;
+			else if(mmap_base == RK3588_VCCIO1_4_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3588_soc_info_t.vccio1_4_ioc_base + mmap_seek)) = val;
+			else if(mmap_base == RK3588_VCCIO3_5_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3588_soc_info_t.vccio3_5_ioc_base + mmap_seek)) = val;
+			else if(mmap_base == RK3588_VCCIO6_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3588_soc_info_t.vccio6_ioc_base + mmap_seek)) = val;
 
 			break;
 
@@ -4197,6 +4224,31 @@ void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 
 	switch (OrangePiModel)
 	{
+		case PI_MODEL_5:
+
+			if(bank == 0 && index < 12)
+				phyaddr = RK3588_PMU1_IOC_BASE + RK3588_PMU1_IOC_GPIO0A_P + ((index >> 3) << 2);
+			else if(bank == 0 && index > 11 && index < 31)
+				phyaddr = RK3588_PMU2_IOC_BASE + RK3588_PMU2_IOC_GPIO0B_P + (((index - 8) >> 3) << 2);
+			else if(bank == 1)
+				phyaddr = RK3588_VCCIO1_4_IOC_BASE + RK3588_VCCIO1_4_IOC_GPIO1A_P + ((index >> 3) << 2);
+			else if(bank < 4 || (bank == 4 && index > 17))
+				phyaddr = RK3588_VCCIO3_5_IOC_BASE + RK3588_VCCIO3_5_IOC_GPIO2A_P + ((index >> 3) << 2);
+			else if(bank == 4 && index < 18)
+				phyaddr = RK3588_VCCIO6_IOC_BASE + RK3588_VCCIO6_IOC_GPIO4A_P + ((index >> 3) << 2);
+
+			offset = (index % 8) << 1;
+			bit_enable = 3 << ( 16 + offset);
+
+			/* */if (PUD_UP == pud)
+				bit_value = 3;
+			else if (PUD_DOWN == pud)
+				bit_value = 1;
+			else if (PUD_OFF == pud)
+				bit_value = 0;
+
+			break;
+
 		case PI_MODEL_800: case PI_MODEL_4_LTS:
 		case PI_MODEL_4:   case PI_MODEL_RK3399:
 
@@ -4260,7 +4312,7 @@ void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 
 		regval = readR(phyaddr);
 		if (wiringPiDebug)
-			printf("read val(%#x) from register[%#x]\n", regval, phyaddr );
+			printf("read val(%#x) from register[%#x]\n", regval, phyaddr);
 
 		/* clear bit */
 		regval &= ~(3 << offset);
