@@ -9,6 +9,9 @@ unsigned char getGpioNum(void)
 
 	switch (model)
 	{
+		case PI_MODEL_5B:
+			return 16;
+			break;
 		case PI_MODEL_3:
 		case PI_MODEL_LTIE_2:
 		case PI_MODEL_ZERO:

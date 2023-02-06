@@ -881,6 +881,53 @@ static char * physNames_5[64] =
 	"     GND", "PWM1    ",
 };
 
+static int physToWpi_5B[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, -1, //21,22
+	13, 14, //23,24
+	-1, 15, //25,26
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
+};
+
+static char * physNames_5B[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.5", "5V      ",
+	"   SCL.5", "GND     ",
+	"   PWM15", "RXD.0   ",
+	"     GND", "TXD.0   ",
+	" CAN1_RX", "CAN2_TX ",
+	" CAN1_TX", "GND     ",
+	" CAN2_RX", "SDA.1   ",
+	"    3.3V", "SCL.1   ",
+	"SPI4_TXD", "GND     ",
+	"SPI4_RXD", "PowerKey",
+	"SPI4_CLK", "SPI4_CS1",
+	"     GND", "PWM1    ",
+};
+
 static int * physToWpi;
 static char ** physNames;
 
@@ -1172,6 +1219,12 @@ void OrangePiReadAll(int model)
 			physNames =  physNames_5;
 			alts = alts_rk3588;
 			break;
+		case PI_MODEL_5B:
+			printf (" +------+-----+----------+--------+---+   PI5B   +---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_5B;
+			physNames =  physNames_5B;
+			alts = alts_rk3588;
+			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", model);
 			break ;
@@ -1199,6 +1252,7 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_800:
 		case PI_MODEL_4_LTS:
 		case PI_MODEL_5:
+		case PI_MODEL_5B:
 			for (pin = 1 ; pin <= 26; pin += 2)
 				readallPhys(pin);
 			break;
@@ -1267,6 +1321,9 @@ void OrangePiReadAll(int model)
 			break;
 		case PI_MODEL_5:
 			printf (" +------+-----+----------+--------+---+   OPI5   +---+--------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_5B:
+			printf (" +------+-----+----------+--------+---+   PI5B   +---+--------+----------+-----+------+\n");
 			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", model);
