@@ -2020,6 +2020,37 @@ void pullUpDnControl (int pin, int pud)
 
   setupCheck ("pullUpDnControl") ;
 
+#ifdef CONFIG_ORANGEPI
+	if(version == ORANGEPI ) {
+		if (wiringPiDebug)
+			printf("PinMode: pin:%d,pull up/down:%d\n", pin, pud);
+		if ((pin & PI_GPIO_MASK) == 0) {
+			if (wiringPiMode == WPI_MODE_PINS)
+				pin = pinToGpio[pin];
+			else if (wiringPiMode == WPI_MODE_PHYS)
+				pin = physToGpio[pin];
+			else if (wiringPiMode != WPI_MODE_GPIO)
+				  return;
+			
+			if (-1 == pin) {
+				printf("[%s:L%d] the pin:%d is invaild,please check it over!\n", 
+							__func__,  __LINE__, pin);
+				return;
+			}
+			
+			if (pud == PUD_UP || pud == PUD_DOWN || pud == PUD_OFF) {
+				OrangePi_set_gpio_pullUpDnControl(pin, pud);
+				return;
+			} else
+				return;
+		} else {
+			if ((node = wiringPiFindNode (pin)) != NULL)
+        node->pullUpDnControl (node, pin, pud) ;
+      return ;
+		}
+	}
+#endif
+
   if ((pin & PI_GPIO_MASK) == 0)		// On-Board Pin
   {
     /**/ if (wiringPiMode == WPI_MODE_PINS)

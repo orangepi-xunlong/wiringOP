@@ -102,6 +102,9 @@
 #define GPIO_SWPORTA_DDR_OFFSET 			0x04
 #define GPIO_EXT_PORTA_OFFSET				0x50
 
+#define RK3399_GRF_GPIO2_3_4_P_OFFSET		0x00040U
+#define RK3399_PMUGRF_GPIO0_1_P_OFFSET		0x00040U
+
 #define PMUGRF_BASE 	     0xff320000	 
 #define PMUGRF_GPIO1A_IOMUX  0x00010
 #define PMUGRF_GPIO1B_IOMUX  0x00014
@@ -218,6 +221,10 @@ extern volatile unsigned int *grf_base;
 #define PWM_CLK_DIV_48K  11
 #define PWM_CLK_DIV_72K  12
 
+#define SUNXI_PUD_OFF   0
+#define SUNXI_PUD_UP    1
+#define SUNXI_PUD_DOWN  2
+
 extern int pinToGpioOrangePi[64];
 extern int physToGpioOrangePi[64];
 extern int physToPinOrangePi[64];
@@ -233,6 +240,7 @@ extern int pwmmode;
 extern unsigned int readR(unsigned int addr);
 extern void writeR(unsigned int val, unsigned int addr);
 extern int OrangePi_set_gpio_mode(int pin, int mode);
+extern int OrangePi_set_gpio_pullUpDnControl(int pin, int pud);
 #if !(defined CONFIG_ORANGEPI_RK3399 || defined CONFIG_ORANGEPI_4 || defined CONFIG_ORANGEPI_4_LTS || defined CONFIG_ORANGEPI_800 || defined CONFIG_ORANGEPI_R1PLUS || CONFIG_ORANGEPI_2G_IOT)
 extern int OrangePi_set_gpio_alt(int pin, int mode);
 #endif
