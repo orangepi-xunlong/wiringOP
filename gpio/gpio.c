@@ -42,11 +42,6 @@
 
 #include "../version.h"
 
-#ifdef CONFIG_ORANGEPI
-#include "OrangePi.h"
-#include <wiringSerial.h>
-#endif
-
 extern int wiringPiDebug ;
 
 // External functions I can't be bothered creating a separate .h file for:
@@ -486,7 +481,7 @@ static void doSerialTest (UNU int argc, char *argv [])
 static void doExports (UNU int argc, UNU char *argv [])
 {
   int fd ;
-  int i, j, l, first ;
+  int i = 0, j = 0, l, first ;
   char fName [128] ;
   char buf [16] ;
 
@@ -821,7 +816,7 @@ void doUnexportall (char *progName)
 {
   FILE *fd ;
   int pin ;
-  int i;
+  int i = 0;
 
   for (pin = 0 ; pin < 63 ; ++pin)
   {
@@ -947,46 +942,7 @@ static void doPadDrive (int argc, char *argv [])
 
 static void doUsbP (int argc, char *argv [])
 {
-  int model, rev, mem, maker, overVolted ;
-
-  if (argc != 3)
-  {
-    fprintf (stderr, "Usage: %s usbp high|low\n", argv [0]) ;
-    exit (1) ;
-  }
-
-// Make sure we're on a B+
-
-  piBoardId (&model, &rev, &mem, &maker, &overVolted) ;
-
-  if (!((model == PI_MODEL_BP) || (model == PI_MODEL_2)))
-  {
-    fprintf (stderr, "USB power contol is applicable to B+ and v2 boards only.\n") ;
-    exit (1) ;
-  }
-    
-// Make sure we start in BCM_GPIO mode
-
-  wiringPiSetupGpio () ;
-
-  if ((strcasecmp (argv [2], "high") == 0) || (strcasecmp (argv [2], "hi") == 0))
-  {
-    digitalWrite (PI_USB_POWER_CONTROL, 1) ;
-    pinMode (PI_USB_POWER_CONTROL, OUTPUT) ;
-    printf ("Switched to HIGH current USB (1.2A)\n") ;
-    return ;
-  }
-
-  if ((strcasecmp (argv [2], "low") == 0) || (strcasecmp (argv [2], "lo") == 0))
-  {
-    digitalWrite (PI_USB_POWER_CONTROL, 0) ;
-    pinMode (PI_USB_POWER_CONTROL, OUTPUT) ;
-    printf ("Switched to LOW current USB (600mA)\n") ;
-    return ;
-  }
-
-  fprintf (stderr, "Usage: %s usbp high|low\n", argv [0]) ;
-  exit (1) ;
+	return;
 }
 
 
@@ -1075,27 +1031,27 @@ static void doGbr (int argc, char *argv [])
 
 static void doWrite (int argc, char *argv [])
 {
-  int pin, val ;
+	int pin, val ;
 
-  if (argc != 4)
-  {
-    fprintf (stderr, "Usage: %s write pin value\n", argv [0]) ;
-    exit (1) ;
-  }
+	if (argc != 4)
+	{
+		fprintf (stderr, "Usage: %s write pin value\n", argv [0]) ;
+		exit (1) ;
+	}
 
-  pin = atoi (argv [2]) ;
+	pin = atoi (argv [2]) ;
 
-  /**/ if ((strcasecmp (argv [3], "up") == 0) || (strcasecmp (argv [3], "on") == 0))
-    val = 1 ;
-  else if ((strcasecmp (argv [3], "down") == 0) || (strcasecmp (argv [3], "off") == 0))
-    val = 0 ;
-  else
-    val = atoi (argv [3]) ;
+	if ((strcasecmp (argv [3], "up") == 0) || (strcasecmp (argv [3], "on") == 0))
+		val = 1 ;
+	else if ((strcasecmp (argv [3], "down") == 0) || (strcasecmp (argv [3], "off") == 0))
+		val = 0 ;
+	else
+		val = atoi (argv [3]) ;
 
-  /**/ if (val == 0)
-    digitalWrite (pin, LOW) ;
-  else
-    digitalWrite (pin, HIGH) ;
+	if (val == 0)
+		digitalWrite (pin, LOW) ;
+	else
+		digitalWrite (pin, HIGH) ;
 }
 
 
@@ -1478,7 +1434,7 @@ int main (int argc, char *argv [])
 
   if ((strcmp (argv [1], "-R") == 0) || (strcmp (argv [1], "-V") == 0))
   {
-    printf ("%d\n", piGpioLayout ()) ;
+    printf ("wiringPi for Orange Pi\n") ;
     exit (EXIT_SUCCESS) ;
   }
 

@@ -8,20 +8,20 @@ Build-Depends: debhelper (>= 8)
 
 Package: libwiringpi2
 Section: libs
-Architecture: armhf
+Architecture: arm64
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: GPIO librariees for Raspberry Pi (runtime).
  Runtime for the popular wiringPi library.
 
 Package: wiringpi
-Architecture: armhf
+Architecture: arm64
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: gpio utility for Raspberry Pi
  The wiringPi gpio command line utility, for GPIO access on a
  Raspberry Pi from the command line.
 
 Package: libwiringpi-dev
-Architecture: armhf
+Architecture: arm64
 Depends: libwiringpi2 (= ${binary:Version}), libc6-dev, ${misc:Depends}
 Suggests: wiringpi
 Description: GPIO development library for Raspberry Pi

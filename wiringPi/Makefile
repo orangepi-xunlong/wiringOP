@@ -44,80 +44,6 @@ CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wextra -Winline $(INCLUDE) -pipe -fPIC
 
 LIBS    = -lm -lpthread -lrt -lcrypt
 
-ifeq ($(BOARD),)
-  BOARD = orangepioneplus-h6
-endif
-
-ifeq ($(BOARD), orangepi2giot)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_2G_IOT
-endif
-
-ifeq ($(BOARD), orangepipc2-h5)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_PC2
-endif
-
-ifeq ($(BOARD), orangepiprime-h5)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_PRIME
-endif
-
-ifeq ($(BOARD), orangepizeroplus-h5)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZEROPLUS
-endif
-
-ifneq ($(findstring $(BOARD), "orangepiwin-a64" "orangepiwinplus-a64"),)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_WIN
-endif
-
-ifneq ($(findstring $(BOARD), "orangepione-h3" "orangepilite-h3" "orangepipc-h3" "orangepiplus-h3" "orangepipcplus-h3" "orangepiplus2e-h3"),)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_H3
-endif
-
-ifneq ($(findstring $(BOARD), "orangepizero-h2" "orangepir1-h2"),)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZERO
-endif
-
-ifneq ($(findstring $(BOARD), "orangepioneplus-h6" "orangepilite2-h6"),)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_LITE2
-endif
-
-ifeq ($(BOARD), orangepi3-h6)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_3
-endif
-
-ifeq ($(BOARD), orangepizero2-h616)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZERO2
-endif
-
-ifeq ($(BOARD), orangepizeroplus2h3) 
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZEROPLUS2_H3
-endif
-
-ifeq ($(BOARD), orangepizeroplus2h5) 
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_ZEROPLUS2_H5
-endif
-
-ifeq ($(BOARD), orangepirk3399)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_RK3399
-endif
-
-ifeq ($(BOARD), orangepi4)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_4
-endif
-
-ifeq ($(BOARD), orangepi4-lts)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_4_LTS
-endif
-
-ifeq ($(BOARD), orangepi800)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_800
-endif
-
-ifeq ($(BOARD), orangepir1plus-rk3328)
-EXTRA_CFLAGS = -DCONFIG_ORANGEPI_R1PLUS
-endif
-
-EXTRA_CFLAGS += -DCONFIG_ORANGEPI
-
 ###############################################################################
 
 SRC	=	wiringPi.c						\
@@ -137,7 +63,7 @@ SRC	=	wiringPi.c						\
 		pseudoPins.c						\
 		wpiExtensions.c 					\
 		w25q64.c						\
-		oled.c OrangePi.c
+		oled.c
 
 HEADERS =	$(shell ls *.h)
 
