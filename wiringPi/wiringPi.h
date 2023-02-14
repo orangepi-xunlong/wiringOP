@@ -157,6 +157,53 @@ typedef struct {
 
 /*********** Rockchip RK3588 *************/
 
+/*********** Rockchip RK3566 *************/
+
+//gpio0~gpio4 register base addr
+#define RK3566_GPIO0_BASE 							0xfdd60000U
+#define RK3566_GPIO1_BASE 							0xfe740000U
+#define RK3566_GPIO2_BASE 							0xfe750000U
+#define RK3566_GPIO3_BASE 							0xfe760000U
+#define RK3566_GPIO4_BASE 							0xfe770000U
+
+//gpio offset
+#define RK3566_GPIO_SWPORT_DR_L_OFFSET 				0x00U
+#define RK3566_GPIO_SWPORT_DR_H_OFFSET 				0x04U
+#define RK3566_GPIO_SWPORT_DDR_L_OFFSET 			0x08U
+#define RK3566_GPIO_SWPORT_DDR_H_OFFSET 			0x0cU
+#define RK3566_GPIO_EXT_PORT_OFFSET					0x70U
+
+#define RK3566_PMU_GRF_BASE							0xfdc20000U
+#define RK3566_SYS_GRF_BASE							0xfdc60000U
+#define RK3566_PMU_CRU_BASE							0xfdd00000U
+#define RK3566_CRU_BASE								0xFdd20000U
+
+// clock
+#define RK3566_CRU_GATE_CON31_OFFSET				0x37CU
+#define RK3566_PMUCRU_PMUGATE_CON01_OFFSET			0x184U  //bit 9 bit10  0 enable
+
+// iomux + pull up/down
+#define RK3566_GRF_GPIO1A_IOMUX_L_OFFSET			0x00U
+#define RK3566_GRF_GPIO1A_P_OFFSET					0x80U
+#define RK3566_PMU_GRF_GPIO0A_IOMUX_L_OFFSET		0x00U
+#define RK3566_PMU_GRF_GPIO0A_P_OFFSET				0x20U
+
+typedef struct {
+	unsigned int * gpio0_base;
+	unsigned int * gpio1_base;
+	unsigned int * gpio2_base;
+	unsigned int * gpio3_base;
+	unsigned int * gpio4_base;
+
+	unsigned int * pmu_grf_base;
+	unsigned int * sys_grf_base;
+
+	unsigned int * cru_base;
+	unsigned int * pmu_cru_base;
+} rk3566_soc_info;
+
+/*********** Rockchip RK3566 *************/
+
 
 /*********** Rockchip RK3399 *************/
 
@@ -304,6 +351,9 @@ extern int wiringPiDebug;
 #define	PI_MODEL_5				24
 #define	PI_MODEL_5B				25
 #define	PI_MODEL_5_PLUS				26
+
+/* Rockchip RK3566 */
+#define	PI_MODEL_CM4				27
 
 extern const char *piModelNames    [16] ;
 

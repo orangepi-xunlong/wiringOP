@@ -282,6 +282,16 @@ static int ORANGEPI_PIN_MASK_5PLUS[5][32] =  //[BANK]	[INDEX]
 	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO4
 };
 
+static int ORANGEPI_PIN_MASK_CM4[5][32] =  //[BANK]	[INDEX]
+{
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,  0, 1,-1,-1,-1,-1,-1,-1,},//GPIO0
+	{ 0, 1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO1
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO2
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1, 6, 7,  0, 1, 2, 3, 4, 5,-1, 7,},//GPIO3
+	{ 0, 1, 2, 3, 4, 5, 6, 7,  0, 1, 2, 3, 4, 5,-1,-1,  0,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO4
+};
+
+
 static int ORANGEPI_PIN_MASK_R1_PLUS[5][32] =  //[BANK]	[INDEX]
 {
 	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},//PA
@@ -469,6 +479,7 @@ sunxi_gpio_info sunxi_gpio_info_t;
 rk3328_soc_info rk3328_soc_info_t;
 rk3399_soc_info rk3399_soc_info_t;
 rk3588_soc_info rk3588_soc_info_t;
+rk3566_soc_info rk3566_soc_info_t;
 
 // sysFds:
 //	Map a file descriptor from the /sys/class/gpio/gpioX/value
@@ -843,6 +854,29 @@ int pinToGpio_5PLUS[64] =
 	114, 98,      //22,23
 	101,113,      //24,25
 	100, 99,      //26,27
+	-1,  -1,      //28,29
+	-1,  -1,      //30,31
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,// ... 63
+};
+
+int pinToGpio_CM4[64] =
+{
+	140,141,      // 0, 1
+	132, 25,      // 2, 3
+	24, 118,      // 4  5
+	119,128,      // 6, 7
+	130,131,      // 8, 9
+	129,138,      //10,11
+	136,137,      //12,13
+	139,134,      //14,15
+	135, 32,      //16,17
+	33, 133,      //18,19
+	124,144,      //20,21
+	127,120,      //22,23
+	125,123,      //24,25
+	122,121,      //26,27
 	-1,  -1,      //28,29
 	-1,  -1,      //30,31
 
@@ -1357,6 +1391,35 @@ int physToGpio_5PLUS[64] =
 	-1, -1, -1, -1, -1, -1, -1,   // ... 63
 };
 
+int physToGpio_CM4[64] =
+{
+	-1,        // 0
+	-1,  -1,   // 1, 2
+	140, -1,   // 3, 4
+	141, -1,   // 5, 6
+	132, 25,   // 7, 8
+	-1,  24,   // 9, 10
+	118,119,   // 11, 12
+	128, -1,   // 13, 14
+	130,131,   // 15, 16
+	-1, 129,   // 17, 18
+	138, -1,   // 19, 20
+	136,137,   // 21, 22
+	139,134,   // 23, 24
+	-1, 135,   // 25, 26
+	32,  33,   // 27, 28
+	133, -1,   // 29, 30
+	124,144,   // 31, 32
+	127, -1,   // 33, 34
+	120,125,   // 35, 36
+	123,122,   // 37, 38
+	-1, 121,   // 39, 40
+
+	//Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1, -1, -1, -1, -1, -1, -1,   // ... 63
+};
+
 int physToGpio_R1_PLUS[64] =//head num map to OrangePi
 {
 	-1,       // 0
@@ -1752,6 +1815,7 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepi5.",     		   10) == 0) { *model = PI_MODEL_5; }
 	else if (strncmp(revision, "orangepi5b.",     		   11) == 0) { *model = PI_MODEL_5B; }
 	else if (strncmp(revision, "orangepi5plus.",     	   14) == 0) { *model = PI_MODEL_5_PLUS; }
+	else if (strncmp(revision, "orangepicm4.",                 12) == 0) { *model = PI_MODEL_CM4; }
 
 	if (wiringPiDebug)
 		printf("piBoardId: model = %d\n", *model);
@@ -2982,6 +3046,11 @@ int wiringPiSetup (void)
 			physToGpio = physToGpio_5PLUS;
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_5PLUS;
 			break;
+		case PI_MODEL_CM4:
+			pinToGpio =  pinToGpio_CM4;
+			physToGpio = physToGpio_CM4;
+			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_CM4;
+			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", OrangePiModel);
 			break ;
@@ -3129,6 +3198,47 @@ int wiringPiSetup (void)
 			rk3588_soc_info_t.vccio6_ioc_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3588_VCCIO6_IOC_BASE);
 			if ((int32_t)(unsigned long)rk3588_soc_info_t.pmu1cur_base == -1)
 				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3588_VCCIO6_IOC_BASE) failed: %s\n", strerror(errno));
+
+			break;
+
+		case PI_MODEL_CM4:
+
+			/* GPIO Register */
+			rk3566_soc_info_t.gpio0_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_GPIO0_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.gpio0_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_GPIO0_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.gpio1_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_GPIO1_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.gpio1_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_GPIO1_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.gpio2_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_GPIO2_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.gpio2_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_GPIO2_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.gpio3_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_GPIO3_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.gpio3_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_GPIO3_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.gpio4_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_GPIO4_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.gpio4_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_GPIO4_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.pmu_grf_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_PMU_GRF_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.pmu_grf_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_PMU_GRF_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.sys_grf_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_SYS_GRF_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.sys_grf_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_SYS_GRF_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.cru_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_CRU_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.cru_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_CRU_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.pmu_cru_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_PMU_CRU_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.pmu_cru_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_PMU_CRU_BASE) failed: %s\n", strerror(errno));
 			break;
 
 		default:
@@ -3391,6 +3501,35 @@ unsigned int readR(unsigned int addr)
 
 			break;
 
+		case PI_MODEL_CM4:
+
+			val = 0;
+
+			mmap_base = (addr & (0xfffff000));
+			mmap_seek = (addr - mmap_base);
+
+			if(mmap_base == RK3566_GPIO0_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio0_base + mmap_seek));
+			else if(mmap_base == RK3566_GPIO1_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio1_base + mmap_seek));
+			else if(mmap_base == RK3566_GPIO2_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio2_base + mmap_seek));
+			else if(mmap_base == RK3566_GPIO3_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio3_base + mmap_seek));
+			else if(mmap_base == RK3566_GPIO4_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio4_base + mmap_seek));
+			else if(mmap_base == RK3566_PMU_GRF_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.pmu_grf_base + mmap_seek));
+			else if(mmap_base == RK3566_SYS_GRF_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.sys_grf_base + mmap_seek));
+			else if(mmap_base == RK3566_CRU_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.cru_base + mmap_seek));
+			else if(mmap_base == RK3566_PMU_CRU_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.pmu_cru_base + mmap_seek));
+			return val;
+
+			break;
+
 		default:
 			
 			val = 0;
@@ -3491,6 +3630,31 @@ void writeR(unsigned int val, unsigned int addr)
 			else if(mmap_base == RK3328_GPIO3_BASE)
 				*((unsigned int *)((unsigned char *)rk3328_soc_info_t.gpio3_base + mmap_seek)) = val;
 
+			break;
+
+		case PI_MODEL_CM4:
+
+			mmap_base = (addr & (~0xfff));
+			mmap_seek = (addr - mmap_base);
+
+			if(mmap_base == RK3566_GPIO0_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio0_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_GPIO1_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio1_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_GPIO2_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio2_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_GPIO3_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio3_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_GPIO4_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.gpio4_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_PMU_GRF_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.pmu_grf_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_SYS_GRF_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.sys_grf_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_CRU_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.cru_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_PMU_CRU_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.pmu_cru_base + mmap_seek)) = val;
 			break;
 
 		default:
@@ -3650,6 +3814,31 @@ int OrangePi_get_gpio_mode(int pin)
 
 			break;
 
+		case PI_MODEL_CM4:
+
+			if(bank == 0){
+				grf_phyaddr = RK3566_PMU_GRF_BASE + RK3566_PMU_GRF_GPIO0A_IOMUX_L_OFFSET + ((pin >> 2) << 2);
+				ddr_phyaddr = RK3566_GPIO0_BASE + RK3566_GPIO_SWPORT_DDR_L_OFFSET + ((index >> 4) << 2);
+			}
+			else{
+				grf_phyaddr = RK3566_SYS_GRF_BASE + RK3566_GRF_GPIO1A_IOMUX_L_OFFSET + (((pin - 32) >> 2) << 2);
+				ddr_phyaddr = RK3566_GPIO1_BASE + ((bank - 1) << 16) + RK3566_GPIO_SWPORT_DDR_L_OFFSET + ((index >> 4) << 2);
+			}
+
+			offset = (index % 4) << 2;
+
+			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
+				regval = readR(grf_phyaddr);
+				mode = (regval >> offset) & 0x7;
+
+				if(mode == 0){ //如果是gpio模式
+					regval = readR(ddr_phyaddr);//获取gpio方向寄存器的值
+					return (regval >> (index % 16)) & 0x1;//index对应的gpio的方向值，0为in，1为out
+				}
+				return mode + 1;//如果不是gpio模式，返回的alt，从2开始，0和1是in和out
+			}
+			break;
+
 		default:
 
 			offset = ((index - ((index >> 3) << 3)) << 2);
@@ -3689,6 +3878,8 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 	unsigned int rk3588_pmu1_ioc_phyaddr;
 	unsigned int rk3588_bus_ioc_phyaddr;
 	unsigned int temp = 0;
+	unsigned int bit_enable;
+	unsigned int grf_val = 0;
 
 	switch (OrangePiModel)
 	{
@@ -3768,7 +3959,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 				{
 					printf("Unknow mode\n");
 				}
-			} 
+			}
 			else
 			{
 				printf("Pin mode failed!\n");
@@ -3843,7 +4034,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 				{
 					printf("Unknow mode\n");
 				}
-			} 
+			}
 			else
 			{
 				printf("Pin mode failed!\n");
@@ -3955,12 +4146,70 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 				{
 					printf("Unknow mode\n");
 				}
-			} 
+			}
 			else
 			{
 				printf("Pin mode failed!\n");
 			}
 
+			break;
+
+		case PI_MODEL_CM4:
+			if(bank == 0){
+				cru_phyaddr = RK3566_PMU_CRU_BASE + RK3566_PMUCRU_PMUGATE_CON01_OFFSET;
+				cru_val = ~((0x3 << 9) | (0x3 << (16 + 9)));
+				grf_phyaddr = RK3566_PMU_GRF_BASE + RK3566_PMU_GRF_GPIO0A_IOMUX_L_OFFSET + ((pin >> 2) << 2);
+				ddr_phyaddr = RK3566_GPIO0_BASE + RK3566_GPIO_SWPORT_DDR_L_OFFSET + ((index >> 4) << 2);
+			}
+			else{
+				cru_phyaddr = RK3566_CRU_BASE + RK3566_CRU_GATE_CON31_OFFSET;
+				cru_val = ~((0xff << 2) | (0xff << (16 + 2)));
+				grf_phyaddr = RK3566_SYS_GRF_BASE + RK3566_GRF_GPIO1A_IOMUX_L_OFFSET + (((pin - 32) >> 2) << 2);
+				ddr_phyaddr = RK3566_GPIO1_BASE + ((bank - 1) << 16) + RK3566_GPIO_SWPORT_DDR_L_OFFSET + ((index >> 4) << 2);
+			}
+
+			offset = (index % 4) << 2;
+			bit_enable = 0x7 << (16 + offset);
+			/* Ignore unused gpio */
+			if (ORANGEPI_PIN_MASK[bank][index] != -1)
+			{
+				regval = readR(cru_phyaddr);
+				regval &= cru_val;
+				writeR(regval, cru_phyaddr);
+				regval = readR(grf_phyaddr);
+				if(wiringPiDebug)
+					printf("read val(%#x) from register[%#x]\n", regval, grf_phyaddr);
+				regval |= bit_enable;
+				regval &= ~(0x7 << offset);
+				if (wiringPiDebug)
+					printf("write val(%#x) to register[%#x]\n", regval, grf_phyaddr);
+				writeR(regval, grf_phyaddr);
+				regval = readR(grf_phyaddr);
+				if(wiringPiDebug)
+					printf("set over reg val: 0x%x\n", regval);
+
+				regval = readR(ddr_phyaddr);
+				if(wiringPiDebug)
+					printf("read val ddr (%#x) from register[%#x]\n", regval, ddr_phyaddr);
+
+				regval |= 0x1 << (16 + (index % 16));
+				if(INPUT == mode)
+					regval &= ~(1 << (index % 16));
+				else
+					regval |= (1 << (index % 16));
+
+				writeR(regval, ddr_phyaddr);
+				if (wiringPiDebug)
+					printf("write val(%#x) to register[%#x]\n", regval, ddr_phyaddr);
+
+				regval = readR(ddr_phyaddr);
+				if (wiringPiDebug)
+					printf("set over reg val: 0x%x\n", regval);
+			}
+			else
+			{
+				printf("Pin mode failed!\n");
+			}
 			break;
 
 		default:
@@ -4056,13 +4305,15 @@ int OrangePi_set_gpio_alt(int pin, int mode)
  */
 int OrangePi_digitalWrite(int pin, int value)
 {
-    unsigned int bank   = pin >> 5;
-    unsigned int index  = pin - (bank << 5);
-    unsigned int phyaddr = 0;
+	unsigned int bank   = pin >> 5;
+	unsigned int index  = pin - (bank << 5);
+	unsigned int phyaddr = 0;
 	unsigned int regval = 0;
 	unsigned int cru_phyaddr =0, gpio_phyaddr = 0, dr_phyaddr = 0;
 	unsigned int cru_val = 0;
 	unsigned int temp = 0;
+	unsigned int bit_enable = 0;
+	unsigned int offset;
 
 	switch (OrangePiModel)
 	{
@@ -4227,6 +4478,56 @@ int OrangePi_digitalWrite(int pin, int value)
 
 			break;
 
+		case PI_MODEL_CM4:
+
+			if(bank == 0){
+				dr_phyaddr = RK3566_GPIO0_BASE + RK3566_GPIO_SWPORT_DR_L_OFFSET + ((index >> 4) << 2);
+				cru_phyaddr = RK3566_PMU_CRU_BASE + RK3566_PMUCRU_PMUGATE_CON01_OFFSET;
+				cru_val = ~((0x3 << 9) | (0x3 << (16 + 9)));
+			}
+			else{
+				dr_phyaddr = RK3566_GPIO1_BASE + ((bank - 1) << 16) + RK3566_GPIO_SWPORT_DR_L_OFFSET + ((index >> 4) << 2);
+				cru_phyaddr = RK3566_CRU_BASE + RK3566_CRU_GATE_CON31_OFFSET;
+				cru_val = ~((0xff << 2) | (0xff << (16 + 2)));
+			}
+
+			offset = index % 16;
+			bit_enable = 0x1 << (16 + offset);
+
+			/* Ignore unused gpio */
+			if (ORANGEPI_PIN_MASK[bank][index] != -1)
+			{
+				regval = readR(cru_phyaddr);
+				regval &= cru_val;
+				writeR(regval, cru_phyaddr);
+
+				regval = readR(dr_phyaddr);
+
+				if(wiringPiDebug)
+					printf("read val(%#x) from register[%#x]\n", regval, dr_phyaddr);;
+
+				regval |= bit_enable;
+
+				if(0 == value)
+					regval &= ~(1 << offset);
+				else
+					regval |= (1 << offset);
+
+				writeR(regval, dr_phyaddr);
+				if (wiringPiDebug)
+					printf("write val(%#x) to register[%#x]\n", regval, dr_phyaddr);
+
+				regval = readR(dr_phyaddr);
+				if (wiringPiDebug)
+					printf("set over reg val: 0x%x\n", regval);
+			} 
+			else
+			{
+				printf("Pin mode failed!\n");
+			}
+
+			break;
+
 		default:
 			
 			if (bank == 11)
@@ -4319,6 +4620,15 @@ int OrangePi_digitalRead(int pin)
 				phyaddr = RK3328_GPIO2_BASE + RK3328_GPIO_EXT_PORTA_OFFSET;
 			else if(bank == 3)
 				phyaddr = RK3328_GPIO3_BASE + RK3328_GPIO_EXT_PORTA_OFFSET;
+
+			break;
+
+		case PI_MODEL_CM4:
+
+			if(bank == 0)
+				phyaddr = RK3566_GPIO0_BASE + RK3566_GPIO_EXT_PORT_OFFSET;
+			else
+				phyaddr = RK3566_GPIO1_BASE + ((bank - 1) << 16) + RK3566_GPIO_EXT_PORT_OFFSET;
 
 			break;
 
@@ -4421,6 +4731,24 @@ void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 					bit_value = 0;
 			}
 
+			break;
+
+		case PI_MODEL_CM4:
+
+			if (bank == 0)
+				phyaddr = RK3566_PMU_GRF_BASE + RK3566_PMU_GRF_GPIO0A_P_OFFSET  + (((pin - 0) >> 3) << 2);
+			else
+				phyaddr = RK3566_SYS_GRF_BASE + RK3566_GRF_GPIO1A_P_OFFSET + (((pin - 32)  >> 3) << 2);
+
+			offset = (index % 8) << 1;
+			bit_enable = 3 << ( 16 + offset);
+
+			/* */if (PUD_UP == pud)
+					bit_value = 1;
+			else if (PUD_DOWN == pud)
+					bit_value = 2;
+			else if (PUD_OFF == pud)
+					bit_value = 0;
 			break;
 
 		default:
