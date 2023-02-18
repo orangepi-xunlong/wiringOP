@@ -3,7 +3,7 @@
 lib*.so.*
 *~
 debian-template/wiringPi
-debian-template/wiringpi-*.deb
+debian-template/wiringpi-opi-*.deb
 gpio/gpio
 examples/speed
 examples/blink

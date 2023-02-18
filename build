@@ -65,7 +65,7 @@ if [ x$1 = "xclean" ]; then
   cd ../scrollPhat
   echo -n "scrollPhat: "	; make clean
   cd ../..
-  echo -n "Deb: " ; rm  -f debian-template/wiringpi*.deb
+  echo -n "Deb: " ; rm  -f debian-template/wiringpi-opi*.deb
   echo
   exit
 fi
@@ -99,7 +99,7 @@ if [ x$1 = "xdebian" ]; then
   echo "Building deb package"
   cd $here/debian-template
   fakeroot dpkg-deb --build wiringPi
-  mv wiringPi.deb  wiringpi-`cat $here/VERSION`-1.deb
+  mv wiringPi.deb  wiringpi-opi-`cat $here/VERSION`-1.deb
   exit
 fi
 

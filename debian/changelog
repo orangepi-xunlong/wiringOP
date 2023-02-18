@@ -1,4 +1,4 @@
-wiringpi (2.26~iwj) rpi-unstable; urgency=low
+wiringpi-opi (2.26~iwj) rpi-unstable; urgency=low
 
   * Initial version with real Debian source package build.
 

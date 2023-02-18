@@ -1,4 +1,4 @@
-Source: wiringpi
+Source: wiringpi-opi
 Section: electronics
 Priority: optional
 Maintainer: Ian Jackson <ijackson@chiark.greenend.org.uk>
@@ -6,24 +6,24 @@ Standards-Version: 3.8.0
 Homepage: http://wiringpi.com/
 Build-Depends: debhelper (>= 8)
 
-Package: libwiringpi2
+Package: libwiringpi-opi2
 Section: libs
 Architecture: arm64
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: GPIO librariees for Raspberry Pi (runtime).
  Runtime for the popular wiringPi library.
 
-Package: wiringpi
+Package: wiringpi-opi
 Architecture: arm64
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: gpio utility for Raspberry Pi
  The wiringPi gpio command line utility, for GPIO access on a
  Raspberry Pi from the command line.
 
-Package: libwiringpi-dev
+Package: libwiringpi-opi-dev
 Architecture: arm64
-Depends: libwiringpi2 (= ${binary:Version}), libc6-dev, ${misc:Depends}
-Suggests: wiringpi
+Depends: libwiringpi-opi2 (= ${binary:Version}), libc6-dev, ${misc:Depends}
+Suggests: wiringpi-opi
 Description: GPIO development library for Raspberry Pi
  Development libraries to allow GPIO access on a Raspberry Pi from C
  and C++ programs.

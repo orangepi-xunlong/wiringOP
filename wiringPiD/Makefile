@@ -41,13 +41,13 @@ LIBS    = -lwiringPi -lwiringPiDev -lpthread -lrt -lm -lcrypt
 # May not need to  alter anything below this line
 ###############################################################################
 
-SRC	=	wiringpid.c network.c runRemote.c daemonise.c
+SRC	=	wiringpi-opid.c network.c runRemote.c daemonise.c
 
 OBJ	=	$(SRC:.c=.o)
 
-all:		wiringpid
+all:		wiringpi-opid
 
-wiringpid:	$(OBJ)
+wiringpi-opid:	$(OBJ)
 	$Q echo [Link]
 	$Q $(CC) -o $@ $(OBJ) $(LDFLAGS) $(LIBS)
 
@@ -58,7 +58,7 @@ wiringpid:	$(OBJ)
 .PHONY:	clean
 clean:
 	$Q echo "[Clean]"
-	$Q rm -f $(OBJ) wiringpid *~ core tags *.bak
+	$Q rm -f $(OBJ) wiringpi-opid *~ core tags *.bak
 
 .PHONY:	tags
 tags:	$(SRC)
@@ -66,11 +66,11 @@ tags:	$(SRC)
 	$Q ctags $(SRC)
 
 .PHONY:	install
-install: wiringpid
+install: wiringpi-opid
 	$Q echo "[Install]"
 	$Q mkdir -p		$(DESTDIR)$(PREFIX)/sbin
-	$Q cp wiringpid		$(DESTDIR)$(PREFIX)/sbin/
-	$Q chown root.root	$(DESTDIR)$(PREFIX)/sbin/wiringpid
+	$Q cp wiringpi-opid		$(DESTDIR)$(PREFIX)/sbin/
+	$Q chown root.root	$(DESTDIR)$(PREFIX)/sbin/wiringpi-opid
 
 #	$Q mkdir -p		$(DESTDIR)$(PREFIX)/man/man8
 #	$Q cp gpio.1		$(DESTDIR)$(PREFIX)/man/man8/
@@ -86,15 +86,15 @@ install-deb:	gpio
 .PHONY:	uninstall
 uninstall:
 	$Q echo "[UnInstall]"
-	$Q rm -f $(DESTDIR)$(PREFIX)/sbin/wiringpid
-	$Q rm -f $(DESTDIR)$(PREFIX)/man/man8/wiringpid.8
+	$Q rm -f $(DESTDIR)$(PREFIX)/sbin/wiringpi-opid
+	$Q rm -f $(DESTDIR)$(PREFIX)/man/man8/wiringpi-opid.8
 
 .PHONY:	depend
 depend:
 	makedepend -Y $(SRC)
 # DO NOT DELETE
 
-wiringpid.o: drcNetCmd.h network.h runRemote.h daemonise.h
+wiringpi-opid.o: drcNetCmd.h network.h runRemote.h daemonise.h
 network.o: network.h
 runRemote.o: drcNetCmd.h network.h runRemote.h
 daemonise.o: daemonise.h
