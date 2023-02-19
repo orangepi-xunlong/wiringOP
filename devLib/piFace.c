@@ -26,8 +26,9 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
-
+#include <stdarg.h>
 #include <wiringPi.h>
 #include <mcp23s17.h>
 
