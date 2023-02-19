@@ -22,7 +22,7 @@ Description: gpio utility for Raspberry Pi
 
 Package: libwiringpi-opi-dev
 Architecture: arm64
-Depends: libwiringpi-opi2 (= ${binary:Version}), libc6-dev, ${misc:Depends}
+Depends: libwiringpi2-opi (= ${binary:Version}), libc6-dev, ${misc:Depends}
 Suggests: wiringpi-opi
 Description: GPIO development library for Raspberry Pi
  Development libraries to allow GPIO access on a Raspberry Pi from C
