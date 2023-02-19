@@ -1,2 +1,2 @@
-libwiringPi 2 libwiringpi-opi2
-libwiringPiDev 2 libwiringpi-opi2
+libwiringPi 2 libwiringpi2-opi
+libwiringPiDev 2 libwiringpi2-opi
