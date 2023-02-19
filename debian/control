@@ -6,7 +6,7 @@ Standards-Version: 3.8.0
 Homepage: http://wiringpi.com/
 Build-Depends: debhelper (>= 8)
 
-Package: libwiringpi-opi2
+Package: libwiringpi2-opi
 Section: libs
 Architecture: arm64
 Depends: ${shlibs:Depends}, ${misc:Depends}

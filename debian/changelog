@@ -1,4 +1,16 @@
-wiringpi-opi (2.27~iwj) jammy; urgency=low
+wiringpi-opi (2.272~iwj) jammy; urgency=low
+
+  * Renamed packages from PR feedback
+
+ -- Erik P <erik@apption.com> Sat, 18 Feb 2023 18:31:35 +0100
+ 
+ wiringpi-opi (2.271~iwj) jammy; urgency=low
+
+  * Fixed include path for device library
+
+ -- Erik P <erik@apption.com> Sat, 18 Feb 2023 18:31:35 +0100
+ 
+ wiringpi-opi (2.27~iwj) jammy; urgency=low
 
   * Reworked package with official changes from Orange Pi
 
