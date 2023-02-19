@@ -2,7 +2,7 @@
 *.substvars
 tmp
 wiringpi-opi
-libwiringpi-opi2
+libwiringpi2-opi
 libwiringpi-opi-dev
 files
 *.postinst.debhelper

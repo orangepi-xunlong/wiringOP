@@ -40,7 +40,7 @@ override_dh_auto_install:
 	dh_install
 	set -ex; for l in libwiringPi libwiringPiDev; do \
 		ln -sf $$l.so.$${VERSION} \
-			debian/libwiringpi-opi$$soname/usr/lib/$$l.so.$$soname; \
+			debian/libwiringpi$$soname-opi/usr/lib/$$l.so.$$soname; \
 		ln -sf $$l.so.$${VERSION} \
 			debian/libwiringpi-opi-dev/usr/lib/$$l.so; \
 	done
