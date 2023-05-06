@@ -81,10 +81,10 @@ select_boards()
 		"orangepizero3"
 		"orangepir1plus-lts"
 		"orangepir1plus")
-  TMP_BOARD=$(printenv BOARD)
-  if [[ ! -z $TMP_BOARD ]]; then
-    export BOARD=$TMP_BOARD
-    echo $BOARD
+	TMP_BOARD=$(printenv BOARD)
+	if [[ ! -z $TMP_BOARD ]]; then
+		export BOARD=$TMP_BOARD
+		echo $BOARD
 	elif [[ -f /etc/orangepi-release ]]; then
 
 		source /etc/orangepi-release
