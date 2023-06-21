@@ -336,6 +336,7 @@ extern int wiringPiDebug;
 
 /* Allwinner H616 */
 #define	PI_MODEL_ZERO_2			9
+#define	PI_MODEL_ZERO_2_W		10
 
 
 /* Rockchip RK3399 */

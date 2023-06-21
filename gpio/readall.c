@@ -590,6 +590,59 @@ static char * physNames_ZERO_2[64] =
 	"    PH10", "        ",
 };
 
+static int physToWpi_ZERO_2_W[64] =
+{
+        -1,     // 0
+        -1, -1, // 1, 2
+         0, -1, // 3, 4
+         1, -1, // 5, 6
+         2,  3, // 7, 8
+        -1,  4, // 9, 10
+         5,  6, //11, 12
+         7, -1, //13, 14
+         8,  9, //15, 16
+        -1, 10, //17, 18
+        11, -1, //19, 20
+        12, 13, //21, 22
+        14, 15, //23, 24
+        -1, 16, //25, 26
+        17, 18, //27, 28
+        19, -1, //29, 30
+        20, 21, //31, 32
+        22, -1, //33, 34
+        23, 24, //35, 36
+        25, 26, //37, 38
+        -1, 27, //39, 40
+
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
+        -1, -1, -1, -1, -1, -1, -1, -1                              // 56-> 63
+};
+
+static char * physNames_ZERO_2_W[64] =
+{
+	      NULL,
+	"    3.3V", "5V      ",
+	"   SDA.1", "5V      ",
+	"   SCL.1", "GND     ",
+	"    PI00", "TXD.0   ",
+	"     GND", "RXD.0   ",
+	"   RXD.5", "PI01    ",
+	"   RXD.5", "GND     ",
+	"    PWM3", "PWM4    ",
+	"    3.3V", "PH04    ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "RXD.2   ",
+	"  SCLK.1", "CE.0    ",
+	"     GND", "CE.1    ",
+	"   SDA.2", "SCL.2   ",
+	"    PWM1", "GND     ",
+	"    PWM2", "TXD.2   ",
+	"    PI15", "GND     ",
+	"    PI12", "PH10    ",
+	"    PI16", "PI04    ",
+	"     GND", "PI03    ",
+};
+
 static int physToWpi_RK3399[64] =
 {
 	-1,		//0
@@ -1225,9 +1278,9 @@ static void piPlusReadall (int model)
  */
 void OrangePiReadAll(int model)
 {
-    int pin;
+	int pin;
 	int tmp = wiringPiDebug;
-    wiringPiDebug = FALSE;
+	wiringPiDebug = FALSE;
 
 	switch (model)
 	{
@@ -1291,6 +1344,12 @@ void OrangePiReadAll(int model)
 			physNames =  physNames_ZERO_2;
 			alts = alts_common;
 			break;
+		case PI_MODEL_ZERO_2_W:
+			printf (" +------+-----+----------+--------+---+  ZERO2W  +---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_ZERO_2_W;
+			physNames =  physNames_ZERO_2_W;
+			alts = alts_common;
+			break;
 		case PI_MODEL_RK3399:
 			printf (" +------+-----+----------+--------+---+OPi RK3399+---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_RK3399;
@@ -1350,8 +1409,8 @@ void OrangePiReadAll(int model)
 			break ;
 	}
 
-    printf (" | GPIO | wPi |   Name   |  Mode  | V | Physical | V |  Mode  | Name     | wPi | GPIO |\n");
-    printf (" +------+-----+----------+--------+---+----++----+---+--------+----------+-----+------+\n");
+	printf (" | GPIO | wPi |   Name   |  Mode  | V | Physical | V |  Mode  | Name     | wPi | GPIO |\n");
+	printf (" +------+-----+----------+--------+---+----++----+---+--------+----------+-----+------+\n");
 
 	switch (model)
 	{
@@ -1363,6 +1422,7 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_WIN:
 		case PI_MODEL_5_PLUS:
 		case PI_MODEL_CM4:
+		case PI_MODEL_ZERO_2_W:
 			for (pin = 1 ; pin <= 40; pin += 2)
 				readallPhys(pin);
 			break;
@@ -1391,8 +1451,8 @@ void OrangePiReadAll(int model)
 			break ;
 	}
 
-    printf (" +------+-----+----------+--------+---+----++----+---+--------+----------+-----+------+\n");
-    printf (" | GPIO | wPi |   Name   |  Mode  | V | Physical | V |  Mode  | Name     | wPi | GPIO |\n");
+	printf (" +------+-----+----------+--------+---+----++----+---+--------+----------+-----+------+\n");
+	printf (" | GPIO | wPi |   Name   |  Mode  | V | Physical | V |  Mode  | Name     | wPi | GPIO |\n");
 
 	switch (model)
 	{
@@ -1425,6 +1485,9 @@ void OrangePiReadAll(int model)
 			break;
 		case PI_MODEL_ZERO_2:
 			printf (" +------+-----+----------+--------+---+   H616   +---+--------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_ZERO_2_W:
+			printf (" +------+-----+----------+--------+---+  ZERO2W  +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_RK3399:
 			printf (" +------+-----+----------+--------+---+OPi RK3399+---+--------+----------+-----+------+\n");
