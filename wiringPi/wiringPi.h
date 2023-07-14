@@ -355,6 +355,7 @@ extern int wiringPiDebug;
 
 /* Rockchip RK3566 */
 #define	PI_MODEL_CM4				27
+#define	PI_MODEL_3B				28
 
 extern const char *piModelNames    [16] ;
 
