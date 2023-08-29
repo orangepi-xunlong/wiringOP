@@ -349,6 +349,7 @@ extern int wiringPiDebug;
 #define	PI_MODEL_R1_PLUS		22
 
 /* Rockchip RK3588(s) */
+#define	PI_MODEL_900				23
 #define	PI_MODEL_5				24
 #define	PI_MODEL_5B				25
 #define	PI_MODEL_5_PLUS				26
