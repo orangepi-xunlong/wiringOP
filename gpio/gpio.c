@@ -100,8 +100,8 @@ char *usage = "Usage: gpio -v\n"
 	//      "       gpio wfi <pin> <mode>\n"
 	//      "       gpio drive <group> <value>\n"
 	     "       gpio pwm-bal/pwm-ms \n"
-	//     "       gpio pwmr <range> \n"
-	//     "       gpio pwmc <divider> \n"
+	//     "       gpio pwmr <pin> <range> \n"
+	//     "       gpio pwmc <pin> <divider> \n"
 	//     "       gpio load spi/i2c\n"
 	//     "       gpio unload spi/i2c\n"
 	      "       gpio i2cd/i2cdetect port\n"
@@ -1289,7 +1289,7 @@ void doPwm (int argc, char *argv [])
   pin = atoi (argv [2]) ;
   val = atoi (argv [3]) ;
 
-  pinMode (pin, PWM_OUTPUT);
+  //pinMode (pin, PWM_OUTPUT);
   pwmWrite (pin, val) ;
 }
 
@@ -1300,53 +1300,67 @@ void doPwm (int argc, char *argv [])
  *********************************************************************************
  */
 
-static void doPwmMode (int mode)
+static void doPwmMode (int argc, char *argv [])
 {
-  pwmSetMode (mode) ;
+    int pin ;
+    int mode ;
+
+    if (argc != 3) {
+        fprintf (stderr, "Usage: %s pwm-ms/pwm-bal <pin> \n", argv [0]) ;
+        exit (1) ;
+    }
+
+    if (strcasecmp (argv [1], "pwm-ms" ) == 0) {
+        mode = PWM_MODE_MS;
+    } else {
+        mode = PWM_MODE_BAL;
+    }
+
+    pin = (unsigned int)strtoul (argv [2], NULL, 10) ;
+    pwmSetMode (pin,mode) ;
 }
 
 static void doPwmRange (int argc, char *argv [])
 {
-  unsigned int range ;
+    int pin ;
+    unsigned int range ;
 
-  if (argc != 3)
-  {
-    fprintf (stderr, "Usage: %s pwmr <range>\n", argv [0]) ;
-    exit (1) ;
-  }
+    if (argc != 4) {
+        fprintf (stderr, "Usage: %s pwmr <pin> <range>\n", argv [0]) ;
+        exit (1) ;
+    }
 
-  range = (unsigned int)strtoul (argv [2], NULL, 10) ;
+    pin = (unsigned int)strtoul (argv [2], NULL, 10) ;
+    range = (unsigned int)strtoul (argv [3], NULL, 10) ;
 
-  if (range == 0)
-  {
-    fprintf (stderr, "%s: range must be > 0\n", argv [0]) ;
-    exit (1) ;
-  }
+    if (range == 0) {
+        fprintf (stderr, "%s: range must be > 0\n", argv [0]) ;
+        exit (1) ;
+    }
 
-  pwmSetRange (range) ;
+    pwmSetRange (pin,range) ;
 }
 
 static void doPwmClock (int argc, char *argv [])
 {
-  unsigned int clock ;
+    int pin ;
+    unsigned int clock ;
 
-  if (argc != 3)
-  {
-    fprintf (stderr, "Usage: %s pwmc <clock>\n", argv [0]) ;
-    exit (1) ;
-  }
+    if (argc != 4) {
+        fprintf (stderr, "Usage: %s pwmc <pin> <clock>\n", argv [0]) ;
+        exit (1) ;
+    }
 
-  clock = (unsigned int)strtoul (argv [2], NULL, 10) ;
+    pin = (unsigned int)strtoul (argv [2], NULL, 10) ;
+    clock = (unsigned int)strtoul (argv [3], NULL, 10) ;
 
-  if ((clock < 1) || (clock > 4095))
-  {
-    fprintf (stderr, "%s: clock must be between 0 and 4096\n", argv [0]) ;
-    exit (1) ;
-  }
+    if ((clock < 1) || (clock > 4095)) {
+        fprintf (stderr, "%s: clock must be between 0 and 4096\n", argv [0]) ;
+        exit (1) ;
+    }
 
-  pwmSetClock (clock) ;
+    pwmSetClock (pin,clock) ;
 }
-
 
 
 /*
@@ -1607,8 +1621,8 @@ int main (int argc, char *argv [])
 
 // Pi Specifics
 
-  else if (strcasecmp (argv [1], "pwm-bal"  ) == 0) doPwmMode    (PWM_MODE_BAL) ;
-  else if (strcasecmp (argv [1], "pwm-ms"   ) == 0) doPwmMode    (PWM_MODE_MS) ;
+  else if (strcasecmp (argv [1], "pwm-bal"  ) == 0) doPwmMode    (argc, argv) ;
+  else if (strcasecmp (argv [1], "pwm-ms"   ) == 0) doPwmMode    (argc, argv) ;
   else if (strcasecmp (argv [1], "pwmr"     ) == 0) doPwmRange   (argc, argv) ;
   else if (strcasecmp (argv [1], "pwmc"     ) == 0) doPwmClock   (argc, argv) ;
   else if (strcasecmp (argv [1], "pwmTone"  ) == 0) doPwmTone    (argc, argv) ;
