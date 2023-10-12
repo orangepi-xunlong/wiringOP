@@ -16,8 +16,8 @@ int main(int argc, char *argv [])
 
 	pin = (unsigned int)strtoul (argv [1], NULL, 10) ;
 
-	if (pin != 3 && pin != 4 && pin != 21 && pin != 22) {
-		fprintf (stderr, "pin 3 for PWM2 / pin 4 for PWM1 / pin 21 for PWM3 / pin 22 for PWM4\n") ;
+	if (pin != 3 && pin != 4 && pin != 21 && pin != 22 && pin != 2 && pin != 9 ) {
+		fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 		exit (1) ;
 	}
 
