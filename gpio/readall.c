@@ -1143,6 +1143,61 @@ static char * physNames_CM4[64] =
 	"     GND", "GPIO3_D1",
 };
 
+static int physToWpi_3PLUS[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+	17, 18, //27,28
+	19, -1, //29,30
+	20, 21, //31,32
+	22, -1, //33,34
+	23, 24, //35,36
+	25, 26, //37,38
+	-1, 27, //39,40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
+};
+
+static char * physNames_3PLUS[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"  SDA_M3", "5V      ",
+	"  SCL_M3", "GND     ",
+	"   PWM_F", "TXD_A   ",
+	"     GND", "RXD_A   ",
+	"    PAO7", "PA12    ",
+	"   RXD_B", "GND     ",
+	"   TXD_B", "PH8     ",
+	"    3.3V", "PA3     ",
+	"  MOSI_B", "GND     ",
+	"  MISO_B", "PAO5    ",
+	"  SCLK_B", "SSO_B   ",
+	"     GND", "PWMAO_C ",
+	"  SDA_M0", "SCL_M0  ",
+	"     PA2", "GND     ",
+	"     PC7", "PA4     ",
+	"   PAO10", "GND     ",
+	"    PA13", "PA0     ",
+	"     PA7", "PA10    ",
+	"     GND", "PA9     ",
+};
+
+
 static int * physToWpi;
 static char ** physNames;
 
@@ -1470,7 +1525,12 @@ void OrangePiReadAll(int model)
 			physNames =  physNames_CM4;
 			alts = alts_rk3588;
 			break;
-
+		case PI_MODEL_3_PLUS:
+			printf (" +------+-----+----------+--------+---+ PI3 PLUS +---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_3PLUS;
+			physNames =  physNames_3PLUS;
+			alts = alts_common;
+			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", model);
 			break ;
@@ -1492,6 +1552,7 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_CM4:
 		case PI_MODEL_3B:
 		case PI_MODEL_ZERO_2_W:
+		case PI_MODEL_3_PLUS:
 			for (pin = 1 ; pin <= 40; pin += 2)
 				readallPhys(pin);
 			break;
@@ -1590,6 +1651,9 @@ void OrangePiReadAll(int model)
 			break;
 		case PI_MODEL_3B:
 			printf (" +------+-----+----------+--------+---+   PI3B   +---+--------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_3_PLUS:
+			printf (" +------+-----+----------+--------+---+ PI3 PLUS +---+--------+----------+-----+------+\n");
 			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", model);

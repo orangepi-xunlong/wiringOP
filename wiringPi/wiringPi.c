@@ -357,6 +357,26 @@ static int ORANGEPI_PIN_MASK_H3[9][32] =  //[BANK]  [INDEX]
 	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PI
 };
 
+static int ORANGEPI_PIN_MASK_3PLUS[16][32] =  //[BANK]  [INDEX]
+{
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//31
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//63
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//95
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//127
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//159
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//191
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//223
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//255
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//287
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//319
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//351
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//383
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,28,29,30,31,},//415
+	{-1, 1, 2, 3, 4, 5, 6,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,31,},//447
+	{ 0, 1, 2, 3,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,27,28,-1,30,31,},//479
+	{ 0,-1,-1, 3,-1, 5, 6, 7, 8, 9,10,11,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//511
+};
+
 int (*ORANGEPI_PIN_MASK)[32];
 
 // Extend wiringPi with other pin-based devices and keep track of
@@ -524,6 +544,7 @@ rk3328_soc_info rk3328_soc_info_t;
 rk3399_soc_info rk3399_soc_info_t;
 rk3588_soc_info rk3588_soc_info_t;
 rk3566_soc_info rk3566_soc_info_t;
+s905d3_gpio_info s905d3_gpio_info_t;
 
 // sysFds:
 //	Map a file descriptor from the /sys/class/gpio/gpioX/value
@@ -555,7 +576,7 @@ static void (*isrFunctions [64])(void) ;
 //	Take a Wiring pin (0 through X) and re-map it to the GPIO pin
 //	Cope for 3 different board revisions here.
 
-static int OrangePiModel;
+int OrangePiModel;
 
 static int *pinToGpio ;
 
@@ -978,27 +999,49 @@ int pinToGpio_CM4[64] =
 
 int pinToGpio_R1_PLUS[64] =
 {
-	89,  88,      // 0, 1
-	100,  102,      // 2, 3
-	112,  103,      // 4  5
-	101,  66,      // 6, 7
-	-1,  -1,      // 8, 9
-	-1,  -1,      //10,11	
-	-1,  -1,      //12,13
-	-1,  -1,      //14,15
-	-1,  -1,      //16,17
-	-1,  -1,      //18,19
-	-1,  -1,      //20,21
-	-1,  -1,      //22,23
-	-1,  -1,      //24,25	
-	-1,  -1,      //26,27	
-	-1,  -1,      //28,29
-	-1,  -1,      //30,31
+        89,  88,      // 0, 1
+       100, 102,      // 2, 3
+       112, 103,      // 4  5
+       101,  66,      // 6, 7
+        -1,  -1,      // 8, 9
+        -1,  -1,      //10,11
+        -1,  -1,      //12,13
+        -1,  -1,      //14,15
+        -1,  -1,      //16,17
+        -1,  -1,      //18,19
+        -1,  -1,      //20,21
+        -1,  -1,      //22,23
+        -1,  -1,      //24,25
+        -1,  -1,      //26,27
+        -1,  -1,      //28,29
+        -1,  -1,      //30,31
 
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,// ... 63	
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 63
 };
 
+int pinToGpio_3PLUS[64] =
+{
+       490, 491,      // 0, 1
+       487, 412,      // 2, 3
+       413, 419,      // 4  5
+       488, 421,      // 6, 7
+       420, 451,      // 8, 9
+       479, 447,      //10,11
+       448, 417,      //12,13
+       450, 449,      //14,15
+       418, 415,      //16,17
+       414, 478,      //18,19
+       475, 480,      //20,21
+       422, 489,      //22,23
+       476, 483,      //24,25
+       486, 485,      //26,27
+        -1,  -1,      //28,29
+        -1,  -1,      //30,31
+
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 63
+};
 
 // physToGpio:
 //	Take a physical pin (1 through 26) and re-map it to the GPIO pin
@@ -1597,6 +1640,35 @@ int physToGpio_R1_PLUS[64] =//head num map to OrangePi
   -1, -1, -1, -1, -1, -1, -1,   // ... 63
 };
 
+int physToGpio_3PLUS[64] =
+{
+        -1,        // 0
+        -1,  -1,   // 1, 2
+       490,  -1,   // 3, 4
+       491,  -1,   // 5, 6
+       487, 412,   // 7, 8
+        -1, 413,   // 9, 10
+       419, 488,   // 11, 12
+       421,  -1,   // 13, 14
+       420, 451,   // 15, 16
+        -1, 479,   // 17, 18
+       447,  -1,   // 19, 20
+       448, 417,   // 21, 22
+       450, 449,   // 23, 24
+        -1, 418,   // 25, 26
+       415, 414,   // 27, 28
+       478,  -1,   // 29, 30
+       475, 480,   // 31, 32
+       422,  -1,   // 33, 34
+       489, 476,   // 35, 36
+       483, 486,   // 37, 38
+        -1, 485,   // 39, 40
+
+        //Padding:
+        -1,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+        -1,  -1, -1, -1, -1, -1, -1,   // ... 63
+};
+
 // gpioToGPFSEL:
 //	Map a BCM_GPIO pin to it's Function Selection
 //	control port. (GPFSEL 0-5)
@@ -1926,24 +1998,24 @@ void piBoardId (int * model)
 	if (wiringPiDebug)
 		printf ("piBoardId: Board string: %s\n", revision) ;
 
-	/**/ if (strncmp(revision, "orangepi3.",    	 	   10) == 0) { *model = PI_MODEL_3; }
-	else if (strncmp(revision, "orangepi3-lts.",		   14) == 0) { *model = PI_MODEL_3; }
-	else if (strncmp(revision, "orangepioneplus.",	  	   16) == 0) { *model = PI_MODEL_LTIE_2; }
+	/**/ if (strncmp(revision, "orangepi3.",               10) == 0) { *model = PI_MODEL_3; }
+	else if (strncmp(revision, "orangepi3-lts.",           14) == 0) { *model = PI_MODEL_3; }
+	else if (strncmp(revision, "orangepioneplus.",         16) == 0) { *model = PI_MODEL_LTIE_2; }
 	else if (strncmp(revision, "orangepilite2.", 	       14) == 0) { *model = PI_MODEL_LTIE_2; }
-	else if (strncmp(revision, "orangepizero.",		       13) == 0) { *model = PI_MODEL_ZERO; }
-	else if (strncmp(revision, "orangepizerolts.",		   16) == 0) { *model = PI_MODEL_ZERO; }
-	else if (strncmp(revision, "orangepizero-lts.",		   17) == 0) { *model = PI_MODEL_ZERO; }
-	else if (strncmp(revision, "orangepir1.",		       11) == 0) { *model = PI_MODEL_ZERO; }
-	else if (strncmp(revision, "orangepi-r1.",		       12) == 0) { *model = PI_MODEL_ZERO; }
-	else if (strncmp(revision, "orangepipc.",		       11) == 0) { *model = PI_MODEL_H3; }
+	else if (strncmp(revision, "orangepizero.",            13) == 0) { *model = PI_MODEL_ZERO; }
+	else if (strncmp(revision, "orangepizerolts.",         16) == 0) { *model = PI_MODEL_ZERO; }
+	else if (strncmp(revision, "orangepizero-lts.",        17) == 0) { *model = PI_MODEL_ZERO; }
+	else if (strncmp(revision, "orangepir1.",              11) == 0) { *model = PI_MODEL_ZERO; }
+	else if (strncmp(revision, "orangepi-r1.",             12) == 0) { *model = PI_MODEL_ZERO; }
+	else if (strncmp(revision, "orangepipc.",              11) == 0) { *model = PI_MODEL_H3; }
 	else if (strncmp(revision, "orangepipcplus.",	       15) == 0) { *model = PI_MODEL_H3; }
-	else if (strncmp(revision, "orangepione.",		       12) == 0) { *model = PI_MODEL_H3; }
-	else if (strncmp(revision, "orangepilite.",		       13) == 0) { *model = PI_MODEL_H3; }
-	else if (strncmp(revision, "orangepiplus.",		       13) == 0) { *model = PI_MODEL_H3; }
+	else if (strncmp(revision, "orangepione.",             12) == 0) { *model = PI_MODEL_H3; }
+	else if (strncmp(revision, "orangepilite.",            13) == 0) { *model = PI_MODEL_H3; }
+	else if (strncmp(revision, "orangepiplus.",            13) == 0) { *model = PI_MODEL_H3; }
 	else if (strncmp(revision, "orangepiplue2e.",	       15) == 0) { *model = PI_MODEL_H3; }
 	else if (strncmp(revision, "orangepizeroplus2h3.",     20) == 0) { *model = PI_MODEL_ZERO_PLUS_2; }
 	else if (strncmp(revision, "orangepizeroplus2-h3.",    21) == 0) { *model = PI_MODEL_ZERO_PLUS_2; }
-	else if (strncmp(revision, "orangepiwin.",		       12) == 0) { *model = PI_MODEL_WIN; }
+	else if (strncmp(revision, "orangepiwin.",             12) == 0) { *model = PI_MODEL_WIN; }
 	else if (strncmp(revision, "orangepiwinplus.",         16) == 0) { *model = PI_MODEL_WIN; }
 	else if (strncmp(revision, "orangepiprime.",	       14) == 0) { *model = PI_MODEL_PRIME; }
 	else if (strncmp(revision, "orangepipc2.",             12) == 0) { *model = PI_MODEL_PC_2; }
@@ -1951,7 +2023,7 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepizeroplus2h5.",     20) == 0) { *model = PI_MODEL_ZERO_PLUS_2; }
 	else if (strncmp(revision, "orangepizeroplus2-h5.",    21) == 0) { *model = PI_MODEL_ZERO_PLUS_2; }
 	else if (strncmp(revision, "orangepizero2.",           14) == 0) { *model = PI_MODEL_ZERO_2; }
-	else if (strncmp(revision, "orangepizero2w.",           14) == 0) { *model = PI_MODEL_ZERO_2_W; }
+	else if (strncmp(revision, "orangepizero2w.",          14) == 0) { *model = PI_MODEL_ZERO_2_W; }
 	else if (strncmp(revision, "orangepizero3.",           14) == 0) { *model = PI_MODEL_ZERO_2; }
 	else if (strncmp(revision, "orangepirk3399.",          15) == 0) { *model = PI_MODEL_RK3399; }
 	else if (strncmp(revision, "orangepi-rk3399.",         16) == 0) { *model = PI_MODEL_RK3399; }
@@ -1962,12 +2034,13 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepi-r1plus.",         16) == 0) { *model = PI_MODEL_R1_PLUS; }
 	else if (strncmp(revision, "orangepir1plus-lts.",      18) == 0) { *model = PI_MODEL_R1_PLUS; }
 	else if (strncmp(revision, "orangepi-r1plus-lts.",     20) == 0) { *model = PI_MODEL_R1_PLUS; }
-	else if (strncmp(revision, "orangepi5.",     		   10) == 0) { *model = PI_MODEL_5; }
-	else if (strncmp(revision, "orangepi5b.",     		   11) == 0) { *model = PI_MODEL_5B; }
-	else if (strncmp(revision, "orangepi5plus.",     	   14) == 0) { *model = PI_MODEL_5_PLUS; }
-	else if (strncmp(revision, "orangepi900.",     	   	   12) == 0) { *model = PI_MODEL_900; }
-	else if (strncmp(revision, "orangepicm4.",                 12) == 0) { *model = PI_MODEL_CM4; }
-	else if (strncmp(revision, "orangepi3b.",                  11) == 0) { *model = PI_MODEL_3B; }
+	else if (strncmp(revision, "orangepi5.",               10) == 0) { *model = PI_MODEL_5; }
+	else if (strncmp(revision, "orangepi5b.",              11) == 0) { *model = PI_MODEL_5B; }
+	else if (strncmp(revision, "orangepi5plus.",           14) == 0) { *model = PI_MODEL_5_PLUS; }
+	else if (strncmp(revision, "orangepi900.",             12) == 0) { *model = PI_MODEL_900; }
+	else if (strncmp(revision, "orangepicm4.",             12) == 0) { *model = PI_MODEL_CM4; }
+	else if (strncmp(revision, "orangepi3b.",              11) == 0) { *model = PI_MODEL_3B; }
+	else if (strncmp(revision, "orangepi3plus.",           14) == 0) { *model = PI_MODEL_3_PLUS; }
 
 	if (wiringPiDebug)
 		printf("piBoardId: model = %d\n", *model);
@@ -2107,27 +2180,55 @@ void sunxi_pwm_set_enable_v2(int en)
 
 void sunxi_pwm_set_enable(int en)
 {
-    int val = 0;
+	int val = 0;
 
-    if(SUNXI_PWM_TYPE == SUNXI_V2_PWM_TYPE) {
-        sunxi_pwm_set_enable_v2(en);
-        return;
-    }
+	switch (OrangePiModel)
+	{
+		case PI_MODEL_ZERO_2:
+		case PI_MODEL_ZERO_2_W:
 
-    val = readR(SUNXI_PWM_CTRL_REG);
+			if(SUNXI_PWM_TYPE == SUNXI_V2_PWM_TYPE) {
+				sunxi_pwm_set_enable_v2(en);
+				return;
+			}
 
-    if (en) {
-        val |= (SUNXI_PWM_EN | SUNXI_PWM_SCLK_GATING);
-    } else {
-        val &= ~(SUNXI_PWM_EN | SUNXI_PWM_SCLK_GATING);
-    }
+			val = readR(SUNXI_PWM_CTRL_REG);
 
-    if (wiringPiDebug)
-	printf(">>function%s,no:%d,enable? :0x%x\n", __func__, __LINE__, val);
+			if (en) {
+				val |= (SUNXI_PWM_EN | SUNXI_PWM_SCLK_GATING);
+			} else {
+				val &= ~(SUNXI_PWM_EN | SUNXI_PWM_SCLK_GATING);
+			}
 
-    writeR(val, SUNXI_PWM_CTRL_REG);
-    delay(1);
-    print_pwm_reg();
+			if (wiringPiDebug)
+				printf(">>function%s,no:%d,enable? :0x%x\n", __func__, __LINE__, val);
+
+			writeR(val, SUNXI_PWM_CTRL_REG);
+			delay(1);
+			print_pwm_reg();
+
+			break;
+
+		case PI_MODEL_3_PLUS:
+
+			val = readR(S905D3_PWM_MISC);
+
+			if (en) {
+				val |= (1 << S905D3_PWM_EN_0 | 1 << S905D3_PWM_EN_1);
+			} else {
+				val &= ~(1 << S905D3_PWM_EN_0 | 1 << S905D3_PWM_EN_1);
+			}
+
+			if (wiringPiDebug)
+				printf(">>function%s,no:%d,enable? :0x%x\n", __func__, __LINE__, val);
+
+			writeR(val, S905D3_PWM_MISC);
+
+			break;
+
+		default:
+			break;
+	}
 }
 
 
@@ -2169,9 +2270,9 @@ void sunxi_pwm_set_clk_v2(int clk)
         printf("read reg val: 0x%x\n", val);
 
     //clear clk to 0
-    clk = (clk - 1) < 0 ? 0 : (clk - 1) ;
     val &= 0x0f00;
 
+    clk = (clk - 1) < 0 ? 0 : (clk - 1);
     val |= (clk & 0xff); //todo check wether clk is invalid or not
     writeR(val, SUNXI_PWM_CTRL_REG);
 
@@ -2187,35 +2288,71 @@ void sunxi_pwm_set_clk_v2(int clk)
 
 void sunxi_pwm_set_clk(int clk)
 {
-    int val = 0;
+	int val = 0;
 
-    if(SUNXI_PWM_TYPE == SUNXI_V2_PWM_TYPE) {
-        sunxi_pwm_set_clk_v2(clk);
-        return;
-    }
+	switch (OrangePiModel)
+	{
+		case PI_MODEL_ZERO_2:
+		case PI_MODEL_ZERO_2_W:
 
-    if (wiringPiDebug)
-        printf(">>function%s,no:%d\n", __func__, __LINE__);
+			if(SUNXI_PWM_TYPE == SUNXI_V2_PWM_TYPE) {
+				sunxi_pwm_set_clk_v2(clk);
+				return;
+			}
 
-    // sunxi_pwm_set_enable(0);
-    val = readR(SUNXI_PWM_CTRL_REG);
+			if (wiringPiDebug)
+				printf(">>function%s,no:%d\n", __func__, __LINE__);
 
-    if (wiringPiDebug)
-        printf("read reg val: 0x%x\n", val);
+			// sunxi_pwm_set_enable(0);
+			val = readR(SUNXI_PWM_CTRL_REG);
 
-    //clear clk to 0
-    val &= 0xf801f0;
+			if (wiringPiDebug)
+				printf("read reg val: 0x%x\n", val);
 
-    val |= ((clk & 0xf) << 15); //todo check wether clk is invalid or not
-    writeR(val, SUNXI_PWM_CTRL_REG);
+			//clear clk to 0
+			val &= 0xf801f0;
 
-    sunxi_pwm_set_enable(1);
+			val |= ((clk & 0xf) << 15); //todo check wether clk is invalid or not
+			writeR(val, SUNXI_PWM_CTRL_REG);
 
-    if (wiringPiDebug)
-        printf(">>function%s,no:%d,clk? :0x%x\n", __func__, __LINE__, val);
+			sunxi_pwm_set_enable(1);
 
-    delay(1);
-    print_pwm_reg();
+			if (wiringPiDebug)
+				printf(">>function%s,no:%d,clk? :0x%x\n", __func__, __LINE__, val);
+
+			delay(1);
+			print_pwm_reg();
+
+			break;
+
+		case PI_MODEL_3_PLUS:
+
+			if (wiringPiDebug)
+				printf(">>function%s,no:%d\n", __func__, __LINE__);
+
+			sunxi_pwm_set_enable(0);
+			val = readR(S905D3_PWM_MISC);
+
+			if (wiringPiDebug)
+				printf("read reg val: 0x%x\n", val);
+
+			//clear clk to 0
+			val &= ~(0x007f7f00);
+
+			clk = (clk - 1) < 0 ? 0 : (clk - 1) ;
+			val = val | (clk << S905D3_PWM_CLK_DIV_0) | (clk << S905D3_PWM_CLK_DIV_1);
+			writeR(val, S905D3_PWM_MISC);
+
+			sunxi_pwm_set_enable(1);
+
+			if (wiringPiDebug)
+				printf(">>function%s,no:%d,clk? :0x%x\n", __func__, __LINE__, val);
+
+			break;
+
+		default:
+			break;
+	}
 }
 
 /**
@@ -2254,59 +2391,130 @@ int sunxi_pwm_get_act(void)
     return period_act;
 }
 
-void sunxi_pwm_set_period(int period_cys)
+void sunxi_pwm_set_period(unsigned int period_cys)
 {
-    uint32_t val = 0;
+	uint32_t val = 0;
+	uint32_t ccr = 0;
 
-    if (wiringPiDebug)
-        printf(">>func:%s no:%d\n", __func__, __LINE__);
+	if (wiringPiDebug)
+		printf(">>func:%s no:%d\n", __func__, __LINE__);
 
-    period_cys -= 1;
-    period_cys &= 0xffff; //set max period to 2^16
-    period_cys = period_cys << 16;
-    val = readR(SUNXI_PWM_PERIOD);
+	switch (OrangePiModel)
+	{
+		case PI_MODEL_ZERO_2:
+		case PI_MODEL_ZERO_2_W:
 
-    if (wiringPiDebug)
-        printf("read reg val: 0x%x\n", val);
+			period_cys -= 1;
+			period_cys &= 0xffff; //set max period to 2^16
+			period_cys = period_cys << 16;
+			val = readR(SUNXI_PWM_PERIOD);
 
-    val &= 0x0000ffff;
-    period_cys |= val;
+			if (wiringPiDebug)
+				printf("read reg val: 0x%x\n", val);
 
-    if (wiringPiDebug)
-        printf("write reg val: 0x%x\n", period_cys);
+			val &= 0x0000ffff;
+			period_cys |= val;
 
-    writeR(period_cys, SUNXI_PWM_PERIOD);
-    delay(1);
-    val = readR(SUNXI_PWM_PERIOD);
+			if (wiringPiDebug)
+				printf("write reg val: 0x%x\n", period_cys);
 
-    if (wiringPiDebug)
-        printf("readback reg val: 0x%x\n", val);
+			writeR(period_cys, SUNXI_PWM_PERIOD);
+			delay(1);
+			val = readR(SUNXI_PWM_PERIOD);
 
-    print_pwm_reg();
+			if (wiringPiDebug)
+				printf("readback reg val: 0x%x\n", val);
+
+			print_pwm_reg();
+
+			break;
+
+		case PI_MODEL_3_PLUS:
+
+			ccr = readR(S905D3_PWM_DUTY_CYCLE);
+
+			if (wiringPiDebug)
+				printf("read reg val: 0x%x\n", ccr);
+
+			ccr = ccr >> 16;
+
+			if (period_cys < ccr) {
+				fprintf (stderr, "gpio: ARR should be greater than or equal to CRR (%d)\n",ccr) ;
+				exit(1);
+			}
+
+			val = (ccr << 16) | (period_cys - ccr);
+			writeR(val,S905D3_PWM_DUTY_CYCLE);
+			val = readR(S905D3_PWM_DUTY_CYCLE);
+
+			if (wiringPiDebug)
+				printf("readback reg val: 0x%x\n", val);
+
+			break;
+
+		default:
+			break;
+	}
 }
 
 void sunxi_pwm_set_act(int act_cys)
 {
-    uint32_t per0 = 0;
+	uint32_t per0 = 0;
+	uint32_t arr = 0;
 
-    //keep period the same, clear act_cys to 0 first
-    if (wiringPiDebug)
-        printf(">>func:%s no:%d\n", __func__, __LINE__);
-    per0 = readR(SUNXI_PWM_PERIOD);
+	switch (OrangePiModel)
+	{
+		case PI_MODEL_ZERO_2:
+		case PI_MODEL_ZERO_2_W:
 
-    if (wiringPiDebug)
-        printf("read reg val: 0x%x\n", per0);
+			//keep period the same, clear act_cys to 0 first
+			if (wiringPiDebug)
+				printf(">>func:%s no:%d\n", __func__, __LINE__);
+			per0 = readR(SUNXI_PWM_PERIOD);
 
-    per0 &= 0xffff0000;
-    act_cys &= 0xffff;
-    act_cys |= per0;
+			if (wiringPiDebug)
+				printf("read reg val: 0x%x\n", per0);
 
-    if (wiringPiDebug)
-        printf("write reg val: 0x%x\n", act_cys);
+			per0 &= 0xffff0000;
+			act_cys &= 0xffff;
+			act_cys |= per0;
 
-    writeR(act_cys, SUNXI_PWM_PERIOD);
-    delay(1);
-    print_pwm_reg();
+			if (wiringPiDebug)
+				printf("write reg val: 0x%x\n", act_cys);
+
+			writeR(act_cys, SUNXI_PWM_PERIOD);
+			delay(1);
+			print_pwm_reg();
+
+			break;
+
+		case PI_MODEL_3_PLUS:
+
+			if (wiringPiDebug)
+				printf(">>func:%s no:%d\n", __func__, __LINE__);
+
+			per0 = readR(S905D3_PWM_DUTY_CYCLE);
+
+			if (wiringPiDebug)
+				printf("read reg val: 0x%x\n", per0);
+
+			arr = ((per0 & 0xffff0000) >> 16) + (per0 & 0x0000ffff);
+
+			if ((unsigned int)act_cys > arr) {
+				fprintf (stderr, "gpio: CCR should be less than or equal to ARR (%d)\n",arr) ;
+				exit(1);
+			} else {
+				per0 = arr - act_cys;
+				act_cys &= 0xffff;
+				act_cys = ((act_cys << 16) | per0);
+				writeR(act_cys, S905D3_PWM_DUTY_CYCLE);
+			}
+
+			break;
+
+		default:
+			break;
+	}
 }
 
 
@@ -2335,17 +2543,28 @@ void pwmSetMode(int pin,int mode)
 
 void pwmSetRange(int pin,unsigned int range)
 {
-    if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
-        if ((range < 1) || (range > 65536)) {
-            fprintf (stderr, "gpio: range must be between 1 and 65536\n") ;
-            exit (1) ;
-        } else {
-            H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
-        }
-    }
+	if ((pin & PI_GPIO_MASK) == 0) {
+		if (wiringPiMode == WPI_MODE_PINS) {
+			pin = pinToGpio[pin];
+		} else if (wiringPiMode == WPI_MODE_PHYS)
+			pin = physToGpio[pin];
+		else if (wiringPiMode != WPI_MODE_GPIO)
+			return;
+	}
 
-    sunxi_pwm_set_period(range);
-    return;
+	if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
+		if ((range < 1) || (range > 65536)) {
+			fprintf (stderr, "gpio: range must be between 1 and 65536\n") ;
+			exit (1) ;
+		} else {
+			H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
+		}
+	} else if (OrangePiModel == PI_MODEL_3_PLUS) {
+			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
+	}
+
+	sunxi_pwm_set_period(range);
+	return;
 }
 
 /*
@@ -2358,17 +2577,32 @@ void pwmSetRange(int pin,unsigned int range)
 
 void pwmSetClock(int pin,int divisor)
 {
-    if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
-        if ((divisor < 1) || (divisor > 256)) {
-            fprintf (stderr, "gpio: clock must be between 1 and 256\n") ;
-            exit (1) ;
-        } else {
-            H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
-        }
-    }
+	if ((pin & PI_GPIO_MASK) == 0) {
+		if (wiringPiMode == WPI_MODE_PINS) {
+			pin = pinToGpio[pin];
+		} else if (wiringPiMode == WPI_MODE_PHYS)
+			pin = physToGpio[pin];
+		else if (wiringPiMode != WPI_MODE_GPIO)
+			return;
+	}
+
+	if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
+		if ((divisor < 1) || (divisor > 256)) {
+			fprintf (stderr, "gpio: clock must be between 1 and 256\n") ;
+			exit (1) ;
+		} else {
+			H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
+		}
+	} else if (OrangePiModel == PI_MODEL_3_PLUS) {
+		if ((divisor < 1) || (divisor > 128)) {
+			fprintf (stderr, "gpio: clock must be between 1 and 128\n") ;
+			exit (1) ;
+		} else {
+			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
+		}
+	}
 
     sunxi_pwm_set_clk(divisor);
-    sunxi_pwm_set_enable(1);
     return;
 }
 
@@ -2586,10 +2820,6 @@ void pinMode (int pin, int mode)
 	if (wiringPiDebug)
 		printf("PinMode: pin:%d,mode:%d\n", pin, mode);
 
-	if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
-		H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
-        }
-
 	if ((pin & PI_GPIO_MASK) == 0) {
 		if (wiringPiMode == WPI_MODE_PINS) {
 			pin = pinToGpio[pin];
@@ -2615,14 +2845,16 @@ void pinMode (int pin, int mode)
 		else if (mode == PWM_OUTPUT) {
 			if (wiringPiDebug)
 				printf("OPI: try wiringPi pin %d for PWM pin\n", pin);
-			if (pin != 5 && pin != 224 && pin != 225 && pin != 226 && pin!= 227 && pin != 267 && pin != 268 && pin != 269 && pin != 270) {
+			if (pin != 5 && pin != 224 && pin != 225 && pin != 226 && pin!= 227 && pin != 267 && pin != 268 && pin != 269 && pin != 270 && pin != 418 && pin != 487) {
 				printf("the pin you choose doesn't support hardware PWM\n");
 				if (OrangePiModel == PI_MODEL_ZERO_2)
-					 printf("OPI:you can select wiringPi pin 224,225,226,227 for PWM pin\n");
+					printf("OPI:you can select wiringPi pin 224,225,226,227 for PWM pin\n");
 				else if (OrangePiModel == PI_MODEL_ZERO_2_W)
-					 printf("OPI:you can select wiringPi pin 267,268,269,270 for PWM pin\n");
+					printf("OPI:you can select wiringPi pin 267,268,269,270 for PWM pin\n");
+				else if (OrangePiModel == PI_MODEL_3_PLUS)
+					printf("OPI:you can select wiringPi pin 418,487 for PWM pin\n");
 				else
-					 printf("you can select wiringPi pin %d for PWM pin\n", 42);
+					printf("you can select wiringPi pin %d for PWM pin\n", 42);
 				printf("or you can use it in softPwm mode\n");
 				return;
 			}
@@ -2839,81 +3071,82 @@ void digitalWrite8 (int pin, int value)
  */
 
 void pwmWrite(int pin, int value) {
-    struct wiringPiNodeStruct *node = wiringPiNodes;
+	int a_val = 0;
+	struct wiringPiNodeStruct *node = wiringPiNodes;
 
-    if (pinToGpio == 0 || physToGpio == 0) {
-        printf("please call wiringPiSetup first.\n");
-        return;
-    }
+	if (pinToGpio == 0 || physToGpio == 0) {
+		printf("please call wiringPiSetup first.\n");
+		return;
+	}
 
-    int a_val = 0;
+	if (pwmmode == 1) {
+		sunxi_pwm_set_mode(1);
+	} else {
+		sunxi_pwm_set_mode(0);
+	}
 
-    if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
-        if ((value < 0) || (value > 65535)) {
-            fprintf (stderr, "gpio: range must be between 0 and 65535\n") ;
-            exit (1) ;
-        } else {
-            H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
-        }
-    }
+	// On-Board Pin needto fix me Jim
+	if (pin < MAX_PIN_NUM) {
+		if (wiringPiMode == WPI_MODE_PINS)
+			pin = pinToGpio [pin];
+		else if (wiringPiMode == WPI_MODE_PHYS)
+			pin = physToGpio[pin];
+		else if (wiringPiMode != WPI_MODE_GPIO)
+			return;
 
-    if (pwmmode == 1)
-    {
-        sunxi_pwm_set_mode(1);
-    } else {
-        sunxi_pwm_set_mode(0);
-    }
+		if (-1 == pin) {
+			printf("[%s:L%d] the pin:%d is invaild,please check it over!\n", __func__, __LINE__, pin);
+			return;
+		}
 
-    if (pin < MAX_PIN_NUM) // On-Board Pin needto fix me Jim
-    {
-        if (wiringPiMode == WPI_MODE_PINS)
-            pin = pinToGpio [pin];
-        else if (wiringPiMode == WPI_MODE_PHYS) {
-            pin = physToGpio[pin];
-        } else if (wiringPiMode != WPI_MODE_GPIO)
-            return;
+		if (wiringPiDebug)
+			printf("OPI: check pwm pin(%d)\n",pin);
 
-        if (-1 == pin) {
-            printf("[%s:L%d] the pin:%d is invaild,please check it over!\n", __func__, __LINE__, pin);
-            return;
-        }
+		if (pin != 5 && pin != 224 && pin != 225 && pin != 226 && pin != 227 && pin != 267 && pin != 268 && pin != 269 && pin != 270 && pin != 418 && pin != 487) {
+			printf("please use soft pwmmode or choose PWM pin\n");
+			return;
+		}
 
-        if (wiringPiDebug)
-            printf("OPI: check pwm pin(%d)\n",pin);
+		if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
+			if ((value < 0) || (value > 65535)) {
+				fprintf (stderr, "gpio: range must be between 0 and 65535\n");
+				exit (1) ;
+			} else {
+				H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
 
-        if (pin != 5 && pin != 224 && pin != 225 && pin != 226 && pin != 227 && pin != 267 && pin != 268 && pin != 269 && pin != 270) {
-            printf("please use soft pwmmode or choose PWM pin\n");
-            return;
-        }
+				a_val = sunxi_pwm_get_period();
 
-        a_val = sunxi_pwm_get_period();
+				if (wiringPiDebug)
+					printf("==> no:%d period now is :%d,act_val to be set:%d\n", __LINE__, a_val, value);
 
-        if (wiringPiDebug)
-            printf("==> no:%d period now is :%d,act_val to be set:%d\n", __LINE__, a_val, value);
+				if (value > (a_val+1)) {
+					printf("val pwmWrite 0 <= X <= 1024\n");
+					printf("Or you can set new range by yourself by pwmSetRange(range)\n");
+					return;
+				}
+			}
+		} else if (OrangePiModel == PI_MODEL_3_PLUS) {
 
-        if (value > (a_val+1)) {
-            printf("val pwmWrite 0 <= X <= 1024\n");
-            printf("Or you can set new range by yourself by pwmSetRange(range)\n");
-            return;
-        }
+			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
+		}
 
-       //if value changed chang it
-       sunxi_pwm_set_enable(0);
-       sunxi_pwm_set_act(value);
-       sunxi_pwm_set_enable(1);
-    } else {
-        printf("not on board :%s,%d\n", __func__, __LINE__);
-        if ((node = wiringPiFindNode(pin)) != NULL) {
-            if (wiringPiDebug)
-                printf("Jim find node%s,%d\n", __func__, __LINE__);
-            node->digitalWrite(node, pin, value);
-        }
-      }
+		sunxi_pwm_set_enable(0);
+		sunxi_pwm_set_act(value);
+		sunxi_pwm_set_enable(1);
 
-    if (wiringPiDebug)
-	printf("this fun is ok now %s,%d\n", __func__, __LINE__);
+	} else {
+		printf("not on board :%s,%d\n", __func__, __LINE__);
+		if ((node = wiringPiFindNode(pin)) != NULL) {
+			if (wiringPiDebug)
+				printf("Jim find node%s,%d\n", __func__, __LINE__);
+			node->digitalWrite(node, pin, value);
+		}
+	}
+
+	if (wiringPiDebug)
+		printf("this fun is ok now %s,%d\n", __func__, __LINE__);
  
-    return;
+	return;
 }
 
 /*
@@ -2963,26 +3196,69 @@ void analogWrite (int pin, int value)
 
 void pwmToneWrite (int pin, int freq)
 {
-    int range ;
-    int div ;
+	int div ;
+	unsigned int range ;
+	unsigned int val;
 
-    setupCheck ("pwmToneWrite") ;
+	setupCheck ("pwmToneWrite") ;
 
-    if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
-        H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
-    }
+	if (wiringPiDebug)
+		printf(">>func:%s no:%d\n", __func__, __LINE__);
 
-    if (freq == 0)
-        pwmWrite (pin, 0) ;             // Off
-    else {
-        div = readR(SUNXI_PWM_CTRL_REG);
-        div &= 0x00ff;  //The lower 8 bits determine the frequency division
-        div += 1;       //The actual frequency division value is (div + 1)
-        range = 24000000 / (div * freq) ;  //The default pwm clock frequency is 24MHz
+	if ((pin & PI_GPIO_MASK) == 0) {
+		if (wiringPiMode == WPI_MODE_PINS) {
+			pin = pinToGpio[pin];
+		} else if (wiringPiMode == WPI_MODE_PHYS)
+			pin = physToGpio[pin];
+		else if (wiringPiMode != WPI_MODE_GPIO)
+			return;
+	}
 
-        pwmSetRange (pin,range) ;
-        pwmWrite (pin, range / 2) ;
-    }
+	if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
+		H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
+
+		if (freq == 0)
+			pwmWrite (pin, 0);             // Off
+		else {
+			div = readR(SUNXI_PWM_CTRL_REG);
+			div &= 0x00ff;  //The lower 8 bits determine the frequency division
+			div += 1;       //The actual frequency division value is (div + 1)
+			range = 24000000 / (div * freq);  //The default pwm clock frequency is 24MHz
+
+			pwmSetRange (pin,range);
+			pwmWrite (pin, range / 2);
+
+			if (wiringPiDebug)
+				printf("div:%d range:%d\n",div,range);
+		}
+
+	} else if (OrangePiModel == PI_MODEL_3_PLUS) {
+		s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
+
+		if (freq == 0)
+			pwmWrite(pin, 0);             // Off
+		else {
+			div = readR(S905D3_PWM_MISC);
+			div = ((div & 0x7f00) >> 8);  //The 8~14 bits determine the frequency division
+			div += 1;       //The actual frequency division value is (div + 1)
+			range = 24000000 / (div * freq);  //The default pwm clock frequency is 24MHz
+
+			if ((range / 2) == 0) {
+				fprintf(stderr,"gpio: The PWM frequency you set is too high to be possible\n");
+				exit(1);
+			}
+
+			val = readR(S905D3_PWM_DUTY_CYCLE);
+			val &= 0x0;
+			val = ((range/2) << 16) | (range/2);
+
+			writeR(val,S905D3_PWM_DUTY_CYCLE);
+			val = readR(S905D3_PWM_DUTY_CYCLE);
+
+			if (wiringPiDebug)
+				printf("div:%d range:%d val:%#x\n",div,range,val);
+		}
+	}
 }
 
 
@@ -3628,6 +3904,11 @@ int wiringPiSetup (void)
 			physToGpio = physToGpio_CM4;
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_CM4;
 			break;
+		case PI_MODEL_3_PLUS:
+			pinToGpio = pinToGpio_3PLUS;
+			physToGpio = physToGpio_3PLUS;
+			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_3PLUS;
+			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", OrangePiModel);
 			break ;
@@ -3821,6 +4102,27 @@ int wiringPiSetup (void)
 			rk3566_soc_info_t.pmu_cru_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_PMU_CRU_BASE);
 			if ((int32_t)(unsigned long)rk3566_soc_info_t.pmu_cru_base == -1)
 				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_PMU_CRU_BASE) failed: %s\n", strerror(errno));
+			break;
+
+		case PI_MODEL_3_PLUS:
+
+			/* GPIO Register */
+			s905d3_gpio_info_t.gpio_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, S905D3_GPIO_BASE);
+			if ((int32_t)(unsigned long)s905d3_gpio_info_t.gpio_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (S905D3_GPIO_BASE) failed: %s\n", strerror(errno));
+
+			s905d3_gpio_info_t.gpio_ao_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, S905D3_GPIO_AO_BASE);
+			if ((int32_t)(unsigned long)s905d3_gpio_info_t.gpio_ao_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (S905D3_AO_GPIO_BASE) failed: %s\n", strerror(errno));
+
+			/* PWM Register */
+			s905d3_gpio_info_t.gpio_pwm_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, S905D3_GPIO_PWM_BASE);
+			if ((int32_t)(unsigned long)s905d3_gpio_info_t.gpio_pwm_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (S905D3_GPIO_PWM_BASE) failed: %s\n", strerror(errno));
+
+			s905d3_gpio_info_t.gpio_pwm_ao_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, S905D3_GPIO_PWM_AO_BASE);
+			if ((int32_t)(unsigned long)s905d3_gpio_info_t.gpio_pwm_ao_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (S905D3_GPIO_PWM_AO_BASE) failed: %s\n", strerror(errno));
 			break;
 
 		default:
@@ -4118,6 +4420,25 @@ unsigned int readR(unsigned int addr)
 
 			break;
 
+		case PI_MODEL_3_PLUS:
+
+			val = 0;
+
+			mmap_base = (addr & 0xfffff000);
+			mmap_seek = (addr - mmap_base);
+
+			if (mmap_base == S905D3_GPIO_BASE)
+				val = *(s905d3_gpio_info_t.gpio_base + mmap_seek);
+			else if (mmap_base == S905D3_GPIO_AO_BASE)
+				val = *(s905d3_gpio_info_t.gpio_ao_base + mmap_seek);
+			else if (mmap_base == S905D3_GPIO_PWM_BASE)
+				val = *(s905d3_gpio_info_t.gpio_pwm_base + mmap_seek);
+			else if (mmap_base == S905D3_GPIO_PWM_AO_BASE)
+				val = *(s905d3_gpio_info_t.gpio_pwm_ao_base + mmap_seek);
+			return val;
+
+			break;
+
 		default:
 			
 			val = 0;
@@ -4252,6 +4573,23 @@ void writeR(unsigned int val, unsigned int addr)
 				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.cru_base + mmap_seek)) = val;
 			else if(mmap_base == RK3566_PMU_CRU_BASE)
 				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.pmu_cru_base + mmap_seek)) = val;
+			break;
+
+		case PI_MODEL_3_PLUS:
+
+			mmap_base = (addr & 0xfffff000);
+			mmap_seek = (addr - mmap_base);
+
+			if (mmap_base == S905D3_GPIO_BASE) {
+				*(s905d3_gpio_info_t.gpio_base + mmap_seek) = val;
+			} else if (mmap_base == S905D3_GPIO_AO_BASE) {
+				*(s905d3_gpio_info_t.gpio_ao_base + mmap_seek) = val;
+			} else if (mmap_base == S905D3_GPIO_PWM_BASE) {
+				*(s905d3_gpio_info_t.gpio_pwm_base + mmap_seek) = val;
+			} else if (mmap_base == S905D3_GPIO_PWM_AO_BASE) {
+				*(s905d3_gpio_info_t.gpio_pwm_ao_base + mmap_seek) = val;
+			}
+
 			break;
 
 		default:
@@ -4445,6 +4783,22 @@ int OrangePi_get_gpio_mode(int pin)
 			}
 			break;
 
+		case PI_MODEL_3_PLUS:
+
+			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
+
+			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
+				regval = readR(S905D3_GPIO_MUX);
+				mode = (regval >> S905D3_GPIO_MUX_OFFSET) & 0x7;
+
+				if(mode == 0){ //如果是gpio模式
+					regval = readR(S905D3_GPIO_OUT_EN);//获取gpio方向寄存器的值
+					return ((regval >> S905D3_GPIO_OUT_EN_OFFSET) + 1) & 0x1;//0为out，1为in
+				}
+				return mode + 1;//如果不是gpio模式，返回的alt，从2开始，0和1是out和in
+			}
+			break;
+
 		default:
 
 			offset = ((index - ((index >> 3) << 3)) << 2);
@@ -4471,9 +4825,7 @@ int OrangePi_get_gpio_mode(int pin)
 
 void H618_set_pwm_reg(int pin,sunxi_gpio_info *sunxi_gpio_info_ptr)
 {
-	int pin_to_gpio = pinToGpio[pin];
-
-	switch(pin_to_gpio) {
+	switch(pin) {
 	case 227:
 	case 267:
 		sunxi_gpio_info_ptr->pwm_period = SUNXI_V2_PWM1_PERIOD;
@@ -4503,20 +4855,109 @@ void H618_set_pwm_reg(int pin,sunxi_gpio_info *sunxi_gpio_info_ptr)
 		sunxi_gpio_info_ptr->pwm_bit_en = SUNXI_V2_PWM3_EN;
 		break;
 	default:
-		fprintf(stderr,"the pin you choose doesn't support hardware PWM\n");
+		fprintf(stderr,"gpio: the pin you choose doesn't support hardware PWM\n");
 	}
 }
 
+void s905d3_set_gpio_reg(int pin,s905d3_gpio_info *s905d3_gpio_info_ptr)
+{
+	if (pin >= 476 && pin <= 491) { //GPIOA——16pin
+
+		s905d3_gpio_info_ptr->gpio_out_en = S905D3_GPIOA_OUT_EN_REG;
+		s905d3_gpio_info_ptr->gpio_out = S905D3_GPIOA_OUT_REG;
+		s905d3_gpio_info_ptr->gpio_in = S905D3_GPIOA_IN_REG;
+		s905d3_gpio_info_ptr->gpio_pupd = S905D3_GPIOA_PUPD_REG;
+		s905d3_gpio_info_ptr->gpio_puen = S905D3_GPIOA_PUEN_REG;
+		s905d3_gpio_info_ptr->gpio_out_offset = pin - 476;
+		s905d3_gpio_info_ptr->gpio_out_en_offset = pin - 476;
+		s905d3_gpio_info_ptr->gpio_in_offset = pin - 476;
+		s905d3_gpio_info_ptr->gpio_pupd_offset = pin - 476;
+		s905d3_gpio_info_ptr->gpio_puen_offset = pin - 476;
+
+		if (pin <= 483) {
+			s905d3_gpio_info_ptr->gpio_mux = S905D3_GPIOA_MUX_REG1;
+			s905d3_gpio_info_ptr->gpio_mux_offset = (pin - 476) * 4;
+		} else {
+			s905d3_gpio_info_ptr->gpio_mux = S905D3_GPIOA_MUX_REG2;
+			s905d3_gpio_info_ptr->gpio_mux_offset = (pin - 484) * 4;
+			s905d3_gpio_info_ptr->pwm_duty_cycle = S905D3_PWM_DUTY_CYCLE_F_REG;
+			s905d3_gpio_info_ptr->pwm_misc = S905D3_PWM_MISC_EF_REG;
+		}
+
+	} else if (pin >= 468 && pin <= 475) { //GPIOC——8pin
+
+		s905d3_gpio_info_ptr->gpio_out_en = S905D3_GPIOC_OUT_EN_REG;
+		s905d3_gpio_info_ptr->gpio_out = S905D3_GPIOC_OUT_REG;
+		s905d3_gpio_info_ptr->gpio_in = S905D3_GPIOC_IN_REG;
+		s905d3_gpio_info_ptr->gpio_pupd = S905D3_GPIOC_PUPD_REG;
+		s905d3_gpio_info_ptr->gpio_puen = S905D3_GPIOC_PUEN_REG;
+		s905d3_gpio_info_ptr->gpio_out_en_offset = pin - 468;
+		s905d3_gpio_info_ptr->gpio_out_offset = pin - 468;
+		s905d3_gpio_info_ptr->gpio_in_offset = pin - 468;
+		s905d3_gpio_info_ptr->gpio_pupd_offset = pin - 468;
+		s905d3_gpio_info_ptr->gpio_puen_offset = pin - 468;
+
+		s905d3_gpio_info_ptr->gpio_mux = S905D3_GPIOC_MUX_REG;
+		s905d3_gpio_info_ptr->gpio_mux_offset = (pin - 468) * 4;
+
+	} else if (pin >= 443 && pin <= 451) { //GPIOH——9pin
+
+		s905d3_gpio_info_ptr->gpio_out_en = S905D3_GPIOH_OUT_EN_REG;
+		s905d3_gpio_info_ptr->gpio_out = S905D3_GPIOH_OUT_REG;
+		s905d3_gpio_info_ptr->gpio_in = S905D3_GPIOH_IN_REG;
+		s905d3_gpio_info_ptr->gpio_pupd = S905D3_GPIOH_PUPD_REG;
+		s905d3_gpio_info_ptr->gpio_puen = S905D3_GPIOH_PUEN_REG;
+		s905d3_gpio_info_ptr->gpio_out_offset = pin - 443;
+		s905d3_gpio_info_ptr->gpio_out_en_offset = pin - 443;
+		s905d3_gpio_info_ptr->gpio_in_offset = pin - 443;
+		s905d3_gpio_info_ptr->gpio_pupd_offset = pin - 443;
+		s905d3_gpio_info_ptr->gpio_puen_offset = pin - 443;
+
+		if (pin <= 450) {
+			s905d3_gpio_info_ptr->gpio_mux = S905D3_GPIOH_MUX_REG1;
+			s905d3_gpio_info_ptr->gpio_mux_offset = (pin - 443) * 4;
+		} else {
+			s905d3_gpio_info_ptr->gpio_mux = S905D3_GPIOH_MUX_REG2;
+			s905d3_gpio_info_ptr->gpio_mux_offset = (pin - 451) * 4;
+		}
+
+	} else if (pin >= 412 && pin <= 423) { //GPIOAO——12pin
+
+		s905d3_gpio_info_ptr->gpio_out_en = S905D3_GPIOAO_OUT_EN_REG;
+		s905d3_gpio_info_ptr->gpio_out = S905D3_GPIOAO_OUT_REG;
+		s905d3_gpio_info_ptr->gpio_in = S905D3_GPIOAO_IN_REG;
+		s905d3_gpio_info_ptr->gpio_pupd = S905D3_GPIOAO_PUPD_REG;
+		s905d3_gpio_info_ptr->gpio_puen = S905D3_GPIOAO_PUEN_REG;
+		s905d3_gpio_info_ptr->gpio_out_offset = pin - 412;
+		s905d3_gpio_info_ptr->gpio_out_en_offset = pin - 412;
+		s905d3_gpio_info_ptr->gpio_in_offset = pin - 412;
+		s905d3_gpio_info_ptr->gpio_pupd_offset = pin - 412;
+		s905d3_gpio_info_ptr->gpio_puen_offset = pin - 412;
+
+		if (pin <= 419) {
+			s905d3_gpio_info_ptr->gpio_mux = S905D3_GPIOAO_MUX_REG1;
+			s905d3_gpio_info_ptr->gpio_mux_offset = (pin - 412) * 4;
+			s905d3_gpio_info_ptr->pwm_duty_cycle = S905D3_PWM_DUTY_CYCLE_AO_C_REG;
+			s905d3_gpio_info_ptr->pwm_misc = S905D3_PWM_MISC_AO_CD_REG;
+		} else {
+			s905d3_gpio_info_ptr->gpio_mux = S905D3_GPIOAO_MUX_REG2;
+			s905d3_gpio_info_ptr->gpio_mux_offset = (pin - 420) * 4;
+		}
+
+	} else {
+		fprintf(stderr,"gpio: the pin you selected is not available\n");
+	}
+}
 
 /*
  * Set GPIO Mode
  */
 int OrangePi_set_gpio_mode(int pin, int mode)
 {
-    unsigned int regval = 0;
-    unsigned int bank   = pin >> 5;
-    unsigned int index  = pin - (bank << 5);
-    unsigned int phyaddr = 0;
+	unsigned int regval = 0;
+	unsigned int bank   = pin >> 5;
+	unsigned int index  = pin - (bank << 5);
+	unsigned int phyaddr = 0;
 	int offset;
 	unsigned int cru_phyaddr =0, grf_phyaddr = 0, gpio_phyaddr = 0, ddr_phyaddr = 0;
 	unsigned int cru_val = 0;
@@ -4859,7 +5300,132 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 			}
 			break;
 
+		case PI_MODEL_3_PLUS:
+			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
+
+			if(INPUT == mode) {
+				/* Set Input */
+				//Set mux
+				regval = readR(S905D3_GPIO_MUX);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_GPIO_MUX, regval);
+
+				regval &=  ~(0xF << S905D3_GPIO_MUX_OFFSET);
+
+				writeR(regval, S905D3_GPIO_MUX);
+				regval = readR(S905D3_GPIO_MUX);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_GPIO_MUX, regval);
+
+				//set fsel
+				regval = readR(S905D3_GPIO_OUT_EN);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_GPIO_OUT_EN, regval);
+
+				regval |=  1 << S905D3_GPIO_OUT_EN_OFFSET;
+
+				writeR(regval, S905D3_GPIO_OUT_EN);
+				regval = readR(S905D3_GPIO_OUT_EN);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_GPIO_OUT_EN, regval);
+
+			} else if (OUTPUT == mode) {
+				/* Set Output */
+				//Set mux
+				regval = readR(S905D3_GPIO_MUX);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_GPIO_MUX, regval);
+
+				regval &=  ~(0xF << S905D3_GPIO_MUX_OFFSET);
+
+				writeR(regval, S905D3_GPIO_MUX);
+				regval = readR(S905D3_GPIO_MUX);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_GPIO_MUX, regval);
+
+				//set fsel
+				regval = readR(S905D3_GPIO_OUT_EN);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_GPIO_OUT_EN, regval);
+
+				regval &=  ~(1 << S905D3_GPIO_OUT_EN_OFFSET);
+
+				writeR(regval, S905D3_GPIO_OUT_EN);
+				regval = readR(S905D3_GPIO_OUT_EN);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_GPIO_OUT_EN, regval);
+
+			} else if (PWM_OUTPUT == mode) {
+
+				/* Set PWM_Output */
+				//Set mux
+				regval = readR(S905D3_GPIO_MUX);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_GPIO_MUX, regval);
+
+				regval &=  ~(0xF << S905D3_GPIO_MUX_OFFSET);
+				regval |=  0x3 << S905D3_GPIO_MUX_OFFSET;
+
+				if (wiringPiDebug)
+					printf(">>>>>line:%d PWM mode ready to set val: 0x%x\n", __LINE__, regval);
+
+				writeR(regval, S905D3_GPIO_MUX);
+				regval = readR(S905D3_GPIO_MUX);
+
+				if (wiringPiDebug)
+					printf("<<<<<PWM mode set over reg val: 0x%x\n", regval);
+
+				//clear all reg
+					writeR(0, S905D3_PWM_DUTY_CYCLE);
+					writeR(0, S905D3_PWM_MISC);
+
+				//Set misc
+				regval = readR(S905D3_PWM_MISC);
+
+				/**
+				* frequency of clock: 24 MHz / 120 = 200 kHz
+				* frequency of PWM: 200 kHz / 1000 = 200 Hz
+				* period of PWM: 1 / 200 Hz = 0.005 s
+				* duty: 500/1000 = 50%
+				*/
+
+				regval =  (1 << S905D3_PWM_CLK_EN_1) \
+					| (119 << S905D3_PWM_CLK_DIV_1) \
+					| (1 << S905D3_PWM_CLK_EN_0) \
+					| (119 << S905D3_PWM_CLK_DIV_0) \
+					| (0 << S905D3_PWM_CLK_SEL_1) \
+					| (0 << S905D3_PWM_CLK_SEL_0) \
+					| (1 << S905D3_PWM_EN_1) \
+					| (1 << S905D3_PWM_EN_0);
+
+				writeR(regval, S905D3_PWM_MISC);
+				regval = readR(S905D3_PWM_MISC);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_PWM_MISC, regval);
+
+				//Set duty_cycle
+				sunxi_pwm_set_period(1000);
+				sunxi_pwm_set_act(500);
+				regval = readR(S905D3_PWM_DUTY_CYCLE);
+
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x\n", S905D3_PWM_DUTY_CYCLE, regval);
+			}
+
+			break;
+
 		default:
+			H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
 
 			offset = ((index - ((index >> 3) << 3)) << 2);
 
@@ -5188,7 +5754,7 @@ int OrangePi_digitalWrite(int pin, int value)
 				regval = readR(dr_phyaddr);
 
 				if(wiringPiDebug)
-					printf("read val(%#x) from register[%#x]\n", regval, dr_phyaddr);;
+					printf("read val(%#x) from register[%#x]\n", regval, dr_phyaddr);
 
 				regval |= bit_enable;
 
@@ -5205,6 +5771,40 @@ int OrangePi_digitalWrite(int pin, int value)
 				if (wiringPiDebug)
 					printf("set over reg val: 0x%x\n", regval);
 			} 
+			else
+			{
+				printf("Pin mode failed!\n");
+			}
+
+			break;
+
+		case PI_MODEL_3_PLUS:
+
+			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
+
+			/* Ignore unused gpio */
+			if (ORANGEPI_PIN_MASK[bank][index] != -1)
+			{
+				regval = readR(S905D3_GPIO_OUT);
+
+				if(wiringPiDebug)
+					printf("read val(%#x) from register[%#x]\n", regval, S905D3_GPIO_OUT);
+
+				if(0 == value)
+					regval &= ~(1 << S905D3_GPIO_OUT_OFFSET);
+				else
+					regval |= (1 << S905D3_GPIO_OUT_OFFSET);
+
+				writeR(regval, S905D3_GPIO_OUT);
+
+				if (wiringPiDebug)
+					printf("write val(%#x) to register[%#x]\n", regval, S905D3_GPIO_OUT);
+
+				regval = readR(S905D3_GPIO_OUT);
+
+				if (wiringPiDebug)
+					printf("set over reg val: 0x%x\n", regval);
+			}
 			else
 			{
 				printf("Pin mode failed!\n");
@@ -5318,6 +5918,13 @@ int OrangePi_digitalRead(int pin)
 
 			break;
 
+		case PI_MODEL_3_PLUS:
+
+			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
+			phyaddr = S905D3_GPIO_IN;
+
+			break;
+
 		default:
 
 			if (bank == 11) 
@@ -5328,7 +5935,7 @@ int OrangePi_digitalRead(int pin)
 			{
 				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + 0x10;
 			}
-			
+
 			break;
 
 	}
@@ -5336,11 +5943,18 @@ int OrangePi_digitalRead(int pin)
 	if (ORANGEPI_PIN_MASK[bank][index] != -1)
 	{
 		val = readR(phyaddr);
-		val = val >> index;
+
+		if (OrangePiModel == PI_MODEL_3_PLUS) {
+			val = val >> S905D3_GPIO_IN_OFFSET;
+		} else {
+			val = val >> index;
+		}
+
 		val &= 1;
+
 		if (wiringPiDebug)
 			printf("Read reg val: 0x%#x, bank:%d, index:%d\n", val, bank, index);
-		
+
 		return val;
 	}
 
@@ -5439,6 +6053,12 @@ void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 					bit_value = 0;
 			break;
 
+		case PI_MODEL_3_PLUS:
+
+			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
+
+			break;
+
 		default:
 			//int offset = ((index - ((index >> 4) << 4)) << 1);
 			offset = ((index % 16) << 1);
@@ -5463,29 +6083,62 @@ void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 	/* Ignore unused gpio */
 	if (ORANGEPI_PIN_MASK[bank][index] != -1)
 	{
-		if (wiringPiDebug)
-			printf("bank: %d, index: %d\n", bank, index);
+		if (OrangePiModel == PI_MODEL_3_PLUS) {
+			if (PUD_UP == pud) {
+				//Set puen
+				regval = readR(S905D3_GPIO_PUEN);
+				regval |= 1 << S905D3_GPIO_PUEN_OFFSET;
+				writeR(regval, S905D3_GPIO_PUEN);
 
-		regval = readR(phyaddr);
-		if (wiringPiDebug)
-			printf("read val(%#x) from register[%#x]\n", regval, phyaddr);
+				//Set pupd
+				regval = readR(S905D3_GPIO_PUPD);
+				regval |= 1 << S905D3_GPIO_PUPD_OFFSET;
+				writeR(regval, S905D3_GPIO_PUPD);
 
-		/* clear bit */
-		regval &= ~(3 << offset);
+			} else if (PUD_DOWN == pud) {
+				//Set puen
+				regval = readR(S905D3_GPIO_PUEN);
+				regval |= 1 << S905D3_GPIO_PUEN_OFFSET;
+				writeR(regval, S905D3_GPIO_PUEN);
 
-		/* bit write enable*/
-		regval |= bit_enable;
+				//Set pupd
+				regval = readR(S905D3_GPIO_PUPD);
+				regval &= ~(1 << S905D3_GPIO_PUPD_OFFSET);
+				writeR(regval, S905D3_GPIO_PUPD);
 
-		/* set bit */
-		regval |= (bit_value & 3) << offset;
+			} else if (PUD_OFF == pud) {
+				//Disable puen
+				regval = readR(S905D3_GPIO_PUEN);
+				regval &= ~(1 << S905D3_GPIO_PUEN_OFFSET);
+				writeR(regval, S905D3_GPIO_PUEN);
+			}
+		} else {
 
-		if (wiringPiDebug)
-			printf("write val(%#x) to register[%#x]\n", regval, phyaddr);
+			if (wiringPiDebug)
+				printf("bank: %d, index: %d\n", bank, index);
 
-		writeR(regval, phyaddr);
-		regval = readR(phyaddr);
+			regval = readR(phyaddr);
 
-		if (wiringPiDebug)
-			printf("over reg val: %#x\n", regval);
+			if (wiringPiDebug)
+				printf("read val(%#x) from register[%#x]\n", regval, phyaddr);
+
+			/* clear bit */
+			regval &= ~(3 << offset);
+
+			/* bit write enable*/
+			regval |= bit_enable;
+
+			/* set bit */
+			regval |= (bit_value & 3) << offset;
+
+			if (wiringPiDebug)
+				printf("write val(%#x) to register[%#x]\n", regval, phyaddr);
+
+			writeR(regval, phyaddr);
+			regval = readR(phyaddr);
+
+			if (wiringPiDebug)
+				printf("over reg val: %#x\n", regval);
+		}
 	}
 }

@@ -344,15 +344,15 @@ typedef struct {
 
 /*********** Rockchip RK3328 *************/
 
-#define RK3328_GPIO2_BASE 							0xff230000
-#define RK3328_GPIO3_BASE 							0xff240000
-#define RK3328_GPIO_NUM                          	(0x40)
-#define RK3328_GPIO_SWPORTA_DR_OFFSET 				0x00
-#define RK3328_GPIO_SWPORTA_DDR_OFFSET 				0x04
-#define RK3328_GPIO_EXT_PORTA_OFFSET				0x50
-#define RK3328_GRF_BASE 							0xff100000
-#define RK3328_CRU_BASE 							0xff440000
-#define RK3328_CRU_CLKGATE_CON16_OFFSET 			0x0240    //bit 7 8 9 10 9877
+#define RK3328_GPIO2_BASE                                       0xff230000
+#define RK3328_GPIO3_BASE                                       0xff240000
+#define RK3328_GPIO_NUM                                         (0x40)
+#define RK3328_GPIO_SWPORTA_DR_OFFSET                           0x00
+#define RK3328_GPIO_SWPORTA_DDR_OFFSET                          0x04
+#define RK3328_GPIO_EXT_PORTA_OFFSET                            0x50
+#define RK3328_GRF_BASE                                         0xff100000
+#define RK3328_CRU_BASE                                         0xff440000
+#define RK3328_CRU_CLKGATE_CON16_OFFSET                         0x0240    //bit 7 8 9 10 9877
 
 typedef struct {
 	unsigned int * gpio2_base;
@@ -362,6 +362,106 @@ typedef struct {
 } rk3328_soc_info;
 
 /*********** Rockchip RK3328 *************/
+
+
+/*************** S905D3 ******************/
+
+#define S905D3_GPIO_BASE                        0xFF634000
+#define S905D3_GPIO_AO_BASE                     0xFF800000
+#define S905D3_GPIO_PWM_BASE                    0xFFD19000
+#define S905D3_GPIO_PWM_AO_BASE                 0xFF802000
+
+//GPIOA
+#define S905D3_GPIOA_OUT_EN_REG                 (S905D3_GPIO_BASE + 0x120)
+#define S905D3_GPIOA_OUT_REG                    (S905D3_GPIO_BASE + 0x121)
+#define S905D3_GPIOA_IN_REG                     (S905D3_GPIO_BASE + 0x122)
+#define S905D3_GPIOA_PUPD_REG                   (S905D3_GPIO_BASE + 0x13F)
+#define S905D3_GPIOA_PUEN_REG                   (S905D3_GPIO_BASE + 0x14D)
+#define S905D3_GPIOA_MUX_REG1                   (S905D3_GPIO_BASE + 0x1BD)
+#define S905D3_GPIOA_MUX_REG2                   (S905D3_GPIO_BASE + 0x1BE)
+
+//GPIOC
+#define S905D3_GPIOC_OUT_EN_REG                 (S905D3_GPIO_BASE + 0x113)
+#define S905D3_GPIOC_OUT_REG                    (S905D3_GPIO_BASE + 0x114)
+#define S905D3_GPIOC_IN_REG                     (S905D3_GPIO_BASE + 0x115)
+#define S905D3_GPIOC_PUPD_REG                   (S905D3_GPIO_BASE + 0x13B)
+#define S905D3_GPIOC_PUEN_REG                   (S905D3_GPIO_BASE + 0x149)
+#define S905D3_GPIOC_MUX_REG                    (S905D3_GPIO_BASE + 0x1B9)
+
+//GPIOH
+#define S905D3_GPIOH_OUT_EN_REG                 (S905D3_GPIO_BASE + 0x119)
+#define S905D3_GPIOH_OUT_REG                    (S905D3_GPIO_BASE + 0x11A)
+#define S905D3_GPIOH_IN_REG                     (S905D3_GPIO_BASE + 0x11B)
+#define S905D3_GPIOH_PUPD_REG                   (S905D3_GPIO_BASE + 0x13D)
+#define S905D3_GPIOH_PUEN_REG                   (S905D3_GPIO_BASE + 0x14B)
+#define S905D3_GPIOH_MUX_REG1                   (S905D3_GPIO_BASE + 0x1BB)
+#define S905D3_GPIOH_MUX_REG2                   (S905D3_GPIO_BASE + 0x1BC)
+
+//GPIOAO
+#define S905D3_GPIOAO_OUT_EN_REG                (S905D3_GPIO_AO_BASE + 0x109)
+#define S905D3_GPIOAO_OUT_REG                   (S905D3_GPIO_AO_BASE + 0x10D)
+#define S905D3_GPIOAO_IN_REG                    (S905D3_GPIO_AO_BASE + 0x10A)
+#define S905D3_GPIOAO_PUPD_REG                  (S905D3_GPIO_AO_BASE + 0x10B)
+#define S905D3_GPIOAO_PUEN_REG                  (S905D3_GPIO_AO_BASE + 0x10C)
+#define S905D3_GPIOAO_MUX_REG1                  (S905D3_GPIO_AO_BASE + 0x105)
+#define S905D3_GPIOAO_MUX_REG2                  (S905D3_GPIO_AO_BASE + 0x106)
+
+//for short——gpio
+#define S905D3_GPIO_OUT_EN                      (s905d3_gpio_info_t.gpio_out_en)
+#define S905D3_GPIO_OUT                         (s905d3_gpio_info_t.gpio_out)
+#define S905D3_GPIO_IN                          (s905d3_gpio_info_t.gpio_in)
+#define S905D3_GPIO_PUPD                        (s905d3_gpio_info_t.gpio_pupd)
+#define S905D3_GPIO_PUEN                        (s905d3_gpio_info_t.gpio_puen)
+#define S905D3_GPIO_MUX                         (s905d3_gpio_info_t.gpio_mux)
+#define S905D3_GPIO_OUT_EN_OFFSET               (s905d3_gpio_info_t.gpio_out_en_offset)
+#define S905D3_GPIO_OUT_OFFSET                  (s905d3_gpio_info_t.gpio_out_offset)
+#define S905D3_GPIO_IN_OFFSET                   (s905d3_gpio_info_t.gpio_in_offset)
+#define S905D3_GPIO_PUPD_OFFSET                 (s905d3_gpio_info_t.gpio_pupd_offset)
+#define S905D3_GPIO_PUEN_OFFSET                 (s905d3_gpio_info_t.gpio_puen_offset)
+#define S905D3_GPIO_MUX_OFFSET                  (s905d3_gpio_info_t.gpio_mux_offset)
+
+//PWM
+#define S905D3_PWM_DUTY_CYCLE_F_REG             (S905D3_GPIO_PWM_BASE + 0x01)
+#define S905D3_PWM_MISC_EF_REG                  (S905D3_GPIO_PWM_BASE + 0x02)
+#define S905D3_PWM_DUTY_CYCLE_AO_C_REG          (S905D3_GPIO_PWM_AO_BASE)
+#define S905D3_PWM_MISC_AO_CD_REG               (S905D3_GPIO_PWM_AO_BASE + 0x02)
+
+//for short——pwm
+#define S905D3_PWM_DUTY_CYCLE                   (s905d3_gpio_info_t.pwm_duty_cycle)
+#define S905D3_PWM_MISC                         (s905d3_gpio_info_t.pwm_misc)
+
+//PWM_MISC_OFFSET
+#define S905D3_PWM_CLK_EN_1                     (23)
+#define S905D3_PWM_CLK_DIV_1                    (16)    // 22 ~ 16
+#define S905D3_PWM_CLK_EN_0                     (15)
+#define S905D3_PWM_CLK_DIV_0                    (8)     // 8 ~ 14
+#define S905D3_PWM_CLK_SEL_1                    (6)     // 7 ~ 6
+#define S905D3_PWM_CLK_SEL_0                    (4)     // 5 ~ 4
+#define S905D3_PWM_EN_1                         (1)
+#define S905D3_PWM_EN_0                         (0)
+
+typedef struct {
+	unsigned int * gpio_base;
+	unsigned int * gpio_ao_base;
+	unsigned int * gpio_pwm_base;
+	unsigned int * gpio_pwm_ao_base;
+	unsigned int gpio_out_en;
+	unsigned int gpio_out;
+	unsigned int gpio_in;
+	unsigned int gpio_pupd;
+	unsigned int gpio_puen;
+	unsigned int gpio_mux;
+	unsigned int gpio_out_en_offset;
+	unsigned int gpio_out_offset;
+	unsigned int gpio_in_offset;
+	unsigned int gpio_pupd_offset;
+	unsigned int gpio_puen_offset;
+	unsigned int gpio_mux_offset;
+	unsigned int pwm_duty_cycle;
+	unsigned int pwm_misc;
+} s905d3_gpio_info;
+
+/*************** S905D3 ******************/
 
 
 // Mask for the bottom 64 pins which belong to the Raspberry Pi
@@ -418,47 +518,50 @@ extern int wiringPiDebug;
 //	Intended for the GPIO program Use at your own risk.
 
 /* Allwinner H6 */
-#define	PI_MODEL_3		 		0
-#define	PI_MODEL_LTIE_2			1
+#define PI_MODEL_3                      0
+#define PI_MODEL_LTIE_2                 1
 
 /* Allwinner H2+ */
-#define	PI_MODEL_ZERO			2
+#define PI_MODEL_ZERO                   2
 
 /* Allwinner H3 */
-#define	PI_MODEL_H3				3
-#define	PI_MODEL_ZERO_PLUS_2	4
+#define PI_MODEL_H3                     3
+#define PI_MODEL_ZERO_PLUS_2            4
 
 /* Allwinner A64 */
-#define	PI_MODEL_WIN			5
+#define PI_MODEL_WIN                    5
 
 /* Allwinner H5 */
-#define	PI_MODEL_PRIME			6
-#define	PI_MODEL_PC_2			7
-#define	PI_MODEL_ZERO_PLUS		8
+#define PI_MODEL_PRIME                  6
+#define PI_MODEL_PC_2                   7
+#define PI_MODEL_ZERO_PLUS              8
 
 /* Allwinner H616 */
-#define	PI_MODEL_ZERO_2			9
-#define	PI_MODEL_ZERO_2_W		10
+#define PI_MODEL_ZERO_2                 9
+#define PI_MODEL_ZERO_2_W              10
 
 
 /* Rockchip RK3399 */
-#define	PI_MODEL_800			15
-#define	PI_MODEL_4				16
-#define	PI_MODEL_4_LTS			17
-#define	PI_MODEL_RK3399			18
+#define PI_MODEL_800                   15
+#define PI_MODEL_4                     16
+#define PI_MODEL_4_LTS                 17
+#define PI_MODEL_RK3399                18
 
 /* Rockchip RK3328 */
-#define	PI_MODEL_R1_PLUS		22
+#define PI_MODEL_R1_PLUS               22
 
 /* Rockchip RK3588(s) */
-#define	PI_MODEL_900				23
-#define	PI_MODEL_5				24
-#define	PI_MODEL_5B				25
-#define	PI_MODEL_5_PLUS				26
+#define PI_MODEL_900                   23
+#define PI_MODEL_5                     24
+#define PI_MODEL_5B                    25
+#define PI_MODEL_5_PLUS                26
 
 /* Rockchip RK3566 */
-#define	PI_MODEL_CM4				27
-#define	PI_MODEL_3B				28
+#define PI_MODEL_CM4                   27
+#define PI_MODEL_3B                    28
+
+/* S905D3 */
+#define PI_MODEL_3_PLUS                29
 
 extern const char *piModelNames    [16] ;
 
@@ -571,21 +674,22 @@ extern int  wiringPiSetupPiFaceForGpioProg (void) ;	// Don't use this - for gpio
 
 // On-Board Raspberry Pi hardware specific stuff
 
-extern          void piBoardId           (int *model) ;
-extern          int  wpiPinToGpio        (int wpiPin) ;
-extern          int  physPinToGpio       (int physPin) ;
-extern          void setPadDrive         (int group, int value) ;
-extern          int  getAlt              (int pin) ;
-extern void H618_set_pwm_reg(int pin,sunxi_gpio_info *sunxi_gpio_info_ptr);
-extern          void pwmToneWrite        (int pin, int freq) ;
-extern void pwmSetMode(int pin,int mode) ;
-extern void pwmSetRange(int pin,unsigned int range) ;
-extern void pwmSetClock(int pin,int divisor) ;
-extern          void gpioClockSet        (int pin, int freq) ;
-extern unsigned int  digitalReadByte     (void) ;
-extern unsigned int  digitalReadByte2    (void) ;
-extern          void digitalWriteByte    (int value) ;
-extern          void digitalWriteByte2   (int value) ;
+extern          void piBoardId(int *model) ;
+extern           int wpiPinToGpio(int wpiPin) ;
+extern           int physPinToGpio(int physPin) ;
+extern          void setPadDrive(int group, int value) ;
+extern           int getAlt(int pin) ;
+extern          void H618_set_pwm_reg(int pin,sunxi_gpio_info *sunxi_gpio_info_ptr);
+extern          void s905d3_set_gpio_reg(int pin,s905d3_gpio_info *s905d3_gpio_info_ptr);
+extern          void pwmToneWrite(int pin, int freq) ;
+extern          void pwmSetMode(int pin,int mode) ;
+extern          void pwmSetRange(int pin,unsigned int range) ;
+extern          void pwmSetClock(int pin,int divisor) ;
+extern          void gpioClockSet(int pin, int freq) ;
+extern unsigned  int digitalReadByte(void) ;
+extern unsigned  int digitalReadByte2(void) ;
+extern          void digitalWriteByte(int value) ;
+extern          void digitalWriteByte2(int value) ;
 
 // Interrupts
 //	(Also Pi hardware specific)

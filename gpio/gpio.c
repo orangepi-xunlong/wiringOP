@@ -1354,11 +1354,6 @@ static void doPwmClock (int argc, char *argv [])
     pin = (unsigned int)strtoul (argv [2], NULL, 10) ;
     clock = (unsigned int)strtoul (argv [3], NULL, 10) ;
 
-    if ((clock < 1) || (clock > 4095)) {
-        fprintf (stderr, "%s: clock must be between 0 and 4096\n", argv [0]) ;
-        exit (1) ;
-    }
-
     pwmSetClock (pin,clock) ;
 }
 
