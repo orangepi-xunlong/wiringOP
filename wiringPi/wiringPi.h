@@ -679,8 +679,9 @@ extern           int wpiPinToGpio(int wpiPin) ;
 extern           int physPinToGpio(int physPin) ;
 extern          void setPadDrive(int group, int value) ;
 extern           int getAlt(int pin) ;
-extern          void H618_set_pwm_reg(int pin,sunxi_gpio_info *sunxi_gpio_info_ptr);
-extern          void s905d3_set_gpio_reg(int pin,s905d3_gpio_info *s905d3_gpio_info_ptr);
+extern          void H618_set_pwm_reg(int pin,sunxi_gpio_info *sunxi_gpio_info_ptr) ;
+extern          void s905d3_set_gpio_reg(int pin,s905d3_gpio_info *s905d3_gpio_info_ptr) ;
+extern          void sunxi_pwm_set_enable(int en) ;
 extern          void pwmToneWrite(int pin, int freq) ;
 extern          void pwmSetMode(int pin,int mode) ;
 extern          void pwmSetRange(int pin,unsigned int range) ;
@@ -722,6 +723,10 @@ extern int OrangePi_digitalRead(int pin);
 extern int OrangePi_digitalWrite(int pin, int value);
 extern int OrangePi_set_gpio_alt(int pin, int mode);
 extern void OrangePi_set_gpio_pullUpDnControl (int pin, int pud);
+extern void sunxi_pwm_set_act(int pin,int act_cys);
+extern void sunxi_pwm_set_period(int pin,unsigned int period_cys);
+extern void sunxi_pwm_set_clk(int pin,int clk);
+extern void sunxi_pwm_set_tone(int pin,int freq);
 
 void set_soc_info(void);
 
