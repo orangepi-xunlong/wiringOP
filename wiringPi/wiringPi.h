@@ -238,6 +238,63 @@ typedef struct {
 #define RK3588_VCCIO3_5_IOC_GPIO2A_P				0x0120U
 #define RK3588_VCCIO6_IOC_GPIO4A_P					0x0140U
 
+//pwm register base addr
+//#define RK3588_CRU_BASE 					0xfd7c0000U
+//#define RK3588_PMU1CRU_BASE 					0xfd7f0000U
+#define RK3588_PWM0_BASE                                         0xfd8b0000U
+#define RK3588_PWM1_BASE                                         0xfe8d0000U
+#define RK3588_PWM2_BASE                                         0xfebe0000U
+#define RK3588_PWM3_BASE                                         0xfebf0000U
+
+//cru
+#define RK3588_CRU_GATE_CON19                                   (RK3588_CRU_BASE + 0x084CU)      //for busioc_clk_en
+#define RK3588_CRU_GATE_CON15                                   (RK3588_CRU_BASE + 0x083CU)      //for pwm123_clk_en
+#define RK3588_PMU1CRU_GATE_CON1 			        (RK3588_PMU1CRU_BASE +0x0804U)	 //for pmu1pwm_clk_en
+
+//CH0
+#define RK3588_CH0_PERIOD_HPR                                   (RK3588_PWM_BASE + 0x04)
+#define RK3588_CH0_DUTY_LPR                                     (RK3588_PWM_BASE + 0x08)
+#define RK3588_CH0_CTRL                                         (RK3588_PWM_BASE + 0x0C)
+
+//CH1
+#define RK3588_CH1_PERIOD_HPR                                   (RK3588_PWM_BASE + 0x14)
+#define RK3588_CH1_DUTY_LPR                                     (RK3588_PWM_BASE + 0x18)
+#define RK3588_CH1_CTRL                                         (RK3588_PWM_BASE + 0x1C)
+
+//CH2
+#define RK3588_CH2_PERIOD_HPR                                   (RK3588_PWM_BASE + 0x24)
+#define RK3588_CH2_DUTY_LPR                                     (RK3588_PWM_BASE + 0x28)
+#define RK3588_CH2_CTRL                                         (RK3588_PWM_BASE + 0x2C)
+
+//CH3
+#define RK3588_CH3_PERIOD_HPR                                   (RK3588_PWM_BASE + 0x34)
+#define RK3588_CH3_DUTY_LPR                                     (RK3588_PWM_BASE + 0x38)
+#define RK3588_CH3_CTRL                                         (RK3588_PWM_BASE + 0x3C)
+
+//for short——pwm
+#define RK3588_PWM_BASE                                         (rk3588_soc_info_t.pwm_base)
+#define RK3588_PWM_MUX                                          (rk3588_soc_info_t.pwm_mux)
+#define RK3588_PWM_MUX_VAL                                      (rk3588_soc_info_t.pwm_mux_val)
+#define RK3588_PWM_MUX_OFFSET                                   (rk3588_soc_info_t.pwm_mux_offset)
+#define RK3588_CH_PERIOD_HPR                                    (rk3588_soc_info_t.ch_period_hpr)
+#define RK3588_CH_DUTY_LPR                                      (rk3588_soc_info_t.ch_duty_lpr)
+#define RK3588_CH_CTRL                                          (rk3588_soc_info_t.ch_crtl)
+
+//pwm_ctrl_offset
+#define RK3588_RPT                                              (24)    // 24 ~ 31
+#define RK3588_SCALE                                            (16)    // 16 ~ 23
+#define RK3588_PRESCALE                                         (12)    // 12 ~ 14
+#define RK3588_CLK_SRC_SEL                                      (10)
+#define RK3588_CLK_SEL                                          (9)
+#define RK3588_FORCE_CLK_EN                                     (8)
+#define RK3588_CH_CNT_EN                                        (7)
+#define RK3588_CONLOCK                                          (6)
+#define RK3588_OUTPUT_MODE                                      (5)
+#define RK3588_INACTIVE_POL                                     (4)
+#define RK3588_DUTY_POL                                         (3)
+#define RK3588_PWM_MODE                                         (1)     // 1 ~ 2
+#define RK3588_PWM_EN                                           (0)
+
 typedef struct {
 	unsigned int * gpio0_base;
 	unsigned int * gpio1_base;
@@ -255,6 +312,18 @@ typedef struct {
 	unsigned int * vccio1_4_ioc_base;
 	unsigned int * vccio3_5_ioc_base;
 	unsigned int * vccio6_ioc_base;
+
+	unsigned int * pwm0_base;
+	unsigned int * pwm1_base;
+	unsigned int * pwm2_base;
+	unsigned int * pwm3_base;
+	unsigned int   pwm_base;
+	unsigned int   pwm_mux;
+	unsigned int   pwm_mux_val;
+	unsigned int   pwm_mux_offset;
+	unsigned int   ch_period_hpr;
+	unsigned int   ch_duty_lpr;
+	unsigned int   ch_crtl;
 } rk3588_soc_info;
 
 /*********** Rockchip RK3588 *************/
@@ -681,6 +750,7 @@ extern          void setPadDrive(int group, int value) ;
 extern           int getAlt(int pin) ;
 extern          void H618_set_pwm_reg(int pin,sunxi_gpio_info *sunxi_gpio_info_ptr) ;
 extern          void s905d3_set_gpio_reg(int pin,s905d3_gpio_info *s905d3_gpio_info_ptr) ;
+extern          void rk3588_set_pwm_reg(int pin,rk3588_soc_info *rk3588_soc_info_ptr) ;
 extern          void sunxi_pwm_set_enable(int en) ;
 extern          void pwmToneWrite(int pin, int freq) ;
 extern          void pwmSetMode(int pin,int mode) ;
