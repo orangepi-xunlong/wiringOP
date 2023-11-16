@@ -2286,7 +2286,7 @@ void sunxi_pwm_set_tone(int pin,int freq)
 				//modifine tone
 				div = readR(RK3588_CH_CTRL);
 				div = ((div & 0x00ff0000) >> RK3588_SCALE);  //The 16 ~ 23 bits determine the frequency division
-				div = 2 * div;  //The actual frequency division value is (div + 1)
+				div = 2 * div;  //The actual frequency division value is (2 * div)
 				range = 24000000 / (div * freq);  //The default pwm clock frequency is 24MHz
 
 				if (range / 2 == 0) {
@@ -2359,6 +2359,49 @@ void sunxi_pwm_set_tone(int pin,int freq)
 
 				if (wiringPiDebug)
 					printf("div:%d range:%d val:%#x\n",div,range,val);
+			}
+
+			break;
+
+		case PI_MODEL_CM4:
+		case PI_MODEL_3B:
+
+			rk3566_set_pwm_reg(pin,&rk3566_soc_info_t);
+
+			if (freq == 0)
+				sunxi_pwm_set_act (pin, 0);  //Off
+			else {
+				//enable conlock
+				val = readR(RK3566_CH_CTRL);
+				val |= (1 << RK3566_CONLOCK);
+				writeR(val, RK3566_CH_CTRL);
+				delay(1);
+				val = readR(RK3566_CH_CTRL);
+
+				//modifine tone
+				div = readR(RK3566_CH_CTRL);
+				div = ((div & 0x00ff0000) >> RK3566_SCALE);  //The 16 ~ 23 bits determine the frequency division
+				div = 2 * div;  //The actual frequency division value is (2 * div)
+				range = 24000000 / (div * freq);  //The default pwm clock frequency is 24MHz
+
+				if (range / 2 == 0) {
+					fprintf(stderr,"gpio: The PWM frequency you set is too high to be possible\n");
+					exit(1);
+				}
+
+				writeR(range,RK3566_CH_PERIOD_HPR);
+				delay(1);
+				writeR(range / 2,RK3566_CH_DUTY_LPR);
+
+				//disable conlock
+				val = readR(RK3566_CH_CTRL);
+				val &= ~(1 << RK3566_CONLOCK);
+				writeR(val, RK3566_CH_CTRL);
+				delay(1);
+				val = readR(RK3566_CH_CTRL);
+
+				if (wiringPiDebug)
+					printf("div:%d range:%d\n",div,range);
 			}
 
 			break;
@@ -2520,6 +2563,45 @@ void sunxi_pwm_set_clk(int pin,int clk)
 
 			break;
 
+		case PI_MODEL_CM4:
+		case PI_MODEL_3B:
+
+			if ((clk < 2) || (clk > 512)) {
+				fprintf (stderr, "gpio: clock must be between 2 and 512\n") ;
+				exit (1) ;
+			}
+
+			rk3566_set_pwm_reg(pin,&rk3566_soc_info_t);
+
+			if (clk == 512)
+				val = 0;
+			else
+				val = clk / 2;
+
+			//enable conlock
+			regval = readR(RK3566_CH_CTRL);
+			regval |= (1 << RK3566_CONLOCK);
+			writeR(regval, RK3566_CH_CTRL);
+			delay(1);
+			regval = readR(RK3566_CH_CTRL);
+
+			//modifine clk
+			regval = regval = readR(RK3566_CH_CTRL);
+			regval &= ~(0xff << RK3566_SCALE);
+			regval |= (val << RK3566_SCALE);
+			writeR(regval, RK3566_CH_CTRL);
+			delay(1);
+			regval = readR(RK3566_CH_CTRL);
+
+			//disable conlock
+			regval = readR(RK3566_CH_CTRL);
+			regval &= ~(1 << RK3566_CONLOCK);
+			writeR(regval, RK3566_CH_CTRL);
+			delay(1);
+			regval = readR(RK3566_CH_CTRL);
+
+			break;
+
 		default:
 			break;
 	}
@@ -2580,7 +2662,7 @@ void sunxi_pwm_set_period(int pin,unsigned int period_cys)
 			ccr = readR(RK3588_CH_DUTY_LPR);
 
 			if (period_cys < ccr) {
-				fprintf (stderr, "gpio: ARR should be greater than or equal to CRR (%d)\n",ccr);
+				fprintf (stderr, "gpio: ARR should be greater than or equal to CCR (%d)\n",ccr);
 				exit(1);
 			}
 
@@ -2652,7 +2734,7 @@ void sunxi_pwm_set_period(int pin,unsigned int period_cys)
 			ccr = ccr >> 16;
 
 			if (period_cys < ccr) {
-				fprintf (stderr, "gpio: ARR should be greater than or equal to CRR (%d)\n",ccr) ;
+				fprintf (stderr, "gpio: ARR should be greater than or equal to CCR (%d)\n",ccr) ;
 				exit(1);
 			}
 
@@ -2662,6 +2744,39 @@ void sunxi_pwm_set_period(int pin,unsigned int period_cys)
 
 			if (wiringPiDebug)
 				printf("readback reg val: 0x%x\n", val);
+
+			break;
+
+		case PI_MODEL_CM4:
+		case PI_MODEL_3B:
+
+			rk3566_set_pwm_reg(pin,&rk3566_soc_info_t);
+
+			ccr = readR(RK3566_CH_DUTY_LPR);
+
+			if (period_cys < ccr) {
+				fprintf (stderr, "gpio: ARR should be greater than or equal to CCR (%d)\n",ccr);
+				exit(1);
+			}
+
+			//enable conlock
+			val = readR(RK3566_CH_CTRL);
+			val |= (1 << RK3566_CONLOCK);
+			writeR(val, RK3566_CH_CTRL);
+			delay(1);
+			val = readR(RK3566_CH_CTRL);
+
+			//modifine period
+			writeR(period_cys, RK3566_CH_PERIOD_HPR);
+			delay(1);
+			val = readR(RK3566_CH_PERIOD_HPR);
+
+			//disable conlock
+			val = readR(RK3566_CH_CTRL);
+			val &= ~(1 << RK3566_CONLOCK);
+			writeR(val, RK3566_CH_CTRL);
+			delay(1);
+			val = readR(RK3566_CH_CTRL);
 
 			break;
 
@@ -2776,6 +2891,39 @@ void sunxi_pwm_set_act(int pin,int act_cys)
 				act_cys = ((act_cys << 16) | per0);
 				writeR(act_cys, S905D3_PWM_DUTY_CYCLE);
 			}
+
+			break;
+
+		case PI_MODEL_CM4:
+		case PI_MODEL_3B:
+
+			rk3566_set_pwm_reg(pin,&rk3566_soc_info_t);
+
+			arr = readR(RK3566_CH_PERIOD_HPR);
+
+			if ((unsigned int)act_cys > arr) {
+				fprintf (stderr, "gpio: CCR should be less than or equal to ARR (%d)\n",arr) ;
+				exit(1);
+			}
+
+			//enable conlock
+			per0 = readR(RK3566_CH_CTRL);
+			per0 |= (1 << RK3566_CONLOCK);
+			writeR(per0, RK3566_CH_CTRL);
+			delay(1);
+			per0 = readR(RK3566_CH_CTRL);
+
+			//modifine act
+			writeR(act_cys, RK3566_CH_DUTY_LPR);
+			delay(1);
+			per0 = readR(RK3566_CH_DUTY_LPR);
+
+			//disable conlock
+			per0 = readR(RK3566_CH_CTRL);
+			per0 &= ~(1 << RK3566_CONLOCK);
+			writeR(per0, RK3566_CH_CTRL);
+			delay(1);
+			per0 = readR(RK3566_CH_CTRL);
 
 			break;
 
@@ -4266,6 +4414,14 @@ int wiringPiSetup (void)
 			rk3566_soc_info_t.pmu_cru_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_PMU_CRU_BASE);
 			if ((int32_t)(unsigned long)rk3566_soc_info_t.pmu_cru_base == -1)
 				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_PMU_CRU_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.pwm2_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_PWM2_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.pwm2_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_PWM2_BASE) failed: %s\n", strerror(errno));
+
+			rk3566_soc_info_t.pwm3_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_PWM3_BASE);
+			if ((int32_t)(unsigned long)rk3566_soc_info_t.pwm3_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_PWM3_BASE) failed: %s\n", strerror(errno));
 			break;
 
 		case PI_MODEL_3_PLUS:
@@ -4515,7 +4671,9 @@ unsigned int readR(unsigned int addr)
 				val = *((unsigned int *)((unsigned char *)rk3588_soc_info_t.pwm3_base + mmap_seek));
 			if (wiringPiDebug)
 				printf("read %#x from [%#x]\n",val,addr);
+
 			return val;
+
 			break;
 
 		case PI_MODEL_800: case PI_MODEL_4_LTS:
@@ -4589,6 +4747,14 @@ unsigned int readR(unsigned int addr)
 				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.cru_base + mmap_seek));
 			else if(mmap_base == RK3566_PMU_CRU_BASE)
 				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.pmu_cru_base + mmap_seek));
+			else if(mmap_base == RK3566_PWM2_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.pwm2_base + mmap_seek));
+			else if(mmap_base == RK3566_PWM3_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.pwm3_base + mmap_seek));
+
+			if (wiringPiDebug)
+				printf("read %#x from [%#x]\n",val,addr);
+
 			return val;
 
 			break;
@@ -4608,6 +4774,7 @@ unsigned int readR(unsigned int addr)
 				val = *(s905d3_gpio_info_t.gpio_pwm_base + mmap_seek);
 			else if (mmap_base == S905D3_GPIO_PWM_AO_BASE)
 				val = *(s905d3_gpio_info_t.gpio_pwm_ao_base + mmap_seek);
+
 			return val;
 
 			break;
@@ -4689,8 +4856,10 @@ void writeR(unsigned int val, unsigned int addr)
 				*((unsigned int *)((unsigned char *)rk3588_soc_info_t.pwm2_base + mmap_seek)) = val;
 			else if(mmap_base == RK3588_PWM3_BASE)
 				*((unsigned int *)((unsigned char *)rk3588_soc_info_t.pwm3_base + mmap_seek)) = val;
+
 			if (wiringPiDebug)
 				printf("write %#x to [%#x]\n",val,addr);
+
 			break;
 
 		case PI_MODEL_800: case PI_MODEL_4_LTS:
@@ -4755,6 +4924,14 @@ void writeR(unsigned int val, unsigned int addr)
 				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.cru_base + mmap_seek)) = val;
 			else if(mmap_base == RK3566_PMU_CRU_BASE)
 				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.pmu_cru_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_PWM2_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.pwm2_base + mmap_seek)) = val;
+			else if(mmap_base == RK3566_PWM3_BASE)
+				*((unsigned int *)((unsigned char *)rk3566_soc_info_t.pwm3_base + mmap_seek)) = val;
+
+			if (wiringPiDebug)
+				printf("write %#x to [%#x]\n",val,addr);
+
 			break;
 
 		case PI_MODEL_3_PLUS:
@@ -5253,6 +5430,36 @@ void rk3588_set_pwm_reg(int pin,rk3588_soc_info *rk3588_soc_info_ptr)
 	}
 }
 
+void rk3566_set_pwm_reg(int pin,rk3566_soc_info *rk3566_soc_info_ptr)
+{
+	rk3566_soc_info_ptr->pwm_mux = RK3566_PWM_MUX_REG;
+
+	switch (pin)
+	{
+		case 144:  //PWM2CH3
+			rk3566_soc_info_ptr->cru_gate_con = RK3566_CRU_GATE_CON31;
+			rk3566_soc_info_ptr->cru_gate_con_offset = 13;
+			rk3566_soc_info_ptr->pwm_mux_val = 0x3;
+			rk3566_soc_info_ptr->pwm_mux_offset = 0;
+			rk3566_soc_info_ptr->pwm_base = RK3566_PWM2_BASE;
+			rk3566_soc_info_ptr->ch_period_hpr = RK3566_CH3_PERIOD_HPR;
+			rk3566_soc_info_ptr->ch_duty_lpr = RK3566_CH3_DUTY_LPR;
+			rk3566_soc_info_ptr->ch_crtl = RK3566_CH3_CTRL;
+			break;
+
+		case 147:  //PWM3CH3
+			rk3566_soc_info_ptr->cru_gate_con = RK3566_CRU_GATE_CON32;
+			rk3566_soc_info_ptr->cru_gate_con_offset = 0;
+			rk3566_soc_info_ptr->pwm_mux_val = 0x1;
+			rk3566_soc_info_ptr->pwm_mux_offset = 12;
+			rk3566_soc_info_ptr->pwm_base = RK3566_PWM3_BASE;
+			rk3566_soc_info_ptr->ch_period_hpr = RK3566_CH3_PERIOD_HPR;
+			rk3566_soc_info_ptr->ch_duty_lpr = RK3566_CH3_DUTY_LPR;
+			rk3566_soc_info_ptr->ch_crtl = RK3566_CH3_CTRL;
+			break;
+	}
+}
+
 /*
  * Set GPIO Mode
  */
@@ -5514,15 +5721,15 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 					regval = readR(gpio_phyaddr);
 					regval &= ~(1 << index);
 					writeR(regval, gpio_phyaddr);
-					
+
 					if (wiringPiDebug){
 						regval = readR(gpio_phyaddr);
 						printf("Input mode set over reg val: %#x\n",regval);
 					}
-				} 
+				}
+				/* Set Output */
 				else if(OUTPUT == mode) 
-				{ 
-					/* Set Output */
+				{
 					writeR(0xffff0180, cru_phyaddr);
 					regval = readR(grf_phyaddr);
 					regval |= 0x3 << ((offset << 1) | 0x10);
@@ -5538,7 +5745,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 						printf("Out mode get value: 0x%x\n",regval);
 					} 
 				}
-				else 
+				else
 				{
 					printf("Unknow mode\n");
 				}
@@ -5664,6 +5871,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 
 		case PI_MODEL_CM4:
 		case PI_MODEL_3B:
+
 			if(bank == 0){
 				cru_phyaddr = RK3566_PMU_CRU_BASE + RK3566_PMUCRU_PMUGATE_CON01_OFFSET;
 				cru_val = ~((0x3 << 9) | (0x3 << (16 + 9)));
@@ -5682,38 +5890,142 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 			/* Ignore unused gpio */
 			if (ORANGEPI_PIN_MASK[bank][index] != -1)
 			{
-				regval = readR(cru_phyaddr);
-				regval &= cru_val;
-				writeR(regval, cru_phyaddr);
-				regval = readR(grf_phyaddr);
-				if(wiringPiDebug)
-					printf("read val(%#x) from register[%#x]\n", regval, grf_phyaddr);
-				regval |= bit_enable;
-				regval &= ~(0x7 << offset);
-				if (wiringPiDebug)
-					printf("write val(%#x) to register[%#x]\n", regval, grf_phyaddr);
-				writeR(regval, grf_phyaddr);
-				regval = readR(grf_phyaddr);
-				if(wiringPiDebug)
-					printf("set over reg val: 0x%x\n", regval);
+				if (INPUT == mode)
+				{
+					regval = readR(cru_phyaddr);
+					regval &= cru_val;
+					writeR(regval, cru_phyaddr);
+					regval = readR(cru_phyaddr);
 
-				regval = readR(ddr_phyaddr);
-				if(wiringPiDebug)
-					printf("read val ddr (%#x) from register[%#x]\n", regval, ddr_phyaddr);
+					regval = readR(grf_phyaddr);
+					regval |= bit_enable;
+					regval &= ~(0x7 << offset);
+					writeR(regval, grf_phyaddr);
+					regval = readR(grf_phyaddr);
 
-				regval |= 0x1 << (16 + (index % 16));
-				if(INPUT == mode)
+					regval = readR(ddr_phyaddr);
+					regval |= 0x1 << (16 + (index % 16));
 					regval &= ~(1 << (index % 16));
-				else
+					writeR(regval, ddr_phyaddr);
+					regval = readR(ddr_phyaddr);
+				}
+				else if (OUTPUT == mode)
+				{
+					regval = readR(cru_phyaddr);
+					regval &= cru_val;
+					writeR(regval, cru_phyaddr);
+					regval = readR(cru_phyaddr);
+
+					regval = readR(grf_phyaddr);
+					regval |= bit_enable;
+					regval &= ~(0x7 << offset);
+					writeR(regval, grf_phyaddr);
+					regval = readR(grf_phyaddr);
+
+					regval = readR(ddr_phyaddr);
+					regval |= 0x1 << (16 + (index % 16));
 					regval |= (1 << (index % 16));
+					writeR(regval, ddr_phyaddr);
+					regval = readR(ddr_phyaddr);
+				}
+				else if (PWM_OUTPUT == mode)
+				{
+					/*//set clk——busioc
+					if (wiringPiDebug)
+						printf(">>Set cru_busioc_clk_en\n");
 
-				writeR(regval, ddr_phyaddr);
-				if (wiringPiDebug)
-					printf("write val(%#x) to register[%#x]\n", regval, ddr_phyaddr);
+					regval = readR(RK3588_CRU_GATE_CON19);
+					regval &= 0xfffffffe;
+					writeR(regval,RK3588_CRU_GATE_CON19);
+					regval = readR(RK3588_CRU_GATE_CON19);*/
 
-				regval = readR(ddr_phyaddr);
-				if (wiringPiDebug)
-					printf("set over reg val: 0x%x\n", regval);
+					rk3566_set_pwm_reg(pin,&rk3566_soc_info_t);
+
+					//Set clk——pwm
+					if (wiringPiDebug)
+						printf(">>Set cru_pwm_clk_en\n");
+
+					regval = readR(RK3566_CRU_GATE_CON);
+					regval &= ~(0x7 << RK3566_CRU_GATE_CON_OFFSET);
+					regval |= (0xffff0000 + (0x4 <<  RK3566_CRU_GATE_CON_OFFSET));
+					writeR(regval,RK3566_CRU_GATE_CON);
+					regval = readR(RK3566_CRU_GATE_CON);
+
+					//Set mux
+					if (wiringPiDebug)
+						printf(">>Set mux\n");
+
+					regval = readR(RK3566_PWM_MUX);
+					regval |= 0xffff0000;
+					regval &= ~(0xf << RK3566_PWM_MUX_OFFSET);
+					regval |= (RK3566_PWM_MUX_VAL << RK3566_PWM_MUX_OFFSET);
+					writeR(regval, RK3566_PWM_MUX);
+					regval = readR(RK3566_PWM_MUX);
+
+					//clear all reg
+					if (wiringPiDebug)
+						printf(">>Clear all reg\n");
+
+					writeR(0, RK3566_CH_PERIOD_HPR);
+					regval = readR(RK3566_CH_PERIOD_HPR);
+
+					writeR(0, RK3566_CH_DUTY_LPR);
+					regval = readR(RK3566_CH_DUTY_LPR);
+
+					writeR(0, RK3566_CH_CTRL);
+					regval = readR(RK3566_CH_CTRL);
+
+					//Set period
+					if (wiringPiDebug)
+						printf(">>Set period\n");
+
+					regval = readR(RK3566_CH_PERIOD_HPR);
+					regval = 1000;
+					writeR(regval, RK3566_CH_PERIOD_HPR);
+					regval = readR(RK3566_CH_PERIOD_HPR);
+
+					//Set duty
+					if (wiringPiDebug)
+						printf(">>Set duty\n");
+
+					regval = readR(RK3566_CH_DUTY_LPR);
+					regval = 500;
+					writeR(regval, RK3566_CH_DUTY_LPR);
+					regval = readR(RK3566_CH_DUTY_LPR);
+
+					//Set ctrl
+					if (wiringPiDebug)
+						printf(">>Set ctrl\n");
+
+					/**
+					* frequency of clock: 24 MHz / 120 = 200 kHz
+					* frequency of PWM: 200 kHz / 1000 = 200 Hz
+					* period of PWM: 1 / 200 Hz = 0.005 s
+					* duty: 500/1000 = 50%
+					*/
+					regval = readR(RK3566_CH_CTRL);
+					regval =  (0 << RK3566_RPT) \
+						| (60 << RK3566_SCALE) \
+						| (0 << RK3566_PRESCALE) \
+						| (0 << RK3566_CLK_SRC_SEL) \
+						| (1 << RK3566_CLK_SEL) \
+						| (1 << RK3566_FORCE_CLK_EN) \
+						| (1 << RK3566_CH_CNT_EN) \
+						| (0 << RK3566_CONLOCK) \
+						| (0 << RK3566_OUTPUT_MODE) \
+						| (0 << RK3566_INACTIVE_POL) \
+						| (1 << RK3566_DUTY_POL) \
+						| (1 << RK3566_PWM_MODE) \
+					        | (1 << RK3566_PWM_EN);
+
+					writeR(regval, RK3566_CH_CTRL);
+					regval = readR(RK3566_CH_CTRL);
+				}
+				else
+				{
+					printf("Unknow mode\n");
+				}
+
 			}
 			else
 			{
@@ -5722,6 +6034,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 			break;
 
 		case PI_MODEL_3_PLUS:
+
 			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
 
 			if(INPUT == mode) {

@@ -24,7 +24,7 @@ static void set_pwm_info(int pin)
 
 			if (pin != 3 && pin != 4 && pin != 21 && pin != 22) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
-				exit (1) ;
+				exit(1);
 			}
 
 			pwm_info_t.ccr = 512;
@@ -37,7 +37,7 @@ static void set_pwm_info(int pin)
 
 			if (pin != 2 && pin != 9 && pin != 21 && pin != 22) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
-				exit (1) ;
+				exit(1);
 			}
 
 			pwm_info_t.ccr = 512;
@@ -50,7 +50,7 @@ static void set_pwm_info(int pin)
 
 			if (pin != 2 && pin != 16) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
-				exit (1) ;
+				exit(1);
 			}
 
 			pwm_info_t.ccr = 500;
@@ -63,7 +63,7 @@ static void set_pwm_info(int pin)
 
 			if (pin != 0 && pin != 2 && pin != 5 && pin != 8 && pin != 9 && pin != 10 && pin != 14 && pin != 16) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
-				exit (1) ;
+				exit(1);
 			}
 
 			pwm_info_t.ccr = 500;
@@ -76,7 +76,7 @@ static void set_pwm_info(int pin)
 
 			if (pin != 0 && pin != 2 && pin != 5 && pin != 8 && pin != 9 && pin != 10 && pin != 13 && pin != 15) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
-				exit (1) ;
+				exit(1);
 			}
 
 			pwm_info_t.ccr = 500;
@@ -89,7 +89,21 @@ static void set_pwm_info(int pin)
 
 			if (pin != 0 && pin != 1 && pin != 2 && pin != 6 && pin != 9 && pin != 10 && pin != 13 && pin != 21 && pin != 22) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
-				exit (1) ;
+				exit(1);
+			}
+
+			pwm_info_t.ccr = 500;
+			pwm_info_t.arr = 1000;
+			pwm_info_t.div = 120;
+			pwm_info_t.div_stepping = 2;
+			break;
+
+		case PI_MODEL_CM4:
+		case PI_MODEL_3B:
+
+			if (pin != 2 && pin != 21) {
+				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
+				exit(1);
 			}
 
 			pwm_info_t.ccr = 500;
