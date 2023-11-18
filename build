@@ -143,8 +143,10 @@ select_boards()
 	[[ $BOARD == orangepizero3 ]] && BOARD=orangepizero2-h616
 	[[ $BOARD == orangepir1plus ]] && BOARD=orangepir1plus-rk3328
 	[[ $BOARD == orangepir1plus-lts ]] && BOARD=orangepir1plus-rk3328
+	[[ $BOARD == orangepizero2w ]] && BOARD=orangepizero2w
 
 	export BOARD="${BOARD}"
+	echo BOARD="${BOARD}"
 }
 
 sudo=${WIRINGPI_SUDO-sudo}
