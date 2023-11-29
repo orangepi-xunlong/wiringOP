@@ -676,8 +676,8 @@ extern int wiringPiDebug;
 #define PI_MODEL_900             23
 #define PI_MODEL_5               24
 #define PI_MODEL_5B              25
-#define PI_MODEL_5PRO            26
-#define PI_MODEL_5MAX            27
+#define PI_MODEL_5_PRO           26
+#define PI_MODEL_5_MAX           27
 #define PI_MODEL_5_PLUS          28
 
 /* Rockchip RK3566 */

@@ -1064,6 +1064,60 @@ static int physToWpi_5MAX[64] =
 	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
 };
 
+static int physToWpi_5PRO[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+	17, 18, //27,28
+	19, -1, //29,30
+	20, 21, //31,32
+	22, -1, //33,34
+	23, 24, //35,36
+	25, 26, //37,38
+	-1, 27, //39,40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
+};
+
+static char * physNames_5PRO[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.1", "5V      ",
+	"   SCL.1", "GND     ",
+	"   PWM13", "TXD.2   ",
+	"     GND", "RXD.2   ",
+	" CAN1_RX", "GPIO1_A7",
+	" CAN1_TX", "GND     ",
+	"GPIO1_B6", "TXD.6   ",
+	"    3.3V", "RXD.6   ",
+	"SPI0_TXD", "GND     ",
+	"SPI0_RXD", "GPIO1_B0",
+	"SPI0_CLK", "SPI0_CS0",
+	"     GND", "SPI0_CS1",
+	"   SDA.4", "SCL.4   ",
+	"GPIO1_A4", "GND     ",
+	"GPIO1_A6", "PWM14   ",
+	"   PWM15", "GND     ",
+	"GPIO4_A7", "TXD.0   ",
+	"GPIO4_A6", "RXD.0   ",
+	"     GND", "GPIO4_A5",
+};
+
 static char * physNames_5PLUS[64] =
 {
 	NULL,
@@ -1555,6 +1609,12 @@ void OrangePiReadAll(int model)
 			physNames =  physNames_5B;
 			alts = alts_rk3588;
 			break;
+		case PI_MODEL_5_PRO:
+			printf (" +------+-----+----------+--------+---+  PI5 PRO +---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_5PRO;
+			physNames =  physNames_5PRO;
+			alts = alts_rk3588;
+			break;
 		case PI_MODEL_5_MAX:
 			printf (" +------+-----+----------+--------+---+  PI5 MAX +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_5MAX;
@@ -1607,6 +1667,7 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_PC_2:
 		case PI_MODEL_PRIME:
 		case PI_MODEL_WIN:
+		case PI_MODEL_5_PRO:
 		case PI_MODEL_5_MAX:
 		case PI_MODEL_5_PLUS:
 		case PI_MODEL_900:
@@ -1700,6 +1761,9 @@ void OrangePiReadAll(int model)
 			break;
 		case PI_MODEL_5B:
 			printf (" +------+-----+----------+--------+---+   PI5B   +---+--------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_5_PRO:
+			printf (" +------+-----+----------+--------+---+  PI5 PRO +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_5_MAX:
 			printf (" +------+-----+----------+--------+---+  PI5 MAX +---+--------+----------+-----+------+\n");
