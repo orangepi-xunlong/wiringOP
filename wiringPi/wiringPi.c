@@ -5168,11 +5168,12 @@ int OrangePi_get_gpio_mode(int pin)
 
 			rk3588_bus_ioc_phyaddr = RK3588_BUS_IOC_BASE + (0x20 * bank) + ((index >> 2) << 2);
 			if(bank == 0){
-				if (index < 12){
-					;/* Todo */
-				}else{
-					ddr_phyaddr = RK3588_GPIO0_BASE + RK3588_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
-				}
+				if (index >= 12)
+					rk3588_pmu1_ioc_phyaddr = RK3588_PMU2_IOC_BASE + ((index - 12) >> 2 << 2);
+				else
+					rk3588_pmu1_ioc_phyaddr = RK3588_PMU1_IOC_BASE + (index >> 2 << 2);
+
+				ddr_phyaddr = RK3588_GPIO0_BASE + RK3588_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
 			}
 			else if(bank == 1){
 				ddr_phyaddr = RK3588_GPIO1_BASE + RK3588_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
@@ -5189,8 +5190,12 @@ int OrangePi_get_gpio_mode(int pin)
 
 			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
 
-				if ( bank == 0 && index < 12 )
-					;/*Todo*/
+				if ( bank == 0 ) {
+					regval = readR(rk3588_pmu1_ioc_phyaddr);
+					mode = (regval >> ((index % 4) << 2)) & 0xf;
+					if(mode == 0x8)
+						regval = readR(rk3588_bus_ioc_phyaddr);
+				}
 				else
 					regval = readR(rk3588_bus_ioc_phyaddr);
 
@@ -5635,11 +5640,12 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 
 			rk3588_bus_ioc_phyaddr = RK3588_BUS_IOC_BASE + (0x20 * bank) + ((index >> 2) << 2);
 			if(bank == 0){
-				if (index < 12){
-					;/* Todo */
-				}else{
-					ddr_phyaddr = RK3588_GPIO0_BASE + RK3588_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
-				}
+				if (index >= 12)
+					rk3588_bus_ioc_phyaddr = RK3588_PMU2_IOC_BASE + ((index - 12) >> 2 << 2);
+				else
+					rk3588_bus_ioc_phyaddr = RK3588_PMU1_IOC_BASE + (index >> 2 << 2);
+
+				ddr_phyaddr = RK3588_GPIO0_BASE + RK3588_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
 				cru_phyaddr = RK3588_PMU1CRU_BASE + RK3588_PMU1CRU_GATE_CON5_OFFSET;
 				cru_val = 0xffff9fff;
 			}
