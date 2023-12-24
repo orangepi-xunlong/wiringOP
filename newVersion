@@ -34,7 +34,7 @@ echo "#define VERSION_MINOR $vMin"		>> version.h
 
 rm -f debian-template/wiringPi/DEBIAN/control
 cat > debian-template/wiringPi/DEBIAN/control <<EOF
-Package: wiringpi
+Package: wiringpi-opi
 Version: `cat VERSION`
 Section: libraries
 Priority: optional
