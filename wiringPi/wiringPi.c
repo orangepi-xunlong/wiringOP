@@ -3590,12 +3590,6 @@ void pwmWrite(int pin, int value) {
 		return;
 	}
 
-	if (pwmmode == 1) {
-		sunxi_pwm_set_mode(1);
-	} else {
-		sunxi_pwm_set_mode(0);
-	}
-
 	// On-Board Pin needto fix me Jim
 	if (pin < MAX_PIN_NUM) {
 		if (wiringPiMode == WPI_MODE_PINS)
