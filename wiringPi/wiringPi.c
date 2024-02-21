@@ -370,6 +370,14 @@ static int ORANGEPI_PIN_MASK_CM4[5][32] =  //[BANK]	[INDEX]
 	{ 0, 1, 2, 3, 4, 5, 6, 7,  0,-1, 2, 3, 4, 5,-1,-1,  0,-1,-1, 3,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO4
 };
 
+static int ORANGEPI_PIN_MASK_3B[5][32] =  //[BANK]	[INDEX]
+{
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,  0, 1,-1,-1,-1,-1,-1,-1,},//GPIO0
+	{ 0, 1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO1
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO2
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1, 6, 7,  0, 1, 2, 3, 4, 5, 6, 7,},//GPIO3
+	{ 0, 1, 2, 3, 4, 5, 6,-1,  0,-1, 2, 3, 4, 5,-1,-1,  0,-1,-1, 3,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO4
+};
 
 static int ORANGEPI_PIN_MASK_R1_PLUS[5][32] =  //[BANK]	[INDEX]
 {
@@ -1125,6 +1133,29 @@ int pinToGpio_CM4[64] =
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,// ... 63
 };
 
+int pinToGpio_3B[64] =
+{
+	140,141,      // 0, 1
+	147, 25,      // 2, 3
+	24, 118,      // 4  5
+	119,128,      // 6, 7
+	130,131,      // 8, 9
+	129,138,      //10,11
+	136,132,      //12,13
+	139,134,      //14,15
+	126, 32,      //16,17
+	33, 133,      //18,19
+	124,144,      //20,21
+	127,120,      //22,23
+	125,123,      //24,25
+	122,121,      //26,27
+	-1,  -1,      //28,29
+	-1,  -1,      //30,31
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,// ... 63
+};
+
 int pinToGpio_R1_PLUS[64] =
 {
         89,  88,      // 0, 1
@@ -1843,6 +1874,35 @@ int physToGpio_CM4[64] =
 	136,132,   // 21, 22
 	139,134,   // 23, 24
 	-1, 135,   // 25, 26
+	32,  33,   // 27, 28
+	133, -1,   // 29, 30
+	124,144,   // 31, 32
+	127, -1,   // 33, 34
+	120,125,   // 35, 36
+	123,122,   // 37, 38
+	-1, 121,   // 39, 40
+
+	//Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1, -1, -1, -1, -1, -1, -1,   // ... 63
+};
+
+int physToGpio_3B[64] =
+{
+	-1,        // 0
+	-1,  -1,   // 1, 2
+	140, -1,   // 3, 4
+	141, -1,   // 5, 6
+	147, 25,   // 7, 8
+	-1,  24,   // 9, 10
+	118,119,   // 11, 12
+	128, -1,   // 13, 14
+	130,131,   // 15, 16
+	-1, 129,   // 17, 18
+	138, -1,   // 19, 20
+	136,132,   // 21, 22
+	139,134,   // 23, 24
+	-1, 126,   // 25, 26
 	32,  33,   // 27, 28
 	133, -1,   // 29, 30
 	124,144,   // 31, 32
@@ -4480,10 +4540,14 @@ int wiringPiSetup (void)
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_900;
 			break;
 		case PI_MODEL_CM4:
-		case PI_MODEL_3B:
 			pinToGpio =  pinToGpio_CM4;
 			physToGpio = physToGpio_CM4;
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_CM4;
+			break;
+		case PI_MODEL_3B:
+			pinToGpio =  pinToGpio_3B;
+			physToGpio = physToGpio_3B;
+			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_3B;
 			break;
 		case PI_MODEL_3_PLUS:
 			pinToGpio = pinToGpio_3PLUS;
@@ -4709,6 +4773,13 @@ int wiringPiSetup (void)
 			rk3566_soc_info_t.pwm3_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3566_PWM3_BASE);
 			if ((int32_t)(unsigned long)rk3566_soc_info_t.pwm3_base == -1)
 				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_PWM3_BASE) failed: %s\n", strerror(errno));
+
+			if(0x20 & readR(RK3566_PMU_GRF_BASE + 0x144)) {
+				pinToGpio =  pinToGpio_CM4;
+				physToGpio = physToGpio_CM4;
+				ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_CM4;
+			}
+
 			break;
 
 		case PI_MODEL_3_PLUS:
