@@ -3591,12 +3591,6 @@ void pwmWrite(int pin, int value) {
 		return;
 	}
 
-	if (pwmmode == 1) {
-		sunxi_pwm_set_mode(1);
-	} else {
-		sunxi_pwm_set_mode(0);
-	}
-
 	// On-Board Pin needto fix me Jim
 	if (pin < MAX_PIN_NUM) {
 		if (wiringPiMode == WPI_MODE_PINS)
@@ -3906,7 +3900,7 @@ int wiringPiISR (int pin, int mode, void (*function)(void))
     else
       modeS = "both" ;
 
-    sprintf (pinS, "%d", pin) ;
+    sprintf (pinS, "%d", bcmGpioPin) ;
 
     if ((pid = fork ()) < 0)	// Fail
       return wiringPiFailure (WPI_FATAL, "wiringPiISR: fork failed: %s\n", strerror (errno)) ;
