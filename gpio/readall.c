@@ -1118,6 +1118,53 @@ static char * physNames_5PRO[64] =
 	"     GND", "GPIO4_A5",
 };
 
+static int physToWpi_CM5[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+	-1, -1, //27,28
+	-1, -1, //29,30
+	-1, -1, //31,32
+	-1, -1, //33,34
+	-1, -1, //35,36
+	-1, -1, //37,38
+	-1, -1, //39,40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
+};
+
+static char * physNames_CM5[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.8", "5V      ",
+	"   SCL.8", "GND     ",
+	"    PWM1", "TXD.6   ",
+	"     GND", "RXD.6   ",
+	"   RXD.1", "GPIO1_A2",
+	"   TXD.1", "GND     ",
+	"GPIO1_B0", "GPIO1_A4",
+	"    3.3V", "GPIO1_A6",
+	"SPI0_TXD", "GND     ",
+	"SPI0_RXD", "GPIO1_A7",
+	"SPI0_CLK", "SPI0_CS0",
+	"     GND", "SPI0_CS1",
+};
+
 static char * physNames_5PLUS[64] =
 {
 	NULL,
@@ -1633,6 +1680,12 @@ void OrangePiReadAll(int model)
 			physNames =  physNames_900;
 			alts = alts_rk3588;
 			break;
+		case PI_MODEL_CM5:
+			printf (" +------+-----+----------+--------+---+  PI CM5  +---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_CM5;
+			physNames =  physNames_CM5;
+			alts = alts_rk3588;
+			break;
 		case PI_MODEL_CM4:
 			printf (" +------+-----+----------+--------+---+  PI CM4  +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_CM4;
@@ -1687,6 +1740,7 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_4_LTS:
 		case PI_MODEL_5:
 		case PI_MODEL_5B:
+		case PI_MODEL_CM5:
 			for (pin = 1 ; pin <= 26; pin += 2)
 				readallPhys(pin);
 			break;
@@ -1773,6 +1827,9 @@ void OrangePiReadAll(int model)
 			break;
 		case PI_MODEL_900:
 			printf (" +------+-----+----------+--------+---+   PI900  +---+--------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_CM5:
+			printf (" +------+-----+----------+--------+---+  PI CM5  +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_CM4:
 			printf (" +------+-----+----------+--------+---+  PI CM4  +---+--------+----------+-----+------+\n");

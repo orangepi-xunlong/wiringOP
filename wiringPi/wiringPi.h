@@ -679,13 +679,14 @@ extern int wiringPiDebug;
 #define PI_MODEL_5_PRO           26
 #define PI_MODEL_5_MAX           27
 #define PI_MODEL_5_PLUS          28
+#define PI_MODEL_CM5             29
 
 /* Rockchip RK3566 */
-#define PI_MODEL_CM4             29
-#define PI_MODEL_3B              30
+#define PI_MODEL_CM4             30
+#define PI_MODEL_3B              31
 
 /* S905D3 */
-#define PI_MODEL_3_PLUS          31
+#define PI_MODEL_3_PLUS          32
 
 extern const char *piModelNames    [16] ;
 
