@@ -319,6 +319,15 @@ static int ORANGEPI_PIN_MASK_5PRO[5][32] =  //[BANK]	[INDEX]
 static int ORANGEPI_PIN_MASK_CM5[5][32] =  //[BANK]	[INDEX]
 {
 	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO0
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1, 1, 2, 3, 4,-1, 6, 7, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO1
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO2
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO3
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1, 2, 3,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO4
+};
+
+static int ORANGEPI_PIN_MASK_CM5_TABLET[5][32] =  //[BANK]	[INDEX]
+{
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO0
 	{ 0, 1, 2, 3, 4,-1, 6, 7,  0, 1, 2, 3, 4, 5, 6, 7, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1, 6, 7,},//GPIO1
 	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO2
 	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO3
@@ -979,6 +988,29 @@ int pinToGpio_5PRO[64] =
 };
 
 int pinToGpio_CM5[64] =
+{
+	43,  41,      // 0, 1
+	44,  42,      // 2, 3
+	47,  46,      // 4  5
+       138, 139,      // 6, 7
+	-1,  -1,      // 8, 9
+	-1,  -1,      //10,11
+	-1,  -1,      //12,13
+	-1,  -1,      //14,15
+	-1,  -1,      //16,17
+	-1,  -1,      //18,19
+	-1,  -1,      //20,21
+	-1,  -1,      //22,23
+	-1,  -1,      //24,25
+	-1,  -1,      //26,27
+	-1,  -1,      //28,29
+	-1,  -1,      //30,31
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,// ... 63
+};
+
+int pinToGpio_CM5_TABLET[64] =
 {
 	63,  62,      // 0, 1
 	35,  33,      // 2, 3
@@ -1653,6 +1685,35 @@ int physToGpio_5PRO[64] =
 int physToGpio_CM5[64] =
 {
 	-1,        // 0
+	43,  41,   // 1, 2
+	44,  42,   // 3, 4
+	47,  46,   // 5, 6
+       138, 139,   // 7, 8
+	-1,  -1,   // 9, 10
+	-1,  -1,   // 11, 12
+	-1,  -1,   // 13, 14
+	-1,  -1,   // 15, 16
+	-1,  -1,   // 17, 18
+	-1,  -1,   // 19, 20
+	-1,  -1,   // 21, 22
+	-1,  -1,   // 23, 24
+	-1,  -1,   // 25, 26
+	-1,  -1,   // 27, 28
+	-1,  -1,   // 29, 30
+	-1,  -1,   // 31, 32
+	-1,  -1,   // 33, 34
+	-1,  -1,   // 35, 36
+	-1,  -1,   // 37, 38
+	-1,  -1,   // 39, 40
+
+	//Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1, -1, -1, -1, -1, -1, -1,   // ... 63
+};
+
+int physToGpio_CM5_TABLET[64] =
+{
+	-1,        // 0
 	-1,  -1,   // 1, 2
 	63,  -1,   // 3, 4
 	62,  -1,   // 5, 6
@@ -2224,7 +2285,8 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepi5max.",            13) == 0) { *model = PI_MODEL_5_MAX; }
 	else if (strncmp(revision, "orangepi5plus.",           14) == 0) { *model = PI_MODEL_5_PLUS; }
 	else if (strncmp(revision, "orangepi900.",             12) == 0) { *model = PI_MODEL_900; }
-	else if (strncmp(revision, "orangepicm5-tablet.",      12) == 0) { *model = PI_MODEL_CM5; }
+	else if (strncmp(revision, "orangepicm5.",             12) == 0) { *model = PI_MODEL_CM5; }
+	else if (strncmp(revision, "orangepicm5-tablet.",      19) == 0) { *model = PI_MODEL_CM5_TABLET; }
 	else if (strncmp(revision, "orangepicm4.",             12) == 0) { *model = PI_MODEL_CM4; }
 	else if (strncmp(revision, "orangepi3b.",              11) == 0) { *model = PI_MODEL_3B; }
 	else if (strncmp(revision, "orangepi3plus.",           14) == 0) { *model = PI_MODEL_3_PLUS; }
@@ -2457,6 +2519,7 @@ void sunxi_pwm_set_tone(int pin,int freq)
 		case PI_MODEL_5:
 		case PI_MODEL_5B:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 		case PI_MODEL_5_PRO:
 		case PI_MODEL_5_MAX:
 		case PI_MODEL_5_PLUS:
@@ -2644,6 +2707,7 @@ void sunxi_pwm_set_clk(int pin,int clk)
 		case PI_MODEL_5:
 		case PI_MODEL_5B:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 		case PI_MODEL_5_PRO:
 		case PI_MODEL_5_MAX:
 		case PI_MODEL_5_PLUS:
@@ -2849,6 +2913,7 @@ void sunxi_pwm_set_period(int pin,unsigned int period_cys)
 		case PI_MODEL_5:
 		case PI_MODEL_5B:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 		case PI_MODEL_5_PRO:
 		case PI_MODEL_5_MAX:
 		case PI_MODEL_5_PLUS:
@@ -2991,6 +3056,7 @@ void sunxi_pwm_set_act(int pin,int act_cys)
 		case PI_MODEL_5:
 		case PI_MODEL_5B:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 		case PI_MODEL_5_PRO:
 		case PI_MODEL_5_MAX:
 		case PI_MODEL_5_PLUS:
@@ -4388,6 +4454,11 @@ int wiringPiSetup (void)
 			physToGpio = physToGpio_CM5;
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_CM5;
 			break;
+		case PI_MODEL_CM5_TABLET:
+			pinToGpio =  pinToGpio_CM5_TABLET;
+			physToGpio = physToGpio_CM5_TABLET;
+			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_CM5_TABLET;
+			break;
 		case PI_MODEL_5_PRO:
 			pinToGpio =  pinToGpio_5PRO;
 			physToGpio = physToGpio_5PRO;
@@ -4517,6 +4588,7 @@ int wiringPiSetup (void)
 
 		case PI_MODEL_5: case PI_MODEL_5B: case PI_MODEL_5_PRO: case PI_MODEL_5_MAX: case PI_MODEL_5_PLUS: case PI_MODEL_900:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 
 			/* GPIO Register */
 			rk3588_soc_info_t.gpio0_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3588_GPIO0_BASE);
@@ -4847,6 +4919,7 @@ unsigned int readR(unsigned int addr)
 		case PI_MODEL_5_PLUS:
 		case PI_MODEL_900:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 
 			val = 0;
 
@@ -5039,6 +5112,7 @@ void writeR(unsigned int val, unsigned int addr)
 		case PI_MODEL_5_PLUS:
 		case PI_MODEL_900:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 
 			mmap_base = (addr & (~0xfff));
 			mmap_seek = (addr - mmap_base);
@@ -5241,6 +5315,7 @@ int OrangePi_get_gpio_mode(int pin)
 		case PI_MODEL_5_PLUS:
 		case PI_MODEL_900:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 
 			rk3588_bus_ioc_phyaddr = RK3588_BUS_IOC_BASE + (0x20 * bank) + ((index >> 2) << 2);
 			if(bank == 0){
@@ -5715,6 +5790,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 		case PI_MODEL_5_PLUS:
 		case PI_MODEL_900:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 
 			rk3588_bus_ioc_phyaddr = RK3588_BUS_IOC_BASE + (0x20 * bank) + ((index >> 2) << 2);
 			if(bank == 0){
@@ -6567,6 +6643,7 @@ int OrangePi_digitalWrite(int pin, int value)
 		case PI_MODEL_5_PLUS:
 		case PI_MODEL_900:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 
 			if(bank == 0){
 				dr_phyaddr = RK3588_GPIO0_BASE + RK3588_GPIO_SWPORT_DR_L_OFFSET + ((index / 16) << 2);
@@ -6875,6 +6952,7 @@ int OrangePi_digitalRead(int pin)
 		case PI_MODEL_5_PLUS:
 		case PI_MODEL_900:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 
 			if(bank == 0)
 				phyaddr = RK3588_GPIO0_BASE + RK3588_GPIO_EXT_PORT_OFFSET;
@@ -6981,6 +7059,7 @@ void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 		case PI_MODEL_5_PLUS:
 		case PI_MODEL_900:
 		case PI_MODEL_CM5:
+		case PI_MODEL_CM5_TABLET:
 
 			if(bank == 0 && index < 12)
 				phyaddr = RK3588_PMU1_IOC_BASE + RK3588_PMU1_IOC_GPIO0A_P + ((index >> 3) << 2);
