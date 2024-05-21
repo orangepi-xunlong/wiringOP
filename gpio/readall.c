@@ -89,6 +89,14 @@ static char * alts_310b [] =
   "IN", "OUT", "PWM", "OFF"
 };
 
+static char * alts_jh7110 [] =
+{
+  "IN", "OUT", "ALT1", "ALT2", "ALT3", "ALT4", "ALT5", "ALT6", "ALT7", "ALT8", "ALT9", "ALT10", "ALT11", "ALT12", "ALT13", "ALT14", \
+  "ALT15", "ALT16", "ALT17", "ALT18", "ALT19", "ALT20", "ALT21", "ALT22", "ALT23", "ALT24", "ALT25", "ALT26", "ALT27", "ALT28", \
+  "ALT29", "ALT30", "ALT31", "ALT32", "ALT33", "ALT34", "ALT35", "ALT36", "ALT37", "ALT38", "ALT39", "ALT40", "ALT41", "ALT42", \
+  "ALT43", "ALT44", "ALT45", "ALT46", "ALT47",
+};
+
 static char ** alts = alts_rk3588;
 
 static int physToWpi_PC_2[64] =
@@ -1449,6 +1457,35 @@ static char * physNames_CM4[64] =
 	"     GND", "GPIO3_D1",
 };
 
+static int physToWpi_RV[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+	17, 18, //27,28
+	19, -1, //29,30
+	20, 21, //31,32
+	22, -1, //33,34
+	23, 24, //35,36
+	25, 26, //37,38
+	-1, 27, //39,40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
+};
+
 static int physToWpi_3B[64] =
 {
 	-1,     //0
@@ -1476,6 +1513,31 @@ static int physToWpi_3B[64] =
 	// Padding:
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
 	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
+};
+
+static char * physNames_RV[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.0", "5V      ",
+	"   SCL.0", "GND     ",
+	"  GPIO55", "TXD.0   ",
+	"     GND", "RXD.0   ",
+	"  GPIO42", "GPIO38  ",
+	"  GPIO43", "GND     ",
+	"  GPIO47", "GPIO54  ",
+	"    3.3V", "GPIO51  ",
+	"SPI0_TXD", "GND     ",
+	"SPI0_RXD", "GPIO50  ",
+	"SPI0_CLK", "SPI0_CS ",
+	"     GND", "GPIO56  ",
+	"  GPIO45", "GPIO40  ",
+	"  GPIO37", "GND     ",
+	"  GPIO39", "GPIO46  ",
+	"  GPIO59", "GND     ",
+	"  GPIO63", "GPIO36  ",
+	"  GPIO60", "GPIO61  ",
+	"     GND", "GPIO44  ",
 };
 
 static char * physNames_3B[64] =
@@ -1994,6 +2056,12 @@ void OrangePiReadAll(int model)
 			physNames =  physNames_AIPRO;
 			alts = alts_310b;
 			break;
+		case PI_MODEL_RV:
+			printf (" +------+-----+----------+--------+---+   PIRV   +---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_RV;
+			physNames =  physNames_RV;
+			alts = alts_jh7110;
+			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", model);
 			break ;
@@ -2021,6 +2089,7 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_ZERO_2_W:
 		case PI_MODEL_3_PLUS:
 		case PI_MODEL_AI_PRO:
+		case PI_MODEL_RV:
 			for (pin = 1 ; pin <= 40; pin += 2)
 				readallPhys(pin);
 			break;
@@ -2148,6 +2217,8 @@ void OrangePiReadAll(int model)
 			break;
 		case PI_MODEL_AI_PRO:
 			printf (" +------+-----+----------+--------+---+  AI PRO  +---+--------+----------+-----+------+\n");
+		case PI_MODEL_RV:
+			printf (" +------+-----+----------+--------+---+   PIRV   +---+--------+----------+-----+------+\n");
 			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", model);

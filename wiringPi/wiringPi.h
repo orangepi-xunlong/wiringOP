@@ -656,6 +656,30 @@ typedef struct {
 
 /*************** Ascend 310B ******************/
 
+/*************** JH7110 ******************/
+
+#define JH7110_SYS_IOMUX_BASE                    0x13040000U
+#define JH7110_SYS_DOEN_REG_BASE                 0x000U
+#define JH7110_SYS_DOUT_REG_BASE                 0x040U
+#define JH7110_SYS_GPI_REG_BASE                  0x080U
+#define JH7110_SYS_GPIOIN_REG_BASE               0x118U
+#define JH7110_DOEN_MASK                         0x3fU
+#define JH7110_DOUT_MASK                         0x7fU
+#define JH7110_SYS_GPO_PDA_0_74_CFG              0x120U
+
+#define JH7110_GPOEN_ENABLE                      0
+#define JH7110_GPOEN_DISABLE                     1
+
+#define GPIO_NUM_PER_WORD       32
+
+typedef struct {
+	unsigned int * sys_iomux_base;
+} jh7110_soc_info;
+
+/*************** JH7110 ******************/
+
+
+
 // Mask for the bottom 64 pins which belong to the Raspberry Pi
 //	The others are available for the other devices
 
@@ -761,6 +785,9 @@ extern int wiringPiDebug;
 
 /* Ascend 310B */
 #define PI_MODEL_AI_PRO          70
+
+/* JH7110 */
+#define PI_MODEL_RV              80
 
 extern const char *piModelNames    [16] ;
 
