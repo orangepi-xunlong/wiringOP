@@ -1842,12 +1842,12 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_4_LTS:
 		case PI_MODEL_5:
 		case PI_MODEL_5B:
-		case PI_MODEL_CM5:
-			for (pin = 1 ; pin <= 8; pin += 2)
-				readallPhys(pin);
-			break;
 		case PI_MODEL_CM5_TABLET:
 			for (pin = 1 ; pin <= 26; pin += 2)
+				readallPhys(pin);
+			break;
+		case PI_MODEL_CM5:
+			for (pin = 1 ; pin <= 8; pin += 2)
 				readallPhys(pin);
 			break;
 		case PI_MODEL_R1_PLUS:
