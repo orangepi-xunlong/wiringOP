@@ -1789,6 +1789,11 @@ void OrangePiReadAll(int model)
 			physToWpi =  physToWpi_CM4;
 			physNames =  physNames_CM4;
 			alts = alts_rk3588;
+			if(!(0x20 & readR(RK3566_PMU_GRF_BASE + 0x144))) {
+				physToWpi =  physToWpi_3B;
+				physNames =  physNames_3B;
+			}
+
 			break;
 		case PI_MODEL_3B:
 			printf (" +------+-----+----------+--------+---+   PI3B   +---+--------+----------+-----+------+\n");

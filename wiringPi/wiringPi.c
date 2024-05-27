@@ -4778,6 +4778,10 @@ int wiringPiSetup (void)
 				pinToGpio =  pinToGpio_CM4;
 				physToGpio = physToGpio_CM4;
 				ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_CM4;
+			} else {
+				pinToGpio =  pinToGpio_3B;
+				physToGpio = physToGpio_3B;
+				ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_3B;
 			}
 
 			break;
