@@ -1150,9 +1150,9 @@ static int physToWpi_CM5[64] =
 static char * physNames_CM5[64] =
 {
 	NULL,
-	"GPIO1_B3", "GPIO1_B1",
-	"GPIO1_B4", "GPIO1_B2",
-	"GPIO1_B7", "GPIO1_B6",
+	"GPIO1_B0", "GPIO1_B1",
+	"GPIO1_B2", "GPIO1_B3",
+	"GPIO1_B4", "GPIO1_B5",
 	"GPIO4_B2", "GPIO4_B3",
 };
 
