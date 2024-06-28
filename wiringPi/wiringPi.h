@@ -585,6 +585,52 @@ typedef struct {
 
 /*************** S905D3 ******************/
 
+/*************** Ascend 310B ******************/
+
+// IOMUX
+#define A310B_IOMUX_BASE_GROUP0	0xC4000000
+#define A310B_IOMUX_BASE_GROUP1	0xC4000000
+#define A310B_IOMUX_BASE_GROUP2	0x82320000
+#define A310B_IOMUX_BASE_GROUP3	0x82320000
+#define A310B_IOMUX_BASE_GROUP4	0xA0140000
+#define A310B_IOMUX_BASE_GROUP5	0x3001D0000
+#define A310B_IOMUX_BASE_GROUP7	0x400140000
+
+// GPIO_BASE
+#define A310B_GPIO_BASE_GROUP0 0xC4040000
+#define A310B_GPIO_BASE_GROUP1 0xC4050000
+#define A310B_GPIO_BASE_GROUP2 0x820F0000
+#define A310B_GPIO_BASE_GROUP3 0x82100000
+#define A310B_GPIO_BASE_GROUP4 0xA0160000
+#define A310B_GPIO_BASE_GROUP5 0x300160000
+#define A310B_GPIO_BASE_GROUP7 0x400150000
+
+// GPIO OFFSET
+#define A310B_GPIO_DIRECTION_OFFSET 0x4
+#define A310B_GPIO_SET_VALUE_OFFSET 0x0
+#define A310B_GPIO_GET_VALUE_OFFSET 0x50
+
+typedef struct {
+
+	void * iomux_base_group0;
+	void * iomux_base_group1;
+	void * iomux_base_group2;
+	void * iomux_base_group3;
+	void * iomux_base_group4;
+	void * iomux_base_group5;
+	void * iomux_base_group7;
+
+	void * gpio_base_group0;
+	void * gpio_base_group1;
+	void * gpio_base_group2;
+	void * gpio_base_group3;
+	void * gpio_base_group4;
+	void * gpio_base_group5;
+	void * gpio_base_group7;
+
+} a310b_gpio_info;
+
+/*************** Ascend 310B ******************/
 
 // Mask for the bottom 64 pins which belong to the Raspberry Pi
 //	The others are available for the other devices
@@ -688,6 +734,9 @@ extern int wiringPiDebug;
 
 /* S905D3 */
 #define PI_MODEL_3_PLUS          50
+
+/* Ascend 310B */
+#define PI_MODEL_AI_PRO          51
 
 extern const char *piModelNames    [16] ;
 

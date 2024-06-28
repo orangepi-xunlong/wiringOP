@@ -84,6 +84,11 @@ static char * alts_rk3588 [] =
   "IN", "OUT", "ALT1", "ALT2", "ALT3", "ALT4", "ALT5", "ALT6", "ALT7", "ALT8", "ALT9", "ALT10", "ALT11", "ALT12", "ALT13", "ALT14",
 };
 
+static char * alts_310b [] =
+{
+  "IN", "OUT", "OFF",
+};
+
 static char ** alts = alts_rk3588;
 
 static int physToWpi_PC_2[64] =
@@ -1444,6 +1449,60 @@ static char * physNames_3PLUS[64] =
 	"     GND", "PA9     ",
 };
 
+static char * physNames_AIPRO[64] =
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"    SDA7", "5V      ",
+	"    SCL7", "GND     ",
+	"GPIO7_02", "UTXD0   ",
+	"     GND", "URXD0   ",
+	"GPIO2_18", "GPIO7_03",
+	"GPIO1_06", "GND     ",
+	"GPIO2_15", "GPIO2_16",
+	"    3.3V", "GPIO0_25",
+	"SPI0_SD0", "GND     ",
+	"SPI0_SDI", "GPIO0_02",
+	"SPI0_CLK", "SPI0_CS ",
+	"     GND", "GPIO2_19",
+	"    SDA6", "SCL6    ",
+	"   URXD7", "GND     ",
+	"GPIO2_20", "GPIO1_01",
+	"GPIO4_00", "GND     ",
+	"GPIO7_04", "GPIO2_17",
+	"GPIO0_03", "GPIO7_06",
+	"     GND", "GPIO7_05",
+};
+
+
+static int physToWpi_AIPRO[64] =
+{
+	-1,     //0
+	-1, -1, //1,2
+	 0, -1, //3,4
+	 1, -1, //5,6
+	 2,  3, //7,8
+	-1,  4, //9,10
+	 5,  6, //11,12
+	 7, -1, //13,14
+	 8,  9, //15,16
+	-1, 10, //17,18
+	11, -1, //19,20
+	12, 13, //21,22
+	14, 15, //23,24
+	-1, 16, //25,26
+	-1, -1, //27,28
+	17, -1, //29,30
+	18, 19, //31,32
+	20, -1, //33,34
+	21, 22, //35,36
+	23, 24, //37,38
+	-1, 25, //39,40
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
+};
 
 static int * physToWpi;
 static char ** physNames;
@@ -1592,9 +1651,9 @@ void abReadall (int model, int rev)
  *********************************************************************************
  */
 
-static void plus2header (int model)
+/*static void plus2header (int model)
 {
-  /**/ if (model == PI_MODEL_AP)
+  if (model == PI_MODEL_AP)
     printf (" +-----+-----+---------+------+---+---Pi A+--+---+------+---------+-----+-----+\n") ;
   else if (model == PI_MODEL_BP)
     printf (" +-----+-----+---------+------+---+---Pi B+--+---+------+---------+-----+-----+\n") ;
@@ -1610,10 +1669,10 @@ static void plus2header (int model)
     printf (" +-----+-----+---------+------+---+---Pi 3+--+---+------+---------+-----+-----+\n") ;
   else
     printf (" +-----+-----+---------+------+---+---Pi ?---+---+------+---------+-----+-----+\n") ;
-}
+}*/
 
 
-static void piPlusReadall (int model)
+/* static void piPlusReadall (int model)
 {
   int pin ;
 
@@ -1627,7 +1686,7 @@ static void piPlusReadall (int model)
   printf (" | BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |\n") ;
 
   plus2header (model) ;
-}
+}*/
 
 /*
  * ReadAll 
@@ -1811,6 +1870,12 @@ void OrangePiReadAll(int model)
 			physNames =  physNames_3PLUS;
 			alts = alts_common;
 			break;
+		case PI_MODEL_AI_PRO:
+			printf (" +------+-----+----------+--------+---+  AI PRO  +---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_AIPRO;
+			physNames =  physNames_AIPRO;
+			alts = alts_310b;
+			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", model);
 			break ;
@@ -1835,6 +1900,7 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_3B:
 		case PI_MODEL_ZERO_2_W:
 		case PI_MODEL_3_PLUS:
+		case PI_MODEL_AI_PRO:
 			for (pin = 1 ; pin <= 40; pin += 2)
 				readallPhys(pin);
 			break;
@@ -1954,6 +2020,9 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_3_PLUS:
 			printf (" +------+-----+----------+--------+---+ PI3 PLUS +---+--------+----------+-----+------+\n");
 			break;
+		case PI_MODEL_AI_PRO:
+			printf (" +------+-----+----------+--------+---+  AI PRO  +---+--------+----------+-----+------+\n");
+			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", model);
 			break ;
@@ -2005,14 +2074,24 @@ void doAllReadall (void)
 
 void doQmode (int argc, char *argv [])
 {
-  int pin ;
+	int pin ;
+	int model = -1;
 
-  if (argc != 3)
-  {
-    fprintf (stderr, "Usage: %s qmode pin\n", argv [0]) ;
-    exit (EXIT_FAILURE) ;
-  }
+	if (argc != 3) {
+		fprintf (stderr, "Usage: %s qmode pin\n", argv [0]) ;
+		exit (EXIT_FAILURE) ;
+	}
 
-  pin = atoi (argv [2]) ;
-  printf ("%s\n", alts [getAlt (pin)]) ;
+	piBoardId (&model) ;
+
+	switch (model) {
+		case PI_MODEL_AI_PRO:
+			alts = alts_310b;
+			break;
+		default:
+			alts = alts_common;
+	}
+
+	pin = atoi (argv [2]) ;
+	printf ("%s\n", alts [getAlt (pin)]) ;
 }

@@ -29,6 +29,9 @@ unsigned char getGpioNum(void)
 		case PI_MODEL_ZERO_2:
 			return 21;
 			break;
+		case PI_MODEL_AI_PRO:
+			return 26;
+			break;
 		case PI_MODEL_WIN:
 		case PI_MODEL_PRIME:
 		case PI_MODEL_PC_2:
