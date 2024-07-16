@@ -16,7 +16,7 @@ static void set_pwm_info(int pin)
 {
 	int model;
 
-	piBoardId (&model);
+	piBoardId(&model);
 
 	switch (model)
 	{
@@ -31,6 +31,7 @@ static void set_pwm_info(int pin)
 			pwm_info_t.arr = 1024;
 			pwm_info_t.div = 1;
 			pwm_info_t.div_stepping = 1;
+
 			break;
 
 		case PI_MODEL_ZERO_2_W:
@@ -44,6 +45,7 @@ static void set_pwm_info(int pin)
 			pwm_info_t.arr = 1024;
 			pwm_info_t.div = 1;
 			pwm_info_t.div_stepping = 1;
+
 			break;
 
 		case PI_MODEL_3_PLUS:
@@ -57,6 +59,7 @@ static void set_pwm_info(int pin)
 			pwm_info_t.arr = 1000;
 			pwm_info_t.div = 120;
 			pwm_info_t.div_stepping = 1;
+
 			break;
 
 		case PI_MODEL_5:
@@ -70,6 +73,7 @@ static void set_pwm_info(int pin)
 			pwm_info_t.arr = 1000;
 			pwm_info_t.div = 120;
 			pwm_info_t.div_stepping = 2;
+
 			break;
 
 		case PI_MODEL_5B:
@@ -83,6 +87,7 @@ static void set_pwm_info(int pin)
 			pwm_info_t.arr = 1000;
 			pwm_info_t.div = 120;
 			pwm_info_t.div_stepping = 2;
+
 			break;
 
 		case PI_MODEL_5_PLUS:
@@ -96,6 +101,7 @@ static void set_pwm_info(int pin)
 			pwm_info_t.arr = 1000;
 			pwm_info_t.div = 120;
 			pwm_info_t.div_stepping = 2;
+
 			break;
 
 		case PI_MODEL_CM4:
@@ -110,6 +116,19 @@ static void set_pwm_info(int pin)
 			pwm_info_t.arr = 1000;
 			pwm_info_t.div = 120;
 			pwm_info_t.div_stepping = 2;
+
+			break;
+
+		case PI_MODEL_AI_PRO:
+
+			if (pin != 19) {
+				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
+				exit(1);
+			}
+
+			pwm_info_t.ccr = 750000;
+			pwm_info_t.arr = 1500000;
+
 			break;
 
 		default:
@@ -123,42 +142,49 @@ int main(int argc, char *argv [])
 	int i = 0;
 	int val = 0;
 	int pin= 0;
+	int model;
+
+	piBoardId(&model);
 
 	if (argc != 2) {
-		fprintf (stderr, "Usage: %s <pin>\n", argv [0]) ;
-		exit (1) ;
+		fprintf (stderr, "Usage: %s <pin>\n", argv [0]);
+		exit (1);
 	}
 
-	pin = (unsigned int)strtoul (argv [1], NULL, 10) ;
+	pin = (unsigned int)strtoul(argv [1], NULL, 10);
 
 	// 初始化
 	printf("wiringPiSetup start\n");
 
 	wiringPiSetup();
 	set_pwm_info(pin);
-	pinMode(pin,PWM_OUTPUT);
+	pinMode(pin, PWM_OUTPUT);
 
 	printf("wiringPiSetup end\n");
 
 	// 开始测试
-	while(1) {
-		pwmSetRange(pin,pwm_info_t.arr);
-		pwmSetClock(pin,pwm_info_t.div);
-		pwmWrite(pin,pwm_info_t.ccr);
+	while(1)
+	{
+		pwmSetRange(pin, pwm_info_t.arr);
+
+		if (model != PI_MODEL_AI_PRO)
+			pwmSetClock(pin, pwm_info_t.div);
+
+		pwmWrite(pin, pwm_info_t.ccr);
 
 		//1. 调节PWM占空比
 		//1.1 通过设置ARR调节PWM占空比
 		printf("Modified ARR test start\n");
 
 		for (i = 0 ; i <= 8 ; i++) {
-			pwmSetRange(pin,pwm_info_t.arr + i * (pwm_info_t.arr / 8));
+			pwmSetRange(pin, pwm_info_t.arr + i * (pwm_info_t.arr / 8));
 			delay(500);
 		}
 
 		delay(5000);
 
 		for (i = 7 ; i >= 0 ; i-- ) {
-			pwmSetRange(pin,pwm_info_t.arr + i * (pwm_info_t.arr / 8));
+			pwmSetRange(pin, pwm_info_t.arr + i * (pwm_info_t.arr / 8));
 			delay(500);
 		}
 
@@ -167,17 +193,17 @@ int main(int argc, char *argv [])
 		printf("Modified ARR test end\n");
 
 		//1.2 通过设置CCR调节PWM占空比
-		printf("Modified CCR test start\n");
+		//printf("Modified CCR test start\n");
 
 		for (i = 0 ; i <= 8 ; i++) {
-			pwmWrite(pin,pwm_info_t.ccr + i * (pwm_info_t.ccr / 8));
+			pwmWrite(pin, pwm_info_t.ccr + i * (pwm_info_t.ccr / 8) - 1);
 			delay(500);
 		}
 
 		delay(5000);
 
 		for (i = 7 ; i >= 0 ; i-- ) {
-			pwmWrite(pin,pwm_info_t.ccr + i * (pwm_info_t.ccr / 8));
+			pwmWrite(pin, pwm_info_t.ccr + i * (pwm_info_t.ccr / 8) - 1);
 			delay(500);
 		}
 
@@ -186,31 +212,38 @@ int main(int argc, char *argv [])
 		printf("Modified CCR test end\n");
 
 		//2.调节PWM频率
-		//2.1通过设置分频系数调节PWM频率
 
-		printf("Modified frequency division test start\n");
+		if (model != PI_MODEL_AI_PRO)
+		{
+			//2.1通过设置分频系数调节PWM频率
 
-		for (i = pwm_info_t.div_stepping ; i <= 10 * pwm_info_t.div_stepping; i += pwm_info_t.div_stepping) {
-			pwmSetClock(pin,i);
-			delay(500);
+			printf("Modified frequency division test start\n");
+
+			for (i = pwm_info_t.div_stepping; i <= 10 * pwm_info_t.div_stepping; i += pwm_info_t.div_stepping)
+			{
+				pwmSetClock(pin,i);
+				delay(500);
+			}
+
+			delay(5000);
+
+			for (i = 9 * pwm_info_t.div_stepping; i >= pwm_info_t.div_stepping; i -= pwm_info_t.div_stepping)
+			{
+				pwmSetClock(pin,i);
+				delay(500);
+			}
+
+			delay(5000);
+
+			printf("Modified frequency division test end\n");
 		}
-
-		delay(5000);
-
-		for (i = 9 * pwm_info_t.div_stepping; i >= pwm_info_t.div_stepping ; i -= pwm_info_t.div_stepping) {
-			pwmSetClock(pin,i);
-			delay(500);
-		}
-
-		delay(5000);
-
-		printf("Modified frequency division test end\n");
 
 		//2.2 直接设置PWM频率
 		printf("Modified PWM frequency test start\n");
 
-		for (i = 1 ; i <= 10; i++) {
-			pwmToneWrite(pin,2000 * i);
+		for (i = 1; i <= 10; i++)
+		{
+			pwmToneWrite(pin, 2000 * i);
 			delay(2000);
 		}
 

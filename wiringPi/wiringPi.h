@@ -610,6 +610,18 @@ typedef struct {
 #define A310B_GPIO_SET_VALUE_OFFSET 0x0
 #define A310B_GPIO_GET_VALUE_OFFSET 0x50
 
+// PWM
+#define A310B_PWM_BASE 		      0xC4080000
+#define A310B_PWM_PRD2_OFFSET 	      0x20
+#define A310B_PWM_CH2_PWL_OFFSET      0x24
+#define A310B_PWM_CH2_PWH_OFFSET      0x28
+
+#define A310B_PWM_PRD3_OFFSET 	      0x2C
+#define A310B_PWM_CH3_PWL_OFFSET      0x30
+#define A310B_PWM_CH3_PWH_OFFSET      0x34
+
+#define A310B_PWM_MEASURE_TIME_OFFSET 0x108
+
 typedef struct {
 
 	void * iomux_base_group0;
@@ -628,6 +640,18 @@ typedef struct {
 	void * gpio_base_group5;
 	void * gpio_base_group7;
 
+	void * pwm_base;
+
+	unsigned int pwm_prd2_phyaddr;
+	unsigned int pwm_ch2_pwl_phyaddr;
+	unsigned int pwm_ch2_pwh_phyaddr;
+
+	unsigned int pwm_prd3_phyaddr;
+	unsigned int pwm_ch3_pwl_phyaddr;
+	unsigned int pwm_ch3_pwh_phyaddr;
+
+	unsigned int pwm_measure_time_phyaddr;
+
 } a310b_gpio_info;
 
 /*************** Ascend 310B ******************/
@@ -635,9 +659,7 @@ typedef struct {
 // Mask for the bottom 64 pins which belong to the Raspberry Pi
 //	The others are available for the other devices
 
-
 #define	PI_GPIO_MASK	(0xFFFFFFC0)
-
 
 // Handy defines
 extern int wiringPiDebug;
@@ -894,16 +916,16 @@ extern unsigned int micros            (void) ;
 
 extern unsigned int readR(unsigned int addr);
 extern void writeR(unsigned int val, unsigned int addr);
-extern int OrangePi_get_gpio_mode(int pin);
-extern int OrangePi_set_gpio_mode(int pin, int mode);
-extern int OrangePi_digitalRead(int pin);
-extern int OrangePi_digitalWrite(int pin, int value);
-extern int OrangePi_set_gpio_alt(int pin, int mode);
+extern int orangepi_get_gpio_mode(int pin);
+extern int orangepi_set_gpio_mode(int pin, int mode);
+extern int orangepi_digitalRead(int pin);
+extern int orangepi_digitalWrite(int pin, int value);
+extern int orangepi_set_gpio_alt(int pin, int mode);
 extern void OrangePi_set_gpio_pullUpDnControl (int pin, int pud);
-extern void sunxi_pwm_set_act(int pin,int act_cys);
-extern void sunxi_pwm_set_period(int pin,unsigned int period_cys);
+extern void orangepi_pwm_set_act(int pin,int act_cys);
+extern void orangepi_pwm_set_period(int pin,unsigned int period_cys);
 extern void sunxi_pwm_set_clk(int pin,int clk);
-extern void sunxi_pwm_set_tone(int pin,int freq);
+extern void orangepi_pwm_set_tone(int pin,int freq);
 
 void set_soc_info(void);
 

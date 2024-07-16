@@ -86,7 +86,7 @@ static char * alts_rk3588 [] =
 
 static char * alts_310b [] =
 {
-  "IN", "OUT", "OFF",
+  "IN", "OUT", "PWM", "OFF"
 };
 
 static char ** alts = alts_rk3588;
@@ -1467,13 +1467,12 @@ static char * physNames_AIPRO[64] =
 	"     GND", "GPIO2_19",
 	"    SDA6", "SCL6    ",
 	"   URXD7", "GND     ",
-	"GPIO2_20", "GPIO1_01",
+	"GPIO2_20", "PWM3    ",
 	"GPIO4_00", "GND     ",
 	"GPIO7_04", "GPIO2_17",
 	"GPIO0_03", "GPIO7_06",
 	"     GND", "GPIO7_05",
 };
-
 
 static int physToWpi_AIPRO[64] =
 {
@@ -1506,7 +1505,6 @@ static int physToWpi_AIPRO[64] =
 
 static int * physToWpi;
 static char ** physNames;
-
 
 /*
  * readallPhys:

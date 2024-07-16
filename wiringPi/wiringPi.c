@@ -86,7 +86,6 @@
 
 int pwmmode = 0;
 
-
 const char * int2bin(uint32_t param) {
 	int bits = sizeof(uint32_t)*CHAR_BIT;
 	static char buffer[sizeof(uint32_t)*CHAR_BIT + 1];
@@ -2031,7 +2030,7 @@ int physToGpio_AIPRO[64] =
 	-1,  83,   // 25, 26
 	-1,  -1,   // 27, 28
 	231, -1,   // 29, 30
-	84,  35,   // 31, 32
+	84,  33,   // 31, 32
 	128, -1,   // 33, 34
 	228, 81,   // 35, 36
 	 3, 230,   // 37, 38
@@ -2497,11 +2496,10 @@ int getAlt (int pin)
 	else if (wiringPiMode != WPI_MODE_GPIO)
 		return 0;
 
-	alt = OrangePi_get_gpio_mode(pin);
+	alt = orangepi_get_gpio_mode(pin);
 
 	return alt;
 }
-
 
 void print_pwm_reg()
 {
@@ -2610,7 +2608,6 @@ void sunxi_pwm_set_enable(int en)
 	}
 }
 
-
 void sunxi_pwm_set_mode(int mode)
 {
     int val = 0;
@@ -2635,11 +2632,15 @@ void sunxi_pwm_set_mode(int mode)
     print_pwm_reg();
 }
 
-void sunxi_pwm_set_tone(int pin,int freq)
+void orangepi_pwm_set_tone(int pin,int freq)
 {
-	int div ;
-	unsigned int range ;
-	unsigned int val;
+	int div = 0;
+	unsigned int range = 0;
+	unsigned int val = 0;
+	unsigned int pwm_period = 0;
+	//unsigned int pwm_high = 0;
+	//unsigned int pwm_cur_prd = 0;
+	//float duty_ratio = 0;
 
 	if (wiringPiDebug)
 		printf(">>func:%s no:%d\n", __func__, __LINE__);
@@ -2657,7 +2658,7 @@ void sunxi_pwm_set_tone(int pin,int freq)
 			rk3588_set_pwm_reg(pin,&rk3588_soc_info_t);
 
 			if (freq == 0)
-				sunxi_pwm_set_act (pin, 0);  //Off
+				orangepi_pwm_set_act (pin, 0);  //Off
 			else {
 				//enable conlock
 				val = readR(RK3588_CH_CTRL);
@@ -2700,15 +2701,15 @@ void sunxi_pwm_set_tone(int pin,int freq)
 			H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
 
 			if (freq == 0)
-				sunxi_pwm_set_act (pin, 0);             // Off
+				orangepi_pwm_set_act(pin, 0);             // Off
 			else {
 				div = readR(SUNXI_PWM_CTRL_REG);
 				div &= 0x00ff;  //The lower 8 bits determine the frequency division
 				div += 1;       //The actual frequency division value is (div + 1)
 				range = 24000000 / (div * freq);  //The default pwm clock frequency is 24MHz
 
-				sunxi_pwm_set_period (pin,range);
-				sunxi_pwm_set_act (pin, range / 2);
+				orangepi_pwm_set_period(pin,range);
+				orangepi_pwm_set_act(pin, range / 2);
 
 				if (wiringPiDebug)
 					printf("div:%d range:%d\n",div,range);
@@ -2721,7 +2722,7 @@ void sunxi_pwm_set_tone(int pin,int freq)
 			s905d3_set_gpio_reg(pin,&s905d3_gpio_info_t);
 
 			if (freq == 0)
-				sunxi_pwm_set_act(pin, 0);             // Off
+				orangepi_pwm_set_act(pin, 0);             // Off
 			else {
 				div = readR(S905D3_PWM_MISC);
 				div = ((div & 0x7f00) >> 8);  //The 8~14 bits determine the frequency division
@@ -2752,7 +2753,7 @@ void sunxi_pwm_set_tone(int pin,int freq)
 			rk3566_set_pwm_reg(pin,&rk3566_soc_info_t);
 
 			if (freq == 0)
-				sunxi_pwm_set_act (pin, 0);  //Off
+				orangepi_pwm_set_act (pin, 0);  //Off
 			else {
 				//enable conlock
 				val = readR(RK3566_CH_CTRL);
@@ -2785,6 +2786,44 @@ void sunxi_pwm_set_tone(int pin,int freq)
 
 				if (wiringPiDebug)
 					printf("div:%d range:%d\n",div,range);
+			}
+
+			break;
+
+		case PI_MODEL_AI_PRO:
+
+			if (freq > 0 && freq <= 32000)
+			{
+				if (pin != 33) {
+					printf("the pin you choose doesn't support hardware PWM\n");
+					printf("OPI:you can select wiringPi pin 33 for PWM pin\n");
+					printf("or you can use it in softPwm mode\n");
+					return;
+				}
+
+				pwm_period = 150000000 / freq;
+				orangepi_pwm_set_period(pin, pwm_period);
+				orangepi_pwm_set_act(pin, pwm_period / 2);
+
+				writeR(0, a310b_gpio_info_t.pwm_ch3_pwl_phyaddr);
+
+				//a310b_gpio_info_t.pwm_prd3_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_PRD3_OFFSET;
+				//a310b_gpio_info_t.pwm_ch3_pwl_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_CH3_PWL_OFFSET;
+				//a310b_gpio_info_t.pwm_ch3_pwh_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_CH3_PWH_OFFSET;
+
+				//// 计算当前占空比
+				//pwm_high =readR(a310b_gpio_info_t.pwm_ch3_pwh_phyaddr);
+				//pwm_cur_prd = readR(a310b_gpio_info_t.pwm_prd3_phyaddr);
+				//duty_ratio = pwm_high * 100 / pwm_cur_prd;
+
+				//pwm_period = 150000000 / freq;
+				//writeR(pwm_period, a310b_gpio_info_t.pwm_prd3_phyaddr);
+
+				//// 设置频率时保持占空比不变
+				//writeR(0, a310b_gpio_info_t.pwm_ch3_pwl_phyaddr);
+				//writeR(pwm_period * duty_ratio / 100, a310b_gpio_info_t.pwm_ch3_pwh_phyaddr);
+			} else {
+				printf("wiringop: pwm freq error!!! (1 ~ 32000hz)\n");
 			}
 
 			break;
@@ -2824,7 +2863,7 @@ void sunxi_pwm_set_clk_v2(int clk)
 }
 
 
-void sunxi_pwm_set_clk(int pin,int clk)
+void orangepi_pwm_set_clk(int pin,int clk)
 {
 	int val = 0;
 	int regval = 0;
@@ -2989,6 +3028,20 @@ void sunxi_pwm_set_clk(int pin,int clk)
 
 			break;
 
+		case PI_MODEL_AI_PRO:
+
+			if (pin != 33)
+			{
+				printf("the pin you choose doesn't support hardware PWM\n");
+				printf("OPI:you can select wiringPi pin 33 for PWM pin\n");
+				printf("or you can use it in softPwm mode\n");
+				return;
+			}
+
+			printf("wiringop: opiaipro pwm clock is 150M. Not support setting the clock!!!\n");
+
+			break;
+
 		default:
 			break;
 	}
@@ -3030,7 +3083,7 @@ int sunxi_pwm_get_act(void)
     return period_act;
 }
 
-void sunxi_pwm_set_period(int pin,unsigned int period_cys)
+void orangepi_pwm_set_period(int pin,unsigned int period_cys)
 {
 	uint32_t val = 0;
 	uint32_t ccr = 0;
@@ -3171,15 +3224,34 @@ void sunxi_pwm_set_period(int pin,unsigned int period_cys)
 
 			break;
 
+		case PI_MODEL_AI_PRO:
+
+			if (pin != 33)
+			{
+				printf("the pin you choose doesn't support hardware PWM\n");
+				printf("OPI:you can select wiringPi pin 33 for PWM pin\n");
+				printf("or you can use it in softPwm mode\n");
+				return;
+			}
+
+			a310b_gpio_info_t.pwm_prd3_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_PRD3_OFFSET;
+			a310b_gpio_info_t.pwm_ch3_pwl_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_CH3_PWL_OFFSET;
+
+			writeR(0, a310b_gpio_info_t.pwm_ch3_pwl_phyaddr);
+			writeR(period_cys, a310b_gpio_info_t.pwm_prd3_phyaddr);
+
+			break;
+
 		default:
 			break;
 	}
 }
 
-void sunxi_pwm_set_act(int pin,int act_cys)
+void orangepi_pwm_set_act(int pin, int act_cys)
 {
 	uint32_t per0 = 0;
 	uint32_t arr = 0;
+	uint32_t pwm_period = 0;
 
 	switch (OrangePiModel)
 	{
@@ -3322,6 +3394,32 @@ void sunxi_pwm_set_act(int pin,int act_cys)
 
 			break;
 
+		case PI_MODEL_AI_PRO:
+
+			if (pin != 33)
+			{
+				printf("the pin you choose doesn't support hardware PWM\n");
+				printf("OPI:you can select wiringPi pin 33 for PWM pin\n");
+				printf("or you can use it in softPwm mode\n");
+				return;
+			}
+
+			a310b_gpio_info_t.pwm_prd3_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_PRD3_OFFSET;
+			a310b_gpio_info_t.pwm_ch3_pwl_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_CH3_PWL_OFFSET;
+			a310b_gpio_info_t.pwm_ch3_pwh_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_CH3_PWH_OFFSET;
+
+			pwm_period = readR(a310b_gpio_info_t.pwm_prd3_phyaddr);
+			if (act_cys >= pwm_period || act_cys < 0)
+			{
+				printf("wiringop: error: value greater than period(%d)\n", pwm_period);
+				return;
+			}
+
+			writeR(0, a310b_gpio_info_t.pwm_ch3_pwl_phyaddr);
+			writeR(pwm_period - act_cys, a310b_gpio_info_t.pwm_ch3_pwh_phyaddr);
+
+			break;
+
 		default:
 			break;
 	}
@@ -3341,6 +3439,7 @@ void pwmSetMode(int pin,int mode)
     }
 
     sunxi_pwm_set_mode(mode);
+
     return;
 }
 
@@ -3367,7 +3466,7 @@ void pwmSetRange(int pin,unsigned int range)
 		return;
 	}
 
-	sunxi_pwm_set_period(pin,range);
+	orangepi_pwm_set_period(pin, range);
 	return;
 }
 
@@ -3395,7 +3494,8 @@ void pwmSetClock(int pin,int divisor)
 		return;
 	}
 
-	sunxi_pwm_set_clk(pin,divisor);
+	orangepi_pwm_set_clk(pin, divisor);
+
 	return;
 }
 
@@ -3567,7 +3667,7 @@ void pinModeAlt (int pin, int mode)
 				return;
 			}
 
-			OrangePi_set_gpio_alt(pin, mode);
+			orangepi_set_gpio_alt(pin, mode);
 
 			return;
                 } else {
@@ -3626,15 +3726,15 @@ void pinMode (int pin, int mode)
 		}
 
 		if (mode == INPUT) {
-			OrangePi_set_gpio_mode(pin, INPUT);
+			orangepi_set_gpio_mode(pin, INPUT);
 			return;
 		} 
 		else if (mode == OUTPUT) {
-			OrangePi_set_gpio_mode(pin, OUTPUT);
+			orangepi_set_gpio_mode(pin, OUTPUT);
 			return ;
 		}
 		else if (mode == PWM_OUTPUT) {
-			OrangePi_set_gpio_mode(pin, PWM_OUTPUT);
+			orangepi_set_gpio_mode(pin, PWM_OUTPUT);
 			return;
 		}
 		else
@@ -3729,7 +3829,7 @@ int digitalRead (int pin)
 			return LOW;
 		}
 
-		return OrangePi_digitalRead(pin);   
+		return orangepi_digitalRead(pin);
 	}
 	else 
 	{
@@ -3809,7 +3909,7 @@ void digitalWrite (int pin, int value)
 			return;
 		}
 
-		OrangePi_digitalWrite(pin, value);	  
+		orangepi_digitalWrite(pin, value);
 	} 
 	else 
 	{
@@ -3845,7 +3945,8 @@ void digitalWrite8 (int pin, int value)
  *********************************************************************************
  */
 
-void pwmWrite(int pin, int value) {
+void pwmWrite(int pin, int value)
+{
 	struct wiringPiNodeStruct *node = wiringPiNodes;
 
 	if (pinToGpio == 0 || physToGpio == 0) {
@@ -3853,11 +3954,11 @@ void pwmWrite(int pin, int value) {
 		return;
 	}
 
-	if (pwmmode == 1) {
-		sunxi_pwm_set_mode(1);
-	} else {
-		sunxi_pwm_set_mode(0);
-	}
+	//if (pwmmode == 1) {
+	//	sunxi_pwm_set_mode(1);
+	//} else {
+	//	sunxi_pwm_set_mode(0);
+	//}
 
 	// On-Board Pin needto fix me Jim
 	if (pin < MAX_PIN_NUM) {
@@ -3872,7 +3973,7 @@ void pwmWrite(int pin, int value) {
 			printf("[%s:L%d] the pin:%d is invaild,please check it over!\n", __func__, __LINE__, pin);
 			return;
 		}
-		sunxi_pwm_set_act(pin,value);
+		orangepi_pwm_set_act(pin,value);
 	} else {
 		printf("not on board :%s,%d\n", __func__, __LINE__);
 		if ((node = wiringPiFindNode(pin)) != NULL) {
@@ -3949,7 +4050,8 @@ void pwmToneWrite (int pin, int freq)
 		return;
 	}
 
-	sunxi_pwm_set_tone(pin,freq);
+	orangepi_pwm_set_tone(pin,freq);
+
 	return;
 }
 
@@ -4942,6 +5044,11 @@ int wiringPiSetup (void)
 			if ((int32_t)(unsigned long)a310b_gpio_info_t.gpio_base_group7 == -1)
 				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (A310B_GPIO_BASE_GROUP7) failed: %s\n", strerror(errno));
 
+			// PWM BASE
+			a310b_gpio_info_t.pwm_base = mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, A310B_PWM_BASE & ~MAP_MASK);
+			if ((int32_t)(unsigned long)a310b_gpio_info_t.pwm_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (A310B_PMW_BASE) failed: %s\n", strerror(errno));
+
 			break;
 		default:
 
@@ -5282,6 +5389,7 @@ unsigned int readR(unsigned int addr)
 			mmap_base = (addr & 0xfffff000);
 			mmap_seek = (addr & MAP_MASK);
 
+			// gpio
 			if(mmap_base == A310B_GPIO_BASE_GROUP0)
 				val = *((unsigned int *) (a310b_gpio_info_t.gpio_base_group0 + mmap_seek));
 			else if(mmap_base == A310B_GPIO_BASE_GROUP1)
@@ -5296,6 +5404,7 @@ unsigned int readR(unsigned int addr)
 				val = *((unsigned int *) (a310b_gpio_info_t.gpio_base_group5 + mmap_seek));
 			else if(mmap_base == 0x150000)
 				val = *((unsigned int *) (a310b_gpio_info_t.gpio_base_group7 + mmap_seek));
+			// iomux
 			else if(mmap_base == A310B_IOMUX_BASE_GROUP0)
 				val = *((unsigned int *) (a310b_gpio_info_t.iomux_base_group0 + mmap_seek));
 			else if(mmap_base == A310B_IOMUX_BASE_GROUP1)
@@ -5310,8 +5419,11 @@ unsigned int readR(unsigned int addr)
 				val = *((unsigned int *) (a310b_gpio_info_t.iomux_base_group5 + mmap_seek));
 			else if(mmap_base == 0x140000)
 				val = *((unsigned int *) (a310b_gpio_info_t.iomux_base_group7 + mmap_seek));
+			// pwm
+			else if(mmap_base == A310B_PWM_BASE)
+				val = *((unsigned int *) (a310b_gpio_info_t.pwm_base + mmap_seek));
 			else
-				printf("readR: mmap_base %x is error ", mmap_base);
+				printf("readR: mmap_base %x is error!\n", mmap_base);
 
 			return val;
 
@@ -5497,6 +5609,7 @@ void writeR(unsigned int val, unsigned int addr)
 			mmap_base = (addr & 0xfffff000);
 			mmap_seek = (addr & MAP_MASK);
 
+			// gpio
 			if(mmap_base == A310B_GPIO_BASE_GROUP0)
 				*((unsigned int *) (a310b_gpio_info_t.gpio_base_group0 + mmap_seek)) = val;
 			else if(mmap_base == A310B_GPIO_BASE_GROUP1)
@@ -5511,7 +5624,7 @@ void writeR(unsigned int val, unsigned int addr)
 				*((unsigned int *) (a310b_gpio_info_t.gpio_base_group5 + mmap_seek)) = val;
 			else if(mmap_base == 0x150000)
 				*((unsigned int *) (a310b_gpio_info_t.gpio_base_group7 + mmap_seek)) = val;
-
+			// iomux
 			else if(mmap_base == A310B_IOMUX_BASE_GROUP0)
 				*((unsigned int *) (a310b_gpio_info_t.iomux_base_group0 + mmap_seek)) = val;
 			else if(mmap_base == A310B_IOMUX_BASE_GROUP1)
@@ -5526,8 +5639,11 @@ void writeR(unsigned int val, unsigned int addr)
 				*((unsigned int *) (a310b_gpio_info_t.iomux_base_group5 + mmap_seek)) = val;
 			else if(mmap_base == 0x140000)
 				*((unsigned int *) (a310b_gpio_info_t.iomux_base_group7 + mmap_seek)) = val;
+			// pwm
+			else if(mmap_base == A310B_PWM_BASE)
+				*((unsigned int *) (a310b_gpio_info_t.pwm_base + mmap_seek)) = val;
 			else
-				printf("writeR: mmap_base %x is error ", mmap_base);
+				printf("writeR: mmap_base %x is error!\n", mmap_base);
 
 			break;
 
@@ -5552,7 +5668,7 @@ void writeR(unsigned int val, unsigned int addr)
 	}
 }
 
-int OrangePi_get_gpio_mode(int pin)
+int orangepi_get_gpio_mode(int pin)
 {
 	unsigned int regval = 0;
 	unsigned int bank   = pin >> 5;
@@ -5774,20 +5890,21 @@ int OrangePi_get_gpio_mode(int pin)
 
                                                 break;
                                         case 1:
-                                                gpio_dir_phyaddr = A310B_GPIO_BASE_GROUP1 + A310B_GPIO_DIRECTION_OFFSET;
+						gpio_dir_phyaddr = A310B_GPIO_BASE_GROUP1 + A310B_GPIO_DIRECTION_OFFSET;
 
-                                                if (index >= 0 && index <= 1)
-                                                        iomux_phyaddr = A310B_IOMUX_BASE_GROUP1 + 0xcc + index * 4;
-                                                else if (index >= 2 && index <= 7)
-                                                        iomux_phyaddr = A310B_IOMUX_BASE_GROUP1 + 0xe4 + (index - 2) * 4;
-                                                else if (index >= 8 && index <= 11)
-                                                        iomux_phyaddr = A310B_IOMUX_BASE_GROUP1 + 0x11c + (index - 8) * 4;
+						if (index >= 0 && index <= 1)
+							iomux_phyaddr = A310B_IOMUX_BASE_GROUP1 + 0xcc + index * 4;
+						else if (index >= 2 && index <= 7)
+							iomux_phyaddr = A310B_IOMUX_BASE_GROUP1 + 0xe4 + (index - 2) * 4;
+						else if (index >= 8 && index <= 11)
+							iomux_phyaddr = A310B_IOMUX_BASE_GROUP1 + 0x11c + (index - 8) * 4;
 
-                                                if (index >= 8 && index <= 9)
-                                                        iomux_val = 0;
-                                                else
-                                                        iomux_val = 3;
-                                                break;
+						if (index >= 8 && index <= 9)
+							iomux_val = 0;
+						else
+							iomux_val = 3;
+
+						break;
                                         case 2:
                                                 gpio_dir_phyaddr = A310B_GPIO_BASE_GROUP2 + A310B_GPIO_DIRECTION_OFFSET;
 
@@ -5843,16 +5960,18 @@ int OrangePi_get_gpio_mode(int pin)
                                                         iomux_val = 3;
                                                 break;
                                         default:
-                                                printf("bank is error!!");
+                                                printf("bank is error!!\n");
 				}
 
-				regval = readR(iomux_phyaddr);//获取gpio方向寄存器的值
-				if (regval == iomux_val){
-					regval = readR(gpio_dir_phyaddr);//获取gpio方向寄存器的值
+				regval = readR(iomux_phyaddr);
+				if (regval == iomux_val) {
+					regval = readR(gpio_dir_phyaddr);
 					mode = (regval >> index) & 0x1;
 				}
-				else
+				else if (regval == 0 && pin == 33)
 					mode = 2;
+				else
+					mode = 3;
 			}
 
 			return mode;
@@ -6164,13 +6283,13 @@ void rk3566_set_pwm_reg(int pin,rk3566_soc_info *rk3566_soc_info_ptr)
 /*
  * Set GPIO Mode
  */
-int OrangePi_set_gpio_mode(int pin, int mode)
+int orangepi_set_gpio_mode(int pin, int mode)
 {
-	unsigned int regval = 0;
-	unsigned int bank   = pin >> 5;
-	unsigned int index  = pin - (bank << 5);
-	unsigned int phyaddr = 0;
 	int offset;
+	unsigned int regval = 0;
+	unsigned int bank = pin >> 5;
+	unsigned int index = pin - (bank << 5);
+	unsigned int phyaddr = 0;
 	unsigned int cru_phyaddr =0, grf_phyaddr = 0, gpio_phyaddr = 0, ddr_phyaddr = 0;
 	unsigned int cru_val = 0;
 	unsigned int rk3588_pmu1_ioc_phyaddr;
@@ -6178,8 +6297,9 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 	unsigned int temp = 0;
 	unsigned int bit_enable;
 	unsigned int grf_val = 0;
-	unsigned int iomux_val = 0; 			//for ai pro
-	unsigned int iomux_phyaddr = 0, gpio_dir_phyaddr = 0;	//for ai pro
+	unsigned int iomux_val = 0; //for ai pro
+	unsigned int iomux_phyaddr = 0, gpio_dir_phyaddr = 0; //for ai pro
+	unsigned int pwm_prd_default = 0; //for ai pro pwm
 
 	switch (OrangePiModel)
 	{
@@ -6865,8 +6985,8 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 					printf("Register[%#x]: %#x\n", S905D3_PWM_MISC, regval);
 
 				//Set duty_cycle
-				sunxi_pwm_set_period(pin,1000);
-				sunxi_pwm_set_act(pin,500);
+				orangepi_pwm_set_period(pin,1000);
+				orangepi_pwm_set_act(pin,500);
 				regval = readR(S905D3_PWM_DUTY_CYCLE);
 
 				if (wiringPiDebug)
@@ -6913,6 +7033,10 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 							iomux_val = 0;
 						else
 							iomux_val = 3;
+
+						if( (index >= 0 && index <=1) && PWM_OUTPUT == mode )
+							iomux_val = 0;
+
 						break;
 					case 2:
 						gpio_dir_phyaddr = A310B_GPIO_BASE_GROUP2 + A310B_GPIO_DIRECTION_OFFSET;
@@ -6923,6 +7047,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 							iomux_phyaddr = A310B_IOMUX_BASE_GROUP2 + 0x28 + (index - 11) * 4;
 
 						iomux_val = 3;
+
 						break;
 					case 3:
 						gpio_dir_phyaddr = A310B_GPIO_BASE_GROUP3 + A310B_GPIO_DIRECTION_OFFSET;
@@ -6931,6 +7056,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 							iomux_phyaddr = A310B_IOMUX_BASE_GROUP3 + index * 4;
 
 						iomux_val = 3;
+
 						break;
 					case 4:
 						gpio_dir_phyaddr = A310B_GPIO_BASE_GROUP4 + A310B_GPIO_DIRECTION_OFFSET;
@@ -6946,6 +7072,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 							iomux_val = 0;
 						else
 							iomux_val = 3;
+
 						break;
 					case 5:
 						gpio_dir_phyaddr = (unsigned int)A310B_GPIO_BASE_GROUP5 + A310B_GPIO_DIRECTION_OFFSET;
@@ -6954,6 +7081,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 							iomux_phyaddr = A310B_IOMUX_BASE_GROUP5 + index * 4;
 
 						iomux_val = 3;
+
 						break;
 					case 7:
 						gpio_dir_phyaddr = (unsigned int)A310B_GPIO_BASE_GROUP7 + A310B_GPIO_DIRECTION_OFFSET;
@@ -6967,9 +7095,10 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 							iomux_val = 0;
 						else
 							iomux_val = 3;
+
 						break;
 					default:
-						printf("bank is error!!");
+						printf("bank is error!!\n");
 				}
 
 				writeR(iomux_val, iomux_phyaddr);
@@ -6995,6 +7124,38 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 						regval = readR(gpio_dir_phyaddr);
 						printf("OUTPUT mode set over reg val: %#x\n",regval);
 					}
+				}
+				else if(PWM_OUTPUT == mode)
+				{
+					if (pin != 33)
+					{
+						printf("the pin you choose doesn't support hardware PWM\n");
+						printf("OPI:you can select wiringPi pin 33 for PWM pin\n");
+						printf("or you can use it in softPwm mode\n");
+						return;
+					}
+
+					pwm_prd_default = 150000;
+					orangepi_pwm_set_period(pin, pwm_prd_default);
+					orangepi_pwm_set_act(pin, pwm_prd_default / 2);
+
+					//设置PWM低电平开始时刻。
+					writeR(0, a310b_gpio_info_t.pwm_ch3_pwl_phyaddr);
+
+					//a310b_gpio_info_t.pwm_prd3_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_PRD3_OFFSET;
+					//a310b_gpio_info_t.pwm_ch3_pwl_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_CH3_PWL_OFFSET;
+					//a310b_gpio_info_t.pwm_ch3_pwh_phyaddr = (unsigned int)A310B_PWM_BASE + A310B_PWM_CH3_PWH_OFFSET;
+					//pwm_prd_default = 150000;
+
+					////设置PWM脉冲周期寄存器的值为1500000，period = 1 / 150000000 x 150000 = 1ms
+					////PWM模块默认时钟频率为150MHz
+					//writeR(pwm_prd_default, a310b_gpio_info_t.pwm_prd3_phyaddr); // 1ms  1khz
+
+					////设置PWM低电平开始时刻。
+					//writeR(0, a310b_gpio_info_t.pwm_ch3_pwl_phyaddr);
+
+					////设置PWM高电平开始时刻，即可设置PWM占空比
+					//writeR(pwm_prd_default / 2, a310b_gpio_info_t.pwm_ch3_pwh_phyaddr);
 				}
 			}
 
@@ -7086,14 +7247,14 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 					writeR(0, SUNXI_PWM_PERIOD);
 
 					//set default M:S to 1/2
-					sunxi_pwm_set_period(pin,1024);
-					sunxi_pwm_set_act(pin,512);
+					orangepi_pwm_set_period(pin,1024);
+					orangepi_pwm_set_act(pin,512);
 					sunxi_pwm_set_mode(PWM_MODE_MS);
 
 					if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W)
-						sunxi_pwm_set_clk(pin,1);  //default clk:24M
+						orangepi_pwm_set_clk(pin,1);  //default clk:24M
 					else
-						sunxi_pwm_set_clk(pin,PWM_CLK_DIV_120); //default clk:24M/120
+						orangepi_pwm_set_clk(pin,PWM_CLK_DIV_120); //default clk:24M/120
 					delayMicroseconds(200);
 				}
 				else
@@ -7112,7 +7273,7 @@ int OrangePi_set_gpio_mode(int pin, int mode)
 	return 0;
 }
 
-int OrangePi_set_gpio_alt(int pin, int mode)
+int orangepi_set_gpio_alt(int pin, int mode)
 {
 	unsigned int regval = 0;
 	unsigned int bank   = pin >> 5;
@@ -7147,7 +7308,7 @@ int OrangePi_set_gpio_alt(int pin, int mode)
 /*
  * OrangePi Digital write 
  */
-int OrangePi_digitalWrite(int pin, int value)
+int orangepi_digitalWrite(int pin, int value)
 {
 	unsigned int bank   = pin >> 5;
 	unsigned int index  = pin - (bank << 5);
@@ -7437,7 +7598,7 @@ int OrangePi_digitalWrite(int pin, int value)
 					phyaddr = (unsigned int)A310B_GPIO_BASE_GROUP7 + A310B_GPIO_SET_VALUE_OFFSET;
 					break;
 				default:
-					printf("bank is error!!");
+					printf("bank is error!!\n");
 			}
 
 			/* Ignore unused gpio */
@@ -7518,7 +7679,7 @@ int OrangePi_digitalWrite(int pin, int value)
 /*
  * OrangePi Digital Read
  */
-int OrangePi_digitalRead(int pin)
+int orangepi_digitalRead(int pin)
 {
 	int bank = pin >> 5;
 	int index = pin - (bank << 5);
@@ -7611,7 +7772,7 @@ int OrangePi_digitalRead(int pin)
 					phyaddr = (unsigned int)A310B_GPIO_BASE_GROUP7 + A310B_GPIO_GET_VALUE_OFFSET;
 					break;
 				default:
-					printf("bank is error!!");
+					printf("bank is error!!\n");
 			}
 
 			break;

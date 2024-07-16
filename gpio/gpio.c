@@ -91,7 +91,7 @@ char *usage = "Usage: gpio -v\n"
      //         "       gpio [-d] ...\n"
      //         "       [-x extension:params] [[ -x ...]] ...\n"
      //         "       gpio [-p] <read/write/wb> ...\n"
-              "       gpio <mode/qmode/read/write/pwm> ...\n"
+              "       gpio <mode/qmode/read/write/pwm/pwmTone> ...\n"
      //		  "       gpio <mode/qmode/read/write> ...\n"
               "       gpio <toggle/blink> <pin>\n"
 	      "       gpio readall\n"
@@ -99,9 +99,9 @@ char *usage = "Usage: gpio -v\n"
 	      "       gpio export/edge/unexport ...\n"
 	//      "       gpio wfi <pin> <mode>\n"
 	//      "       gpio drive <group> <value>\n"
-	     "       gpio pwm-bal/pwm-ms \n"
-	//     "       gpio pwmr <pin> <range> \n"
-	//     "       gpio pwmc <pin> <divider> \n"
+	//     "       gpio pwm-bal/pwm-ms \n"
+	     "       gpio pwmr <pin> <range> \n"
+	     "       gpio pwmc <pin> <divider> \n"
 	//     "       gpio load spi/i2c\n"
 	//     "       gpio unload spi/i2c\n"
 	      "       gpio i2cd/i2cdetect port\n"
@@ -1263,13 +1263,6 @@ void doClock (int argc, char *argv [])
   gpioClockSet (pin, freq) ;
 }
 
-
-/*
- * doPwm:
- *	Output a PWM value on a pin
- *********************************************************************************
- */
-
 /*
  * doPwm:
  *	Output a PWM value on a pin
@@ -1289,8 +1282,7 @@ void doPwm (int argc, char *argv [])
   pin = atoi (argv [2]) ;
   val = atoi (argv [3]) ;
 
-  //pinMode (pin, PWM_OUTPUT);
-  pwmWrite (pin, val) ;
+  pwmWrite(pin, val) ;
 }
 
 
@@ -1317,7 +1309,7 @@ static void doPwmMode (int argc, char *argv [])
     }
 
     pin = (unsigned int)strtoul (argv [2], NULL, 10) ;
-    pwmSetMode (pin,mode) ;
+    pwmSetMode (pin, mode) ;
 }
 
 static void doPwmRange (int argc, char *argv [])
