@@ -2418,7 +2418,8 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepi3b.",              11) == 0) { *model = PI_MODEL_3B; }
 	else if (strncmp(revision, "orangepi3plus.",           14) == 0) { *model = PI_MODEL_3_PLUS; }
 	else if (strncmp(revision, "orangepiaipro.",           14) == 0) { *model = PI_MODEL_AI_PRO; }
-	else if (strncmp(revision, "orangepiaipro-20t.",       14) == 0) { *model = PI_MODEL_AI_PRO; }
+	else if (strncmp(revision, "orangepiaipro-20t.",       18) == 0) { *model = PI_MODEL_AI_PRO; }
+	else if (strncmp(revision, "orangepikunpengpro.",      19) == 0) { *model = PI_MODEL_AI_PRO; }
 
 	if (wiringPiDebug)
 		printf("piBoardId: model = %d\n", *model);
