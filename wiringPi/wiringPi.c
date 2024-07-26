@@ -7209,7 +7209,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 						printf("the pin you choose doesn't support hardware PWM\n");
 						printf("OPI:you can select wiringPi pin 33 for PWM pin\n");
 						printf("or you can use it in softPwm mode\n");
-						return;
+						exit(1);
 					}
 
 					pwm_prd_default = 150000;
