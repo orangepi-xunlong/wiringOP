@@ -2719,7 +2719,7 @@ void orangepi_pwm_set_tone(int pin,int freq)
 		case PI_MODEL_5_ULTRA:
 		case PI_MODEL_5_PLUS:
 
-			rk3588_set_pwm_reg(pin,&rk3588_soc_info_t);
+			rk3588_set_pwm_reg(pin, &rk3588_soc_info_t);
 
 			if (freq == 0)
 				orangepi_pwm_set_act (pin, 0);  //Off
@@ -3148,7 +3148,7 @@ int sunxi_pwm_get_act(void)
     return period_act;
 }
 
-void orangepi_pwm_set_period(int pin,unsigned int period_cys)
+void orangepi_pwm_set_period(int pin, unsigned int period_cys)
 {
 	uint32_t val = 0;
 	uint32_t ccr = 0;
@@ -3167,7 +3167,7 @@ void orangepi_pwm_set_period(int pin,unsigned int period_cys)
 		case PI_MODEL_5_ULTRA:
 		case PI_MODEL_5_PLUS:
 
-			rk3588_set_pwm_reg(pin,&rk3588_soc_info_t);
+			rk3588_set_pwm_reg(pin, &rk3588_soc_info_t);
 
 			ccr = readR(RK3588_CH_DUTY_LPR);
 
@@ -6037,6 +6037,7 @@ int orangepi_get_gpio_mode(int pin)
                                                 break;
                                         default:
                                                 printf("bank is error!!\n");
+						break;
 				}
 
 				regval = readR(iomux_phyaddr);
@@ -6111,6 +6112,7 @@ void H618_set_pwm_reg(int pin,sunxi_gpio_info *sunxi_gpio_info_ptr)
 			break;
 		default:
 			fprintf(stderr,"gpio: the pin you choose doesn't support hardware PWM\n");
+			break;
 	}
 }
 
@@ -6204,7 +6206,7 @@ void s905d3_set_gpio_reg(int pin,s905d3_gpio_info *s905d3_gpio_info_ptr)
 	}
 }
 
-void rk3588_set_pwm_reg(int pin,rk3588_soc_info *rk3588_soc_info_ptr)
+void rk3588_set_pwm_reg(int pin, rk3588_soc_info * rk3588_soc_info_ptr)
 {
 	rk3588_soc_info_ptr->pwm_mux = RK3588_BUS_IOC_BASE + ((pin >> 2) << 2);
 	rk3588_soc_info_ptr->pwm_mux_val = 0xb;
@@ -6212,6 +6214,45 @@ void rk3588_set_pwm_reg(int pin,rk3588_soc_info *rk3588_soc_info_ptr)
 
 	switch (OrangePiModel)
 	{
+		case PI_MODEL_CM5_TABLET:
+
+			switch (pin)
+			{
+				case 58:  //PWM0CH0  GPIO1_D2 PWM0_M1
+					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
+					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH0_PERIOD_HPR;
+					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH0_DUTY_LPR;
+					rk3588_soc_info_ptr->ch_crtl = RK3588_CH0_CTRL;
+					break;
+
+				case 35:  //PWM0CH1  GPIO1_A3 PWM1_M2
+					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
+					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
+					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
+					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
+					break;
+
+				case 39:  //PWM0CH3  GPIO1_A7 PWM3_M3
+					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
+					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
+					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
+					rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
+					break;
+
+				case 47:  //PWM3CH1  GPIO1_B7 PWM13_M2
+					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
+					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
+					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
+					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
+					break;
+				default:
+					printf("The pin you choose doesn't support hardware PWM.\n");
+					printf("You can select wiringPi pin 0/2/5/13 for PWM pin.\n");
+					exit(1);
+					break;
+			}
+			break;
+
 		case PI_MODEL_5_PLUS:
 
 			if (pin == 15 || pin == 16) {
@@ -6264,6 +6305,11 @@ void rk3588_set_pwm_reg(int pin,rk3588_soc_info *rk3588_soc_info_ptr)
 					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH2_PERIOD_HPR;
 					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH2_DUTY_LPR;
 					rk3588_soc_info_ptr->ch_crtl = RK3588_CH2_CTRL;
+					break;
+				default:
+					printf("The pin you choose doesn't support hardware PWM.\n");
+					printf("You can select wiringPi pin 0/1/2/6/9/10/13/21/22 for PWM pin.\n");
+					exit(1);
 					break;
 			}
 			break;
@@ -6320,6 +6366,11 @@ void rk3588_set_pwm_reg(int pin,rk3588_soc_info *rk3588_soc_info_ptr)
 					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
 					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
 					rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
+					break;
+				default:
+					printf("The pin you choose doesn't support hardware PWM.\n");
+					printf("You can select wiringPi pin 0/2/5/8/9/10/14/16 for PWM pin.\n");
+					exit(1);
 					break;
 			}
 			break;
@@ -6480,7 +6531,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 
 					regval = readR(RK3588_CRU_GATE_CON19);
 					regval &= 0xfffffffe;
-					writeR(regval,RK3588_CRU_GATE_CON19);
+					writeR(regval, RK3588_CRU_GATE_CON19);
 					regval = readR(RK3588_CRU_GATE_CON19);
 
 					//Set clk——pwm123
@@ -6493,7 +6544,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 					writeR(regval,RK3588_CRU_GATE_CON15);
 					regval = readR(RK3588_CRU_GATE_CON15);
 
-					//Set clk——pwu1pwm
+					//Set clk——pmu1pwm
 					if (wiringPiDebug)
 						printf(">>Set cru_pmu1pwm_clk_en\n");
 
@@ -6503,7 +6554,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 					writeR(regval,RK3588_PMU1CRU_GATE_CON1);
 					regval = readR(RK3588_PMU1CRU_GATE_CON1);
 
-					rk3588_set_pwm_reg(pin,&rk3588_soc_info_t);
+					rk3588_set_pwm_reg(pin, &rk3588_soc_info_t);
 
 					//Set mux
 					if (wiringPiDebug)
@@ -7176,6 +7227,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 						break;
 					default:
 						printf("bank is error!!\n");
+						break;
 				}
 
 				writeR(iomux_val, iomux_phyaddr);
@@ -7677,6 +7729,7 @@ int orangepi_digitalWrite(int pin, int value)
 					break;
 				default:
 					printf("bank is error!!\n");
+					break;
 			}
 
 			/* Ignore unused gpio */

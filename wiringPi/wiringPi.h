@@ -317,13 +317,13 @@ typedef struct {
 	unsigned int * pwm1_base;
 	unsigned int * pwm2_base;
 	unsigned int * pwm3_base;
-	unsigned int   pwm_base;
-	unsigned int   pwm_mux;
-	unsigned int   pwm_mux_val;
-	unsigned int   pwm_mux_offset;
-	unsigned int   ch_period_hpr;
-	unsigned int   ch_duty_lpr;
-	unsigned int   ch_crtl;
+	unsigned int pwm_base;
+	unsigned int pwm_mux;
+	unsigned int pwm_mux_val;
+	unsigned int pwm_mux_offset;
+	unsigned int ch_period_hpr;
+	unsigned int ch_duty_lpr;
+	unsigned int ch_crtl;
 } rk3588_soc_info;
 
 /*********** Rockchip RK3588 *************/
