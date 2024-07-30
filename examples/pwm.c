@@ -18,6 +18,11 @@ static void set_pwm_info(int pin)
 
 	piBoardId(&model);
 
+	pwm_info_t.ccr = 500;
+	pwm_info_t.arr = 1000;
+	pwm_info_t.div = 120;
+	pwm_info_t.div_stepping = 2;
+
 	switch (model)
 	{
 		case PI_MODEL_ZERO_2:
@@ -55,9 +60,6 @@ static void set_pwm_info(int pin)
 				exit(1);
 			}
 
-			pwm_info_t.ccr = 500;
-			pwm_info_t.arr = 1000;
-			pwm_info_t.div = 120;
 			pwm_info_t.div_stepping = 1;
 
 			break;
@@ -69,11 +71,6 @@ static void set_pwm_info(int pin)
 				exit(1);
 			}
 
-			pwm_info_t.ccr = 500;
-			pwm_info_t.arr = 1000;
-			pwm_info_t.div = 120;
-			pwm_info_t.div_stepping = 2;
-
 			break;
 
 		case PI_MODEL_5B:
@@ -82,11 +79,6 @@ static void set_pwm_info(int pin)
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
-			pwm_info_t.ccr = 500;
-			pwm_info_t.arr = 1000;
-			pwm_info_t.div = 120;
-			pwm_info_t.div_stepping = 2;
 
 			break;
 
@@ -97,10 +89,14 @@ static void set_pwm_info(int pin)
 				exit(1);
 			}
 
-			pwm_info_t.ccr = 500;
-			pwm_info_t.arr = 1000;
-			pwm_info_t.div = 120;
-			pwm_info_t.div_stepping = 2;
+			break;
+
+		case PI_MODEL_5_MAX:
+
+			if (pin != 0 && pin != 1 && pin != 2 && pin != 8 && pin != 9 && pin != 17 && pin != 20 && pin != 21 && pin != 22 && pin !=23) {
+				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
+				exit(1);
+			}
 
 			break;
 
@@ -111,11 +107,6 @@ static void set_pwm_info(int pin)
 				exit(1);
 			}
 
-			pwm_info_t.ccr = 500;
-			pwm_info_t.arr = 1000;
-			pwm_info_t.div = 120;
-			pwm_info_t.div_stepping = 2;
-
 			break;
 
 		case PI_MODEL_CM4:
@@ -125,11 +116,6 @@ static void set_pwm_info(int pin)
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
-			pwm_info_t.ccr = 500;
-			pwm_info_t.arr = 1000;
-			pwm_info_t.div = 120;
-			pwm_info_t.div_stepping = 2;
 
 			break;
 
