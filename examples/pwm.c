@@ -26,111 +26,83 @@ static void set_pwm_info(int pin)
 	switch (model)
 	{
 		case PI_MODEL_ZERO_2:
-
 			if (pin != 3 && pin != 4 && pin != 21 && pin != 22) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			pwm_info_t.ccr = 512;
 			pwm_info_t.arr = 1024;
 			pwm_info_t.div = 1;
 			pwm_info_t.div_stepping = 1;
-
 			break;
-
 		case PI_MODEL_ZERO_2_W:
-
 			if (pin != 2 && pin != 9 && pin != 21 && pin != 22) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			pwm_info_t.ccr = 512;
 			pwm_info_t.arr = 1024;
 			pwm_info_t.div = 1;
 			pwm_info_t.div_stepping = 1;
-
 			break;
-
 		case PI_MODEL_3_PLUS:
-
 			if (pin != 2 && pin != 16) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			pwm_info_t.div_stepping = 1;
-
 			break;
-
+		case PI_MODEL_5_PRO:
+			if (pin != 2 && pin != 6 && pin != 5 && pin != 7 && pin != 17 && pin != 18 && pin != 21 && pin != 22) {
+				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
+				exit(1);
+			}
+			break;
 		case PI_MODEL_5:
-
 			if (pin != 0 && pin != 2 && pin != 5 && pin != 8 && pin != 9 && pin != 10 && pin != 14 && pin != 16) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			break;
-
 		case PI_MODEL_5B:
-
 			if (pin != 0 && pin != 2 && pin != 5 && pin != 8 && pin != 9 && pin != 10 && pin != 13 && pin != 15) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			break;
-
 		case PI_MODEL_5_PLUS:
-
 			if (pin != 0 && pin != 1 && pin != 2 && pin != 6 && pin != 9 && pin != 10 && pin != 13 && pin != 21 && pin != 22) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			break;
-
 		case PI_MODEL_5_MAX:
-
 			if (pin != 0 && pin != 1 && pin != 2 && pin != 8 && pin != 9 && pin != 17 && pin != 20 && pin != 21 && pin != 22 && pin !=23) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			break;
-
 		case PI_MODEL_CM5_TABLET:
-
 			if (pin != 0 && pin != 2 && pin != 5 && pin != 13) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			break;
-
 		case PI_MODEL_CM4:
 		case PI_MODEL_3B:
-
 			if (pin != 2 && pin != 21) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			break;
-
 		case PI_MODEL_AI_PRO:
-
 			if (pin != 19) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);
 			}
-
 			pwm_info_t.ccr = 750000;
 			pwm_info_t.arr = 1500000;
-
 			break;
-
 		default:
 			printf("Oops - unable to determine board type...");
 			exit(1);
@@ -140,7 +112,6 @@ static void set_pwm_info(int pin)
 int main(int argc, char *argv [])
 {
 	int i = 0;
-	int val = 0;
 	int pin= 0;
 	int model;
 

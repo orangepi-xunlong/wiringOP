@@ -6212,211 +6212,94 @@ void rk3588_set_pwm_reg(int pin, rk3588_soc_info * rk3588_soc_info_ptr)
 	rk3588_soc_info_ptr->pwm_mux_val = 0xb;
 	rk3588_soc_info_ptr->pwm_mux_offset = (pin % 4) << 2;
 
-	switch (OrangePiModel)
+	if (pin == 15 || pin == 16 || pin == 28) {
+		rk3588_soc_info_ptr->pwm_mux = RK3588_PMU2_IOC_BASE + (((pin >> 2) - 3) << 2);
+		rk3588_soc_info_ptr->pwm_mux_val = 0x3;
+	}
+
+	switch (pin)
 	{
-		case PI_MODEL_5_MAX:
-
-			if (pin == 15 || pin == 16) {
-				rk3588_soc_info_ptr->pwm_mux = RK3588_PMU2_IOC_BASE + (((pin >> 2) - 3) << 2);
-				rk3588_soc_info_ptr->pwm_mux_val = 0x3;
-			}
-
-			switch (pin)
+		case 15:
+		case 34:
+		case 58:  //PWM0CH0
+			rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
+			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH0_PERIOD_HPR;
+			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH0_DUTY_LPR;
+			rk3588_soc_info_ptr->ch_crtl = RK3588_CH0_CTRL;
+			break;
+		case 16:
+		case 35:
+		case 59:  //PWM0CH1
+			rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
+			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
+			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
+			rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
+			break;
+		case 39:
+		case 28:
+		case 50:  //PWM0CH3
+			rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
+			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
+			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
+			rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
+			break;
+		case 97:  //PWM2CH3
+			rk3588_soc_info_ptr->pwm_base = RK3588_PWM2_BASE;
+			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
+			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
+			rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
+			break;
+		case 109:  //PWM3CH0
+			rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
+			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH0_PERIOD_HPR;
+			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH0_DUTY_LPR;
+			rk3588_soc_info_ptr->ch_crtl = RK3588_CH0_CTRL;
+			break;
+		case 47:
+		case 110:  //PWM3CH1
+			rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
+			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
+			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
+			rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
+			break;
+		case 62:
+		case 114:
+		case 138:  //PWM3CH2
+			rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
+			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH2_PERIOD_HPR;
+			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH2_DUTY_LPR;
+			rk3588_soc_info_ptr->ch_crtl = RK3588_CH2_CTRL;
+			break;
+		case 54:
+		case 63:
+		case 139:  //PWM3CH3
+			rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
+			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
+			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
+			rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
+			break;
+		default:
+			printf("The pin you choose doesn't support hardware PWM.\n");
+			switch (OrangePiModel)
 			{
-				case 15:
-				case 34:  //PWM0CH0
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH0_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH0_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH0_CTRL;
+				case PI_MODEL_5_PRO:
+					printf("You can select wiringPi pin 2/5/6/7/17/18/21/22 for PWM pin.\n");
 					break;
-				case 16:
-				case 35:  //PWM0CH1
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
-					break;
-				case 39:  //PWM0CH3
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
-					break;
-				case 109:  //PWM3CH0
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH0_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH0_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH0_CTRL;
-					break;
-				case 47:
-				case 110:  //PWM3CH1
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
-					break;
-				case 62:
-				case 114:  //PWM3CH2
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH2_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH2_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH2_CTRL;
-					break;
-				default:
-					printf("The pin you choose doesn't support hardware PWM.\n");
+				case PI_MODEL_5_MAX:
 					printf("You can select wiringPi pin 0/1/2/8/9/17/20/21/22/23 for PWM pin.\n");
-					exit(1);
 					break;
-			}
-			break;
-
-		case PI_MODEL_CM5_TABLET:
-
-			switch (pin)
-			{
-				case 58:  //PWM0CH0  GPIO1_D2 PWM0_M1
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH0_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH0_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH0_CTRL;
-					break;
-				case 35:  //PWM0CH1  GPIO1_A3 PWM1_M2
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
-					break;
-				case 39:  //PWM0CH3  GPIO1_A7 PWM3_M3
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
-					break;
-				case 47:  //PWM3CH1  GPIO1_B7 PWM13_M2
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
-					break;
-				default:
-					printf("The pin you choose doesn't support hardware PWM.\n");
+				case PI_MODEL_CM5_TABLET:
 					printf("You can select wiringPi pin 0/2/5/13 for PWM pin.\n");
-					exit(1);
 					break;
-			}
-			break;
-
-		case PI_MODEL_5_PLUS:
-
-			if (pin == 15 || pin == 16) {
-				rk3588_soc_info_ptr->pwm_mux = RK3588_PMU2_IOC_BASE + (((pin >> 2) - 3) << 2);
-				rk3588_soc_info_ptr->pwm_mux_val = 0x3;
-			}
-
-			switch (pin)
-			{
-				case 15:
-				case 34:  //PWM0CH0
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH0_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH0_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH0_CTRL;
-					break;
-				case 16:
-				case 35:  //PWM0CH1
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
-					break;
-				case 97:  //PWM2CH3
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM2_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
-					break;
-				case 109:  //PWM3CH0
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH0_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH0_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH0_CTRL;
-					break;
-				case 110:  //PWM3CH1
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
-					break;
-				case 62:
-				case 114:  //PWM3CH2
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH2_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH2_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH2_CTRL;
-					break;
-				default:
-					printf("The pin you choose doesn't support hardware PWM.\n");
+				case PI_MODEL_5_PLUS:
 					printf("You can select wiringPi pin 0/1/2/6/9/10/13/21/22 for PWM pin.\n");
-					exit(1);
 					break;
-			}
-			break;
-
-		case PI_MODEL_5:
-		case PI_MODEL_5B:
-
-			if (pin == 28) {
-				rk3588_soc_info_ptr->pwm_mux = RK3588_PMU2_IOC_BASE + (((pin >> 2) - 3) << 2);
-				rk3588_soc_info_ptr->pwm_mux_val = 0x3;
-			}
-
-			switch (pin)
-			{
-				case 58:  //PWM0CH0
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH0_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH0_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH0_CTRL;
-					break;
-				case 35:
-				case 59:  //PWM0CH1
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
-					break;
-				case 28:
-				case 50:  //PWM0CH3
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM0_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
-					break;
-				case 47:  //PWM3CH1
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH1_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH1_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH1_CTRL;
-					break;
-				case 138:  //PWM3CH2
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH2_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH2_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH2_CTRL;
-					break;
-				case 54:  //PWM3CH3
-					rk3588_soc_info_ptr->pwm_base = RK3588_PWM3_BASE;
-					rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
-					rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
-					rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
-					break;
-				default:
-					printf("The pin you choose doesn't support hardware PWM.\n");
+				case PI_MODEL_5:
+				case PI_MODEL_5B:
 					printf("You can select wiringPi pin 0/2/5/8/9/10/14/16 for PWM pin.\n");
-					exit(1);
 					break;
 			}
+			exit(1);
 			break;
 	}
 }
