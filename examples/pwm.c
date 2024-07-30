@@ -21,7 +21,7 @@ static void set_pwm_info(int pin)
 	pwm_info_t.ccr = 500;
 	pwm_info_t.arr = 1000;
 	pwm_info_t.div = 120;
-	pwm_info_t.div_stepping = 2;
+	pwm_info_t.div_stepping = 12;
 
 	switch (model)
 	{
