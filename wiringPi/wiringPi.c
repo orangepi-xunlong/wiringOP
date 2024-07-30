@@ -6243,6 +6243,12 @@ void rk3588_set_pwm_reg(int pin, rk3588_soc_info * rk3588_soc_info_ptr)
 			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH3_DUTY_LPR;
 			rk3588_soc_info_ptr->ch_crtl = RK3588_CH3_CTRL;
 			break;
+		case 96:  //PWM2CH2
+			rk3588_soc_info_ptr->pwm_base = RK3588_PWM2_BASE;
+			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH2_PERIOD_HPR;
+			rk3588_soc_info_ptr->ch_duty_lpr = RK3588_CH2_DUTY_LPR;
+			rk3588_soc_info_ptr->ch_crtl = RK3588_CH2_CTRL;
+			break;
 		case 97:  //PWM2CH3
 			rk3588_soc_info_ptr->pwm_base = RK3588_PWM2_BASE;
 			rk3588_soc_info_ptr->ch_period_hpr = RK3588_CH3_PERIOD_HPR;
@@ -6292,7 +6298,7 @@ void rk3588_set_pwm_reg(int pin, rk3588_soc_info * rk3588_soc_info_ptr)
 					printf("You can select wiringPi pin 0/2/5/13 for PWM pin.\n");
 					break;
 				case PI_MODEL_5_PLUS:
-					printf("You can select wiringPi pin 0/1/2/6/9/10/13/21/22 for PWM pin.\n");
+					printf("You can select wiringPi pin 0/1/2/6/9/10/13/17/20/21/22 for PWM pin.\n");
 					break;
 				case PI_MODEL_5:
 				case PI_MODEL_5B:
