@@ -6301,8 +6301,9 @@ void rk3588_set_pwm_reg(int pin, rk3588_soc_info * rk3588_soc_info_ptr)
 					printf("You can select wiringPi pin 0/1/2/6/9/10/13/17/20/21/22 for PWM pin.\n");
 					break;
 				case PI_MODEL_5:
-				case PI_MODEL_5B:
 					printf("You can select wiringPi pin 0/2/5/8/9/10/14/16 for PWM pin.\n");
+				case PI_MODEL_5B:
+					printf("You can select wiringPi pin 0/2/5/8/9/10/13/15 for PWM pin.\n");
 					break;
 			}
 			exit(1);
