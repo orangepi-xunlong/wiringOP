@@ -925,7 +925,7 @@ extern int orangepi_set_gpio_alt(int pin, int mode);
 extern void OrangePi_set_gpio_pullUpDnControl (int pin, int pud);
 extern void orangepi_pwm_set_act(int pin,int act_cys);
 extern void orangepi_pwm_set_period(int pin,unsigned int period_cys);
-extern void sunxi_pwm_set_clk(int pin,int clk);
+extern void orangepi_pwm_set_clk(int pin,int clk);
 extern void orangepi_pwm_set_tone(int pin,int freq);
 
 void set_soc_info(void);
