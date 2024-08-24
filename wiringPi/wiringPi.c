@@ -252,6 +252,22 @@ static int ORANGEPI_PIN_MASK_ZERO_2_W[12][32] =  //[BANK]  [INDEX]
 	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PE
 };
 
+static int ORANGEPI_PIN_MASK_4A[12][32] =  //[BANK]  [INDEX]
+{
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PA
+	{ 0, 1, 2, 3, 4, 5, 6, 7, 8,-1,-1,11,12,13,14,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PB
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PC
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PD
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PE
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PF
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PG
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PH
+	{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PI
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PJ
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PK
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PE
+};
+
 static int ORANGEPI_PIN_MASK_800[5][32] =  //[BANK]	[INDEX]
 {
 	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
@@ -864,6 +880,30 @@ int pinToGpio_ZERO_2_W[64] =
 	 76, 272,      //24,25
 	260, 259,      //26,27
 	
+	-1,  -1,      //28,29
+	-1,  -1,      //30,31
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 63
+};
+
+int pinToGpio_4A[64] =
+{
+	257, 256,     // 0, 1
+	 36,  45,     // 2, 3
+	 46,  32,     // 4  5
+	 37,  33,     // 6, 7
+	 34, 269,     // 8, 9
+	270, 260,     //10,11
+	261, 262,     //12,13
+	259, 258,     //14,15
+	263, 265,     //16,17
+	264,  35,     //18,19
+	 43, 267,     //20,21
+	268,  38,     //22,23
+	266,  44,     //24,25
+	 39,  40,     //26,27
+
 	-1,  -1,      //28,29
 	-1,  -1,      //30,31
 
@@ -1639,6 +1679,34 @@ int physToGpio_ZERO_2_W[64] =
 	258,  76,
 	272, 260,
 	 -1, 259,
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	   // ... 56
+	-1, -1, -1, -1, -1, -1, -1, 			 		   // ... 63
+};
+
+int physToGpio_4A[64] =
+{
+	 -1,
+	 -1,  -1,
+	257,  -1,
+	256,  -1,
+	 36,  45,
+	 -1,  46,
+	 32,  37,
+	 33,  -1,
+	 34, 269,
+	 -1, 270,
+	260,  -1,
+	261, 262,
+	259, 258,
+	 -1, 263,
+	265, 264,
+	 35,  -1,
+	 43, 267,
+	268,  -1,
+	 38, 266,
+	 44,  39,
+	 -1,  40,
 
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	   // ... 56
 	-1, -1, -1, -1, -1, -1, -1, 			 		   // ... 63
@@ -2582,6 +2650,7 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepi-rk3399.",         16) == 0) { *model = PI_MODEL_RK3399; }
 	else if (strncmp(revision, "orangepi800.",             12) == 0) { *model = PI_MODEL_800; }
 	else if (strncmp(revision, "orangepi4.",               10) == 0) { *model = PI_MODEL_4; }
+	else if (strncmp(revision, "orangepi4a.",              11) == 0) { *model = PI_MODEL_4A; }
 	else if (strncmp(revision, "orangepi4-lts.",           14) == 0) { *model = PI_MODEL_4_LTS; }
 	else if (strncmp(revision, "orangepir1plus.",          15) == 0) { *model = PI_MODEL_R1_PLUS; }
 	else if (strncmp(revision, "orangepi-r1plus.",         16) == 0) { *model = PI_MODEL_R1_PLUS; }
@@ -4690,6 +4759,18 @@ void set_soc_info(void)
 			sunxi_gpio_info_t.gpio_base_offset = 0x0;
 			sunxi_gpio_info_t.r_gpio_base_offset = 0x0;
 			sunxi_gpio_info_t.pwm_base_addr = H6_PWM_BASE;
+			sunxi_gpio_info_t.gpio_bank_offset = 0x24;
+			sunxi_gpio_info_t.pull_offset = 0x1c;
+			sunxi_gpio_info_t.gpio_cfg_mask = 0x7;
+			break;
+		case PI_MODEL_4A:
+			sunxi_gpio_info_t.gpio_base_addr = A527_GPIO_BASE_ADDR;
+			sunxi_gpio_info_t.r_gpio_base_addr = H6_R_GPIO_BASE_ADDR;
+			sunxi_gpio_info_t.gpio_base_offset = 0x0;
+			sunxi_gpio_info_t.r_gpio_base_offset = 0x0;
+			sunxi_gpio_info_t.gpio_bank_offset = 0x30;
+			sunxi_gpio_info_t.pull_offset = 0x24;
+			sunxi_gpio_info_t.gpio_cfg_mask = 0xf;
 			break;
 		case PI_MODEL_ZERO:
 		case PI_MODEL_ZERO_PLUS_2:
@@ -4703,6 +4784,9 @@ void set_soc_info(void)
 			sunxi_gpio_info_t.gpio_base_offset = 0x800;
 			sunxi_gpio_info_t.r_gpio_base_offset = 0xc00;
 			sunxi_gpio_info_t.pwm_base_addr = H3_PWM_BASE;
+			sunxi_gpio_info_t.gpio_bank_offset = 0x24;
+			sunxi_gpio_info_t.pull_offset = 0x1c;
+			sunxi_gpio_info_t.gpio_cfg_mask = 0x7;
 			break;
 		default:
 			break;
@@ -4833,6 +4917,11 @@ int wiringPiSetup (void)
 			pinToGpio =  pinToGpio_ZERO_2_W;
 			physToGpio = physToGpio_ZERO_2_W;
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_ZERO_2_W;
+			break;
+		case PI_MODEL_4A:
+			pinToGpio =  pinToGpio_4A;
+			physToGpio = physToGpio_4A;
+			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_4A;
 			break;
 		case PI_MODEL_800:
 			pinToGpio =  pinToGpio_800;
@@ -4967,7 +5056,7 @@ int wiringPiSetup (void)
 		case PI_MODEL_3: case PI_MODEL_LTIE_2: case PI_MODEL_ZERO_2:
 		case PI_MODEL_ZERO: case PI_MODEL_ZERO_PLUS_2: case PI_MODEL_WIN:
 		case PI_MODEL_PRIME: case PI_MODEL_PC_2: case PI_MODEL_ZERO_PLUS:
-		case PI_MODEL_H3: case PI_MODEL_ZERO_2_W:
+		case PI_MODEL_H3: case PI_MODEL_ZERO_2_W: case PI_MODEL_4A:
 	
 			sunxi_gpio_info_t.pwm = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, sunxi_gpio_info_t.pwm_base_addr);
 			if ((int32_t)(unsigned long)sunxi_gpio_info_t.pwm == -1)
@@ -5394,6 +5483,10 @@ int wiringPiSetupSys (void)
 		case PI_MODEL_ZERO_2_W:
 			pinToGpio =  pinToGpio_ZERO_2_W;
 			physToGpio = physToGpio_ZERO_2_W;
+			break;
+		case PI_MODEL_4A:
+			pinToGpio =  pinToGpio_4A;
+			physToGpio = physToGpio_4A;
 			break;
 		case PI_MODEL_800:
 			pinToGpio =  pinToGpio_800;
@@ -6246,13 +6339,13 @@ int orangepi_get_gpio_mode(int pin)
 			if (bank == 11)
 				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + ((index >> 3) << 2);
 			else
-				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + ((index >> 3) << 2);
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * sunxi_gpio_info_t.gpio_bank_offset) + ((index >> 3) << 2);
 
 			/* Ignore unused gpio */
 			if (ORANGEPI_PIN_MASK[bank][index] != -1)
 			{
 				regval = readR(phyaddr);
-				mode = (regval >> offset) & 7;
+				mode = (regval >> offset) & sunxi_gpio_info_t.gpio_cfg_mask;
 			}
 
 			return mode;
@@ -7452,7 +7545,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 			if (bank == 11)
 				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + ((index >> 3) << 2);
 			else
-				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + ((index >> 3) << 2);
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * sunxi_gpio_info_t.gpio_bank_offset) + ((index >> 3) << 2);
 
 			/* Ignore unused gpio */
 			if (ORANGEPI_PIN_MASK[bank][index] != -1)
@@ -7467,7 +7560,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 				/* Set Input */
 				if(INPUT == mode)
 				{
-					regval &= ~(7 << offset);
+					regval &= ~(sunxi_gpio_info_t.gpio_cfg_mask << offset);
 					writeR(regval, phyaddr);
 					regval = readR(phyaddr);
 
@@ -7477,13 +7570,14 @@ int orangepi_set_gpio_mode(int pin, int mode)
 				else if(OUTPUT == mode)
 				{
 					/* Set Output */
-					regval &= ~(7 << offset);
+					regval &= ~(sunxi_gpio_info_t.gpio_cfg_mask << offset);
 					regval |=  (1 << offset);
 
 					if (wiringPiDebug)
 						printf("Out mode ready set val: 0x%x\n",regval);
 
 					writeR(regval, phyaddr);
+					//printf("write regval = %#x\n", regval);
 					regval = readR(phyaddr);
 
 					if (wiringPiDebug)
@@ -7509,7 +7603,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 					H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
 
 					// set pin PWMx to pwm mode
-					regval &= ~(7 << offset);
+					regval &= ~(sunxi_gpio_info_t.gpio_cfg_mask << offset);
 					if (OrangePiModel == PI_MODEL_ZERO_2)
 						regval |= (0x4 << offset); // ALT4 PWM
 					else if (OrangePiModel == PI_MODEL_ZERO_2_W)
@@ -7568,7 +7662,7 @@ int orangepi_set_gpio_alt(int pin, int mode)
 	if (bank == 11)
 		phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + ((index >> 3) << 2);
 	else
-		phyaddr = sunxi_gpio_info_t.gpio_base_addr + (bank * 36) + ((index >> 3) << 2);
+		phyaddr = sunxi_gpio_info_t.gpio_base_addr + (bank * sunxi_gpio_info_t.gpio_bank_offset) + ((index >> 3) << 2);
 
 	/* Ignore unused gpio */
 	if (ORANGEPI_PIN_MASK[bank][index] != -1)
@@ -7577,7 +7671,7 @@ int orangepi_set_gpio_alt(int pin, int mode)
 			printf("Register[%#x]: %#x index:%d\n", phyaddr, regval, index);
 
 		regval = readR(phyaddr);
-		regval &= ~(7 << offset);
+		regval &= ~(sunxi_gpio_info_t.gpio_cfg_mask << offset);
 		regval |=  (mode << offset);
 		writeR(regval, phyaddr);
 	}
@@ -7943,9 +8037,9 @@ int orangepi_digitalWrite(int pin, int value)
 			}
 			else
 			{
-				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + 0x10;
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * sunxi_gpio_info_t.gpio_bank_offset) + 0x10;
 			}
-			
+
 			/* Ignore unused gpio */
 			if (ORANGEPI_PIN_MASK[bank][index] != -1)
 			{
@@ -8094,7 +8188,7 @@ int orangepi_digitalRead(int pin)
 			if (bank == 11) 
 				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + 0x10;
 			else
-				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + 0x10;
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * sunxi_gpio_info_t.gpio_bank_offset) + 0x10;
 
 			break;
 
@@ -8283,9 +8377,9 @@ void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 			offset = ((index % 16) << 1);
 
 			if (bank == 11)
-				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + ((index >> 4) << 2) + 0x1c;
+				phyaddr = sunxi_gpio_info_t.r_gpio_base_addr + sunxi_gpio_info_t.r_gpio_base_offset + ((index >> 4) << 2) + sunxi_gpio_info_t.pull_offset;
 			else
-				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * 36) + ((index >> 4) << 2) + 0x1c;
+				phyaddr = sunxi_gpio_info_t.gpio_base_addr + sunxi_gpio_info_t.gpio_base_offset + (bank * sunxi_gpio_info_t.gpio_bank_offset) + ((index >> 4) << 2) + sunxi_gpio_info_t.pull_offset;
 
 			bit_enable = 0;
 

@@ -70,6 +70,10 @@
 #define H6_R_GPIO_BASE_ADDR                     0x07022000U
 /*********** Allwinner H6 *************/
 
+/********** Allwinner A527 ************/
+#define A527_GPIO_BASE_ADDR                     0x02000000U
+/********** Allwinner A527 ************/
+
 typedef struct {
 	unsigned int gpio_base_addr;
 	unsigned int r_gpio_base_addr;
@@ -77,6 +81,9 @@ typedef struct {
 	unsigned int * r_gpio;
 	unsigned int gpio_base_offset;
 	unsigned int r_gpio_base_offset;
+	unsigned int gpio_bank_offset;
+	unsigned int pull_offset;
+	unsigned int gpio_cfg_mask;
 	unsigned int pwm_base_addr;
 	unsigned int * pwm;
 	unsigned int pwm_ctrl;
@@ -788,6 +795,9 @@ extern int wiringPiDebug;
 
 /* JH7110 */
 #define PI_MODEL_RV              80
+
+/* Allwinner A527 */
+#define PI_MODEL_4A              90
 
 extern const char *piModelNames    [16] ;
 

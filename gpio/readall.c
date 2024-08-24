@@ -79,6 +79,11 @@ static char * alts_common [] =
   "IN", "OUT", "ALT2", "ALT3", "ALT4", "ALT5", "ALT6", "OFF"
 };
 
+static char * alts_a527 [] =
+{
+  "IN", "OUT", "ALT2", "ALT3", "ALT4", "ALT5", "ALT6",  "ALT7", "ALT8", "ALT9", "ALT10", "ALT11", "ALT12", "ALT13", "ALT14", "OFF",
+};
+
 static char * alts_rk3588 [] =
 {
   "IN", "OUT", "ALT1", "ALT2", "ALT3", "ALT4", "ALT5", "ALT6", "ALT7", "ALT8", "ALT9", "ALT10", "ALT11", "ALT12", "ALT13", "ALT14",
@@ -603,6 +608,34 @@ static char * physNames_ZERO_2[64] =
 	"    PH10", "        ",
 };
 
+static int physToWpi_4A[64] =
+{
+        -1,     // 0
+        -1, -1, // 1, 2
+         0, -1, // 3, 4
+         1, -1, // 5, 6
+         2,  3, // 7, 8
+        -1,  4, // 9, 10
+         5,  6, //11, 12
+         7, -1, //13, 14
+         8,  9, //15, 16
+        -1, 10, //17, 18
+        11, -1, //19, 20
+        12, 13, //21, 22
+        14, 15, //23, 24
+        -1, 16, //25, 26
+        17, 18, //27, 28
+        19, -1, //29, 30
+        20, 21, //31, 32
+        22, -1, //33, 34
+        23, 24, //35, 36
+        25, 26, //37, 38
+        -1, 27, //39, 40
+
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
+        -1, -1, -1, -1, -1, -1, -1, -1                              // 56-> 63
+};
+
 static int physToWpi_ZERO_2_W[64] =
 {
         -1,     // 0
@@ -629,6 +662,31 @@ static int physToWpi_ZERO_2_W[64] =
 
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //41-> 55
         -1, -1, -1, -1, -1, -1, -1, -1                              // 56-> 63
+};
+
+static char * physNames_4A[64] =
+{
+	      NULL,
+	"    3.3V", "5V      ",
+	"   SDA.4", "5V      ",
+	"   SCL.4", "GND     ",
+	"    PWM8", "TXD.7   ",
+	"     GND", "RXD.7   ",
+	"   TXD.2", "PB05    ",
+	"   RXD.2", "GND     ",
+	"    PB02", "PI13    ",
+	"    3.3V", "PI14    ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "TXD.6   ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "RXD.6   ",
+	"   SDA.5", "SCL.5   ",
+	"    PB03", "GND     ",
+	"    PB11", "PWM12   ",
+	"   PWM13", "GND     ",
+	"    PB06", "PI10    ",
+	"    PB12", "PB07    ",
+	"     GND", "PB08    ",
 };
 
 static char * physNames_ZERO_2_W[64] =
@@ -1933,6 +1991,12 @@ void OrangePiReadAll(int model)
 			physNames =  physNames_ZERO_2_W;
 			alts = alts_common;
 			break;
+		case PI_MODEL_4A:
+			printf (" +------+-----+----------+--------+---+  OPI 4A  +---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_4A;
+			physNames =  physNames_4A;
+			alts = alts_a527;
+			break;
 		case PI_MODEL_RK3399:
 			printf (" +------+-----+----------+--------+---+OPi RK3399+---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_RK3399;
@@ -2090,6 +2154,7 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_3_PLUS:
 		case PI_MODEL_AI_PRO:
 		case PI_MODEL_RV:
+		case PI_MODEL_4A:
 			for (pin = 1 ; pin <= 40; pin += 2)
 				readallPhys(pin);
 			break;
@@ -2160,6 +2225,9 @@ void OrangePiReadAll(int model)
 			break;
 		case PI_MODEL_ZERO_2_W:
 			printf (" +------+-----+----------+--------+---+  ZERO2W  +---+--------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_4A:
+			printf (" +------+-----+----------+--------+---+  OPI 4A  +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_RK3399:
 			printf (" +------+-----+----------+--------+---+OPi RK3399+---+--------+----------+-----+------+\n");
