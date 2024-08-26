@@ -78,6 +78,7 @@ static void set_pwm_info(int pin)
 			}
 			break;
 		case PI_MODEL_5_MAX:
+		case PI_MODEL_5_ULTRA:
 			if (pin != 0 && pin != 1 && pin != 2 && pin != 8 && pin != 9 && pin != 17 && pin != 20 && pin != 21 && pin != 22 && pin !=23) {
 				fprintf (stderr, "the pin you choose doesn't support hardware PWM\n") ;
 				exit(1);

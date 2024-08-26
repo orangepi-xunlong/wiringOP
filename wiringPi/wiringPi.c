@@ -6569,6 +6569,7 @@ void rk3588_set_pwm_reg(int pin, rk3588_soc_info * rk3588_soc_info_ptr)
 					printf("You can select wiringPi pin 2/5/6/7/17/18/21/22 for PWM pin.\n");
 					break;
 				case PI_MODEL_5_MAX:
+				case PI_MODEL_5_ULTRA:
 					printf("You can select wiringPi pin 0/1/2/8/9/17/20/21/22/23 for PWM pin.\n");
 					break;
 				case PI_MODEL_CM5_TABLET:
