@@ -8012,6 +8012,7 @@ int orangepi_digitalWrite(int pin, int value)
 			break;
 
 		case PI_MODEL_RV:
+		{
 			unsigned int dout = 0;
 			unsigned int offset = 4 * (pin / 4);
 			unsigned int shift  = 8 * (pin % 4);
@@ -8028,7 +8029,7 @@ int orangepi_digitalWrite(int pin, int value)
 			}
 
 			break;
-
+		}
 		default:
 			
 			if (bank == 11)
