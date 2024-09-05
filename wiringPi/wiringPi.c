@@ -6014,6 +6014,7 @@ int orangepi_get_gpio_mode(int pin)
 	unsigned int iomux_val = 0; 			//for ai pro
 	unsigned int iomux_phyaddr = 0, gpio_dir_phyaddr = 0;	//for ai pro
 	unsigned int offset, shift;
+	unsigned int doen, reg_doen;
 
 	switch (OrangePiModel)
 	{
@@ -6318,8 +6319,7 @@ int orangepi_get_gpio_mode(int pin)
 			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
 				offset = 4 * (pin / 4);
 				shift  = 8 * (pin % 4);
-				unsigned int doen;
-				unsigned int reg_doen = JH7110_SYS_IOMUX_BASE + JH7110_SYS_DOEN_REG_BASE + offset;
+				reg_doen = JH7110_SYS_IOMUX_BASE + JH7110_SYS_DOEN_REG_BASE + offset;
 
 				doen = readR(reg_doen);
 				doen = (doen >> shift) & JH7110_DOEN_MASK;
@@ -6640,6 +6640,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 	unsigned int iomux_val = 0; //for ai pro
 	unsigned int iomux_phyaddr = 0, gpio_dir_phyaddr = 0; //for ai pro
 	unsigned int pwm_prd_default = 0; //for ai pro pwm
+	unsigned int dout, doen, dout_mask, doen_mask, reg_dout, reg_doen, reg_cfg;
 
 	switch (OrangePiModel)
 	{
@@ -7508,12 +7509,11 @@ int orangepi_set_gpio_mode(int pin, int mode)
 
 		        offset = 4 * (pin / 4);
 			shift  = 8 * (pin % 4);
-			unsigned int dout, doen;
-			unsigned int dout_mask = JH7110_DOUT_MASK << shift;
-			unsigned int doen_mask = JH7110_DOEN_MASK << shift;
-			unsigned int reg_dout = JH7110_SYS_IOMUX_BASE + JH7110_SYS_DOUT_REG_BASE + offset;
-			unsigned int reg_doen = JH7110_SYS_IOMUX_BASE + JH7110_SYS_DOEN_REG_BASE + offset;
-			unsigned int reg_cfg = JH7110_SYS_IOMUX_BASE + JH7110_SYS_GPO_PDA_0_74_CFG + 4 * pin;
+			dout_mask = JH7110_DOUT_MASK << shift;
+			doen_mask = JH7110_DOEN_MASK << shift;
+			reg_dout = JH7110_SYS_IOMUX_BASE + JH7110_SYS_DOUT_REG_BASE + offset;
+			reg_doen = JH7110_SYS_IOMUX_BASE + JH7110_SYS_DOEN_REG_BASE + offset;
+			reg_cfg = JH7110_SYS_IOMUX_BASE + JH7110_SYS_GPO_PDA_0_74_CFG + 4 * pin;
 
 			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
 				if (INPUT == mode) {
@@ -7698,6 +7698,7 @@ int orangepi_digitalWrite(int pin, int value)
 	unsigned int temp = 0;
 	unsigned int bit_enable = 0;
 	unsigned int offset;
+	unsigned int shift, dout_mask, reg_dout, dout, ddout;
 
 	switch (OrangePiModel)
 	{
@@ -8013,16 +8014,16 @@ int orangepi_digitalWrite(int pin, int value)
 			break;
 
 		case PI_MODEL_RV:
-			unsigned int dout = 0;
-			unsigned int offset = 4 * (pin / 4);
-			unsigned int shift  = 8 * (pin % 4);
-			unsigned int dout_mask = JH7110_DOUT_MASK << shift;
-			unsigned int reg_dout = JH7110_SYS_IOMUX_BASE + JH7110_SYS_DOUT_REG_BASE + offset;
+			dout = 0;
+			offset = 4 * (pin / 4);
+			shift  = 8 * (pin % 4);
+			dout_mask = JH7110_DOUT_MASK << shift;
+			reg_dout = JH7110_SYS_IOMUX_BASE + JH7110_SYS_DOUT_REG_BASE + offset;
 
 			dout <<= shift;
 
 			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
-				unsigned int ddout = (value ? 1 : 0) << shift;
+				ddout = (value ? 1 : 0) << shift;
 
 				ddout |= readR(reg_dout) & ~dout_mask;
 				writeR(ddout, reg_dout);
