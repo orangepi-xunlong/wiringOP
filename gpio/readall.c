@@ -2052,7 +2052,7 @@ void OrangePiReadAll(int model)
 			alts = alts_rk3588;
 			break;
 		case PI_MODEL_5_ULTRA:
-			printf (" +------+-----+----------+--------+---+OPI5-ULTAR+---+--------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+OPI5-ULTRA+---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_5ULTRA;
 			physNames =  physNames_5ULTRA;
 			alts = alts_rk3588;
@@ -2257,7 +2257,7 @@ void OrangePiReadAll(int model)
 			printf (" +------+-----+----------+--------+---+  PI5 MAX +---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_5_ULTRA:
-			printf (" +------+-----+----------+--------+---+OPI5-ULTAR+---+--------+----------+-----+------+\n");
+			printf (" +------+-----+----------+--------+---+OPI5-ULTRA+---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_5_PLUS:
 			printf (" +------+-----+----------+--------+---+ PI5 PLUS +---+--------+----------+-----+------+\n");
