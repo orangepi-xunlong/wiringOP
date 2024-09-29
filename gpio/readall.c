@@ -1567,9 +1567,10 @@ static int physToWpi_3B[64] =
 	23, 24, //35,36
 	25, 26, //37,38
 	-1, 27, //39,40
+	-1, 28, //gnd,fan
 
 	// Padding:
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
 	-1, -1, -1, -1, -1, -1, -1,    					// ... 63
 };
 
@@ -1621,6 +1622,7 @@ static char * physNames_3B[64] =
 	"GPIO3_D0", "GPIO3_D5",
 	"GPIO3_D3", "GPIO3_D2",
 	"     GND", "GPIO3_D1",
+	"GND(FAN)", "GPIO0_C6",
 };
 
 static int physToWpi_3PLUS[64] =
@@ -2136,6 +2138,10 @@ void OrangePiReadAll(int model)
 
 	switch (model)
 	{
+		case PI_MODEL_3B:
+			for (pin = 1 ; pin <= 42; pin += 2)
+				readallPhys(pin);
+			break;
 		case PI_MODEL_H3:
 		case PI_MODEL_RK3399:
 		case PI_MODEL_4:
@@ -2149,7 +2155,6 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_AI_MAX:
 		case PI_MODEL_900:
 		case PI_MODEL_CM4:
-		case PI_MODEL_3B:
 		case PI_MODEL_ZERO_2_W:
 		case PI_MODEL_3_PLUS:
 		case PI_MODEL_AI_PRO:
