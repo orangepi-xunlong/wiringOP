@@ -1567,7 +1567,7 @@ static int physToWpi_3B[64] =
 	23, 24, //35,36
 	25, 26, //37,38
 	-1, 27, //39,40
-	-1, 28, //gnd,fan
+	28, -1, //fan,+5V
 
 	// Padding:
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
@@ -1622,7 +1622,7 @@ static char * physNames_3B[64] =
 	"GPIO3_D0", "GPIO3_D5",
 	"GPIO3_D3", "GPIO3_D2",
 	"     GND", "GPIO3_D1",
-	"GND(FAN)", "GPIO0_C6",
+	"GPIO0_C6", "+5V(FAN)",
 };
 
 static int physToWpi_3PLUS[64] =
