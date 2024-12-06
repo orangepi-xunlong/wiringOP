@@ -608,6 +608,50 @@ static char * physNames_ZERO_2[64] =
 	"    PH10", "        ",
 };
 
+static int physToWpi_ZERO_3_PLUS[64] =
+{
+	-1, 	// 0
+	-1, -1, // 1, 2
+	 0, -1, // 3, 4
+	 1, -1, // 5, 6
+	 2,  3, // 7, 8
+	-1,  4, // 8, 10
+	 5,  6, //11, 12
+	 7, -1, //13, 14
+	 8,  9, //15, 16
+	-1, 10, //17, 18
+	11, -1, //19, 20
+	12, 13, //21, 22
+	14, 15, //23, 24
+	-1, 16, //25, 26
+	-1, -1, //27, 28
+	-1, -1, //29, 30
+	-1, -1, //31, 32
+	-1, -1, //33, 34
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1,  													  // ... 63
+};
+
+static char * physNames_ZERO_3_PLUS[64] = 
+{
+	NULL,
+	"    3.3V", "5V      ",
+	"   SDA.3", "5V      ",
+	"   SCL.3", "GND     ",
+	"     PC8", "TXD.5   ",
+	"     GND", "RXD.5   ",
+	"     PC9", "PC1     ",
+	"    PC10", "GND     ",
+	"    PC11", "PH0     ",
+	"    3.3V", "PH1     ",
+	"  MOSI.1", "GND     ",
+	"  MISO.1", "PC7     ",
+	"  SCLK.1", "CE.1    ",
+	"     GND", "PC12    ",
+};
+
 static int physToWpi_4A[64] =
 {
         -1,     // 0
@@ -1991,6 +2035,12 @@ void OrangePiReadAll(int model)
 			physNames =  physNames_ZERO_2_W;
 			alts = alts_common;
 			break;
+		case PI_MODEL_ZERO_3_PLUS:
+			printf (" +------+-----+----------+--------+---+ ZERO3PLUS+---+--------+----------+-----+------+\n");
+			physToWpi =  physToWpi_ZERO_3_PLUS;
+			physNames =  physNames_ZERO_3_PLUS;
+			alts = alts_common;
+			break;
 		case PI_MODEL_4A:
 			printf (" +------+-----+----------+--------+---+  OPI 4A  +---+--------+----------+-----+------+\n");
 			physToWpi =  physToWpi_4A;
@@ -2163,6 +2213,7 @@ void OrangePiReadAll(int model)
 		case PI_MODEL_ZERO_PLUS_2:
 		case PI_MODEL_3:
 		case PI_MODEL_ZERO:
+		case PI_MODEL_ZERO_3_PLUS:
 		case PI_MODEL_800:
 		case PI_MODEL_4_LTS:
 		case PI_MODEL_5:
@@ -2225,6 +2276,9 @@ void OrangePiReadAll(int model)
 			break;
 		case PI_MODEL_ZERO_2_W:
 			printf (" +------+-----+----------+--------+---+  ZERO2W  +---+--------+----------+-----+------+\n");
+			break;
+		case PI_MODEL_ZERO_3_PLUS:
+			printf (" +------+-----+----------+--------+---+ ZERO3PLUS+---+--------+----------+-----+------+\n");
 			break;
 		case PI_MODEL_4A:
 			printf (" +------+-----+----------+--------+---+  OPI 4A  +---+--------+----------+-----+------+\n");

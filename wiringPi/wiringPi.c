@@ -252,6 +252,22 @@ static int ORANGEPI_PIN_MASK_ZERO_2_W[12][32] =  //[BANK]  [INDEX]
 	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PE
 };
 
+static int ORANGEPI_PIN_MASK_ZERO_3_PLUS[12][32] =  //[BANK]  [INDEX]
+{
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PA
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PB
+	{ 1, 1,-1,-1,-1,-1,-1, 7, 8, 9,10,11,12,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PC
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PD
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PE
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PF
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PG
+	{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PH
+	{-1,-1,-1,-1,-1,-1, 6,-1,-1,-1,-1,-1,-1,-1,-1,-1,16,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PI
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PJ
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PK
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PE
+};
+
 static int ORANGEPI_PIN_MASK_4A[12][32] =  //[BANK]  [INDEX]
 {
 	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PA
@@ -886,6 +902,20 @@ int pinToGpio_ZERO_2_W[64] =
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 63
 };
+
+int pinToGpio_ZERO_3_PLUS[64] =
+{
+	229, 228, 72, 226, 227,  73,  65,
+	 74,  75, 224, 225, 231, 232,  71,
+	230, 233, 76, -1, -1, -1, -1,
+	-1, -1,
+
+	// Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 				  	 // ... 31
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 47
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,           // ... 63
+};
+
 
 int pinToGpio_4A[64] =
 {
@@ -1682,6 +1712,31 @@ int physToGpio_ZERO_2_W[64] =
 
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	   // ... 56
 	-1, -1, -1, -1, -1, -1, -1, 			 		   // ... 63
+};
+
+int physToGpio_ZERO_3_PLUS[64] =
+{
+	 -1,	      // 0
+	 -1,  -1,     // 1, 2
+	229,  -1,
+	228,  -1,
+	 72, 226,
+	 -1, 227,
+	 73,  65,
+	 74,  -1,
+	 75,  224,
+	 -1,  225,
+	231,  -1,
+	232,  71,
+	230, 233,
+	 -1,  76,     // 25, 26
+	 -1,  -1,     // 27
+	 -1,  -1,     // 29
+	 -1,  -1,     // 31
+	 -1,  -1,     // 33
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 49
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 63
 };
 
 int physToGpio_4A[64] =
@@ -2646,6 +2701,7 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepizero2.",           14) == 0) { *model = PI_MODEL_ZERO_2; }
 	else if (strncmp(revision, "orangepizero2w.",          14) == 0) { *model = PI_MODEL_ZERO_2_W; }
 	else if (strncmp(revision, "orangepizero3.",           14) == 0) { *model = PI_MODEL_ZERO_2; }
+	else if (strncmp(revision, "orangepizero3plus.",       18) == 0) { *model = PI_MODEL_ZERO_3_PLUS; }
 	else if (strncmp(revision, "orangepirk3399.",          15) == 0) { *model = PI_MODEL_RK3399; }
 	else if (strncmp(revision, "orangepi-rk3399.",         16) == 0) { *model = PI_MODEL_RK3399; }
 	else if (strncmp(revision, "orangepi800.",             12) == 0) { *model = PI_MODEL_800; }
@@ -2818,6 +2874,7 @@ void sunxi_pwm_set_enable(int en)
 	{
 		case PI_MODEL_ZERO_2:
 		case PI_MODEL_ZERO_2_W:
+		case PI_MODEL_ZERO_3_PLUS:
 
 			if(SUNXI_PWM_TYPE == SUNXI_V2_PWM_TYPE) {
 				sunxi_pwm_set_enable_v2(en);
@@ -2954,6 +3011,7 @@ void orangepi_pwm_set_tone(int pin,int freq)
 
 		case PI_MODEL_ZERO_2:
 		case PI_MODEL_ZERO_2_W:
+		case PI_MODEL_ZERO_3_PLUS:
 
 			H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
 
@@ -3178,6 +3236,7 @@ void orangepi_pwm_set_clk(int pin,int clk)
 
 		case PI_MODEL_ZERO_2:
 		case PI_MODEL_ZERO_2_W:
+		case PI_MODEL_ZERO_3_PLUS:
 
 			if ((clk < 1) || (clk > 256)) {
 				fprintf (stderr, "gpio: clock must be between 1 and 256\n") ;
@@ -3394,6 +3453,7 @@ void orangepi_pwm_set_period(int pin, unsigned int period_cys)
 
 		case PI_MODEL_ZERO_2:
 		case PI_MODEL_ZERO_2_W:
+		case PI_MODEL_ZERO_3_PLUS:
 
 			if ((period_cys < 1) || (period_cys > 65536)) {
 				fprintf (stderr, "gpio: range must be between 1 and 65536\n") ;
@@ -3558,6 +3618,7 @@ void orangepi_pwm_set_act(int pin, int act_cys)
 
 		case PI_MODEL_ZERO_2:
 		case PI_MODEL_ZERO_2_W:
+		case PI_MODEL_ZERO_3_PLUS:
 
 			if ((act_cys < 0) || (act_cys > 65535)) {
 				fprintf (stderr, "gpio: range must be between 0 and 65535\n");
@@ -3697,7 +3758,8 @@ void orangepi_pwm_set_act(int pin, int act_cys)
 
 void pwmSetMode(int pin,int mode)
 {
-    if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W) {
+    if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W \
+		    || OrangePiModel == PI_MODEL_ZERO_3_PLUS) {
         H618_set_pwm_reg(pin,&sunxi_gpio_info_t);
     }
 
@@ -4755,6 +4817,7 @@ void set_soc_info(void)
 		case PI_MODEL_LTIE_2:
 		case PI_MODEL_ZERO_2:
 		case PI_MODEL_ZERO_2_W:
+		case PI_MODEL_ZERO_3_PLUS:
 			sunxi_gpio_info_t.gpio_base_addr = H6_GPIO_BASE_ADDR;
 			sunxi_gpio_info_t.r_gpio_base_addr = H6_R_GPIO_BASE_ADDR;
 			sunxi_gpio_info_t.gpio_base_offset = 0x0;
@@ -4817,6 +4880,7 @@ void set_soc_info(void)
 			break;
 		case PI_MODEL_ZERO_2:
 		case PI_MODEL_ZERO_2_W:
+		case PI_MODEL_ZERO_3_PLUS:
 			sunxi_gpio_info_t.pwm_en = SUNXI_V2_PWM_EN_REG;
 			sunxi_gpio_info_t.pwm_type = SUNXI_V2_PWM_TYPE;	// H616
 			sunxi_gpio_info_t.pwm_bit_act = SUNXI_V2_PWM_ACT_STA;
@@ -4918,6 +4982,11 @@ int wiringPiSetup (void)
 			pinToGpio =  pinToGpio_ZERO_2_W;
 			physToGpio = physToGpio_ZERO_2_W;
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_ZERO_2_W;
+			break;
+		case PI_MODEL_ZERO_3_PLUS:
+			pinToGpio =  pinToGpio_ZERO_3_PLUS;
+			physToGpio = physToGpio_ZERO_3_PLUS;
+			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_ZERO_3_PLUS;
 			break;
 		case PI_MODEL_4A:
 			pinToGpio =  pinToGpio_4A;
@@ -5058,6 +5127,7 @@ int wiringPiSetup (void)
 		case PI_MODEL_ZERO: case PI_MODEL_ZERO_PLUS_2: case PI_MODEL_WIN:
 		case PI_MODEL_PRIME: case PI_MODEL_PC_2: case PI_MODEL_ZERO_PLUS:
 		case PI_MODEL_H3: case PI_MODEL_ZERO_2_W: case PI_MODEL_4A:
+		case PI_MODEL_ZERO_3_PLUS:
 	
 			sunxi_gpio_info_t.pwm = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, sunxi_gpio_info_t.pwm_base_addr);
 			if ((int32_t)(unsigned long)sunxi_gpio_info_t.pwm == -1)
@@ -5484,6 +5554,10 @@ int wiringPiSetupSys (void)
 		case PI_MODEL_ZERO_2_W:
 			pinToGpio =  pinToGpio_ZERO_2_W;
 			physToGpio = physToGpio_ZERO_2_W;
+			break;
+		case PI_MODEL_ZERO_3_PLUS:
+			pinToGpio =  pinToGpio_ZERO_3_PLUS;
+			physToGpio = physToGpio_ZERO_3_PLUS;
 			break;
 		case PI_MODEL_4A:
 			pinToGpio =  pinToGpio_4A;
@@ -7590,7 +7664,8 @@ int orangepi_set_gpio_mode(int pin, int mode)
 					if (wiringPiDebug)
 						printf("OPI: try wiringPi pin %d for PWM pin\n", pin);
 
-					if (OrangePiModel == PI_MODEL_ZERO_2 && pin != 224 && pin != 225 && pin != 226 && pin != 227) {
+					if ((OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_3_PLUS) \
+							&& pin != 224 && pin != 225 && pin != 226 && pin != 227) {
 						printf("the pin you choose doesn't support hardware PWM\n");
 						printf("OPI:you can select wiringPi pin 224,225,226,227 for PWM pin\n");
 						printf("or you can use it in softPwm mode\n");
@@ -7606,7 +7681,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 
 					// set pin PWMx to pwm mode
 					regval &= ~(sunxi_gpio_info_t.gpio_cfg_mask << offset);
-					if (OrangePiModel == PI_MODEL_ZERO_2)
+					if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_3_PLUS)
 						regval |= (0x4 << offset); // ALT4 PWM
 					else if (OrangePiModel == PI_MODEL_ZERO_2_W)
 						regval |= (0x5 << offset);
@@ -7631,7 +7706,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 					orangepi_pwm_set_act(pin,512);
 					sunxi_pwm_set_mode(PWM_MODE_MS);
 
-					if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W)
+					if (OrangePiModel == PI_MODEL_ZERO_2 || OrangePiModel == PI_MODEL_ZERO_2_W || OrangePiModel == PI_MODEL_ZERO_3_PLUS)
 						orangepi_pwm_set_clk(pin,1);  //default clk:24M
 					else
 						orangepi_pwm_set_clk(pin,PWM_CLK_DIV_120); //default clk:24M/120

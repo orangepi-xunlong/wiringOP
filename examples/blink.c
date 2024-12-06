@@ -20,6 +20,7 @@ unsigned char getGpioNum(void)
 		case PI_MODEL_ZERO:
 		case PI_MODEL_ZERO_PLUS_2:
 		case PI_MODEL_ZERO_PLUS:
+		case PI_MODEL_ZERO_3_PLUS:
 		case PI_MODEL_4_LTS:
 		case PI_MODEL_800:
 		case PI_MODEL_5:
