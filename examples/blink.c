@@ -24,6 +24,7 @@ unsigned char getGpioNum(void)
 		case PI_MODEL_4_LTS:
 		case PI_MODEL_800:
 		case PI_MODEL_5:
+		case PI_MODEL_RV2:
 		case PI_MODEL_CM5_TABLET:
 			return 17;
 			break;

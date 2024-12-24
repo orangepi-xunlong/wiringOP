@@ -686,6 +686,25 @@ typedef struct {
 /*************** JH7110 ******************/
 
 
+/********************* KYX1 ********************/
+#define KYX1_GPIO_BASE                   0xd4019000U
+#define KYX1_IOMUX_BASE                  0xd401e000U
+
+#define KYX1_FUNC_MASK                   0xff77U
+#define KYX1_OFFSET                      0x3fcU
+
+/* pull up/down */
+#define KYX1_PULL_DIS        (0 << 13)     /* bit[15:13] 000 */
+#define KYX1_PULL_UP         (6 << 13)     /* bit[15:13] 110 */
+#define KYX1_PULL_DOWN       (5 << 13)     /* bit[15:13] 101 */
+
+typedef struct {
+	unsigned int * iomux_base;
+	unsigned int * gpio_base;
+} kyx1_soc_info;
+
+/********************* KYX1 ********************/
+
 
 // Mask for the bottom 64 pins which belong to the Raspberry Pi
 //	The others are available for the other devices
@@ -799,6 +818,8 @@ extern int wiringPiDebug;
 
 /* Allwinner A527 */
 #define PI_MODEL_4A              90
+
+#define PI_MODEL_RV2             100
 
 extern const char *piModelNames    [16] ;
 

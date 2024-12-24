@@ -425,6 +425,13 @@ static int ORANGEPI_PIN_MASK_RV[5][32] =  //[BANK]	[INDEX]
 	{-1,-1,-1,-1,36,37,38,39, 40,-1,42,43,44,45,46,47, 48,49,50,51,52,53,54,55, 56,57,58,59,60,61,-1,63,},
 };
 
+static int ORANGEPI_PIN_MASK_RV2[5][32] =  //[BANK]	[INDEX]
+{
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,47, 48,49,50,51,52,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},
+	{-1,-1,-1,-1,-1,-1,70,71, 72,73,74,75,76,77,78,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,91,92,-1,-1,-1,},
+};
+
 static int ORANGEPI_PIN_MASK_3B[5][32] =  //[BANK]	[INDEX]
 {
 	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,  0, 1,-1,-1,-1,-1,-1,-1,},//GPIO0
@@ -661,6 +668,7 @@ rk3566_soc_info rk3566_soc_info_t;
 s905d3_gpio_info s905d3_gpio_info_t;
 a310b_gpio_info a310b_gpio_info_t;
 jh7110_soc_info jh7110_soc_info_t;
+kyx1_soc_info kyx1_soc_info_t;
 
 // sysFds:
 //	Map a file descriptor from the /sys/class/gpio/gpioX/value
@@ -1328,6 +1336,29 @@ int pinToGpio_RV[64] =
 	59, 63,      //22,23
 	36, 60,      //24,25
 	61, 44,      //26,27
+	-1,  -1,      //28,29
+	-1,  -1,      //30,31
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,// ... 63
+};
+
+int pinToGpio_RV2[64] =
+{
+	52, 51,      // 0, 1
+	74, 47,      // 2, 3
+	48, 71,      // 4  5
+	70, 72,      // 6, 7
+	73, 91,      // 8, 9
+	92, 77,      //10,11
+	78, 49,      //12,13
+	75, 76,      //14,15
+	50, -1,      //16,17
+	-1, -1,      //18,19
+	-1, -1,      //20,21
+	-1, -1,      //22,23
+	-1, -1,      //24,25
+	-1, -1,      //26,27
 	-1,  -1,      //28,29
 	-1,  -1,      //30,31
 
@@ -2229,6 +2260,35 @@ int physToGpio_RV[64] =
 	-1, -1, -1, -1, -1, -1, -1,   // ... 63
 };
 
+int physToGpio_RV2[64] =
+{
+	-1,        // 0
+	-1,  -1,   // 1, 2
+	52,  -1,   // 3, 4
+	51,  -1,   // 5, 6
+	74,  47,   // 7, 8
+	-1,  78,   // 9, 10
+	71,  70,   // 11, 12
+	72,  -1,   // 13, 14
+	73,  91,   // 15, 16
+	-1,  92,   // 17, 18
+	77,  -1,   // 19, 20
+	78,  49,   // 21, 22
+	75,  76,   // 23, 24
+	-1,  50,   // 25, 26
+	-1,  -1,   // 27, 28
+	-1,  -1,   // 29, 30
+	-1,  -1,   // 31, 32
+	-1,  -1,   // 33, 34
+	-1,  -1,   // 35, 36
+	-1,  -1,   // 37, 38
+	-1,  -1,   // 39, 40
+
+	//Padding:
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   // ... 56
+	-1, -1, -1, -1, -1, -1, -1,   // ... 63
+};
+
 int physToGpio_3B[64] =
 {
 	-1,        // 0
@@ -2730,6 +2790,7 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepiaipro-20t.",       18) == 0) { *model = PI_MODEL_AI_PRO; }
 	else if (strncmp(revision, "orangepikunpengpro.",      19) == 0) { *model = PI_MODEL_AI_PRO; }
 	else if (strncmp(revision, "orangepirv.",              11) == 0) { *model = PI_MODEL_RV; }
+	else if (strncmp(revision, "orangepirv2.",             12) == 0) { *model = PI_MODEL_RV2; }
 
 	if (wiringPiDebug)
 		printf("piBoardId: model = %d\n", *model);
@@ -5098,6 +5159,11 @@ int wiringPiSetup (void)
 			physToGpio = physToGpio_RV;
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_RV;
 			break;
+		case PI_MODEL_RV2:
+			pinToGpio = pinToGpio_RV2;
+			physToGpio = physToGpio_RV2;
+			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_RV2;
+			break;
 		default:
 			printf ("Oops - unable to determine board type... model: %d\n", OrangePiModel);
 			break ;
@@ -5426,6 +5492,17 @@ int wiringPiSetup (void)
 			jh7110_soc_info_t.sys_iomux_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, JH7110_SYS_IOMUX_BASE);
 			if ((int32_t)(unsigned long)jh7110_soc_info_t.sys_iomux_base == -1)
 				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (JH7110_SYS_IOMUX_BASE) failed: %s\n", strerror(errno));
+			break;
+
+		case PI_MODEL_RV2:
+
+			kyx1_soc_info_t.iomux_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, KYX1_IOMUX_BASE);
+			if ((int32_t)(unsigned long)kyx1_soc_info_t.iomux_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (KYX1_IOMUX_BASE) failed: %s\n", strerror(errno));
+
+			kyx1_soc_info_t.gpio_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, KYX1_GPIO_BASE);
+			if ((int32_t)(unsigned long)kyx1_soc_info_t.gpio_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (KYX1_GPIO_BASE) failed: %s\n", strerror(errno));
 			break;
 
 		default:
@@ -5827,6 +5904,17 @@ unsigned int readR(unsigned int addr)
 
 			break;
 
+		case PI_MODEL_RV2:
+			mmap_base = (addr & 0xfffff000);
+			mmap_seek = (addr - mmap_base);
+			if(mmap_base == KYX1_GPIO_BASE)
+				val = *((unsigned int *)((unsigned char *)kyx1_soc_info_t.gpio_base + mmap_seek));
+			else if(mmap_base == KYX1_IOMUX_BASE)
+				val = *((unsigned int *)((unsigned char *)kyx1_soc_info_t.iomux_base + mmap_seek));
+			return val;
+
+			break;
+
 		default:
 			
 			val = 0;
@@ -6053,6 +6141,16 @@ void writeR(unsigned int val, unsigned int addr)
 			mmap_base = (addr & 0xfffff000);
 			mmap_seek = (addr - mmap_base);
 			*((unsigned int *)((unsigned char *)jh7110_soc_info_t.sys_iomux_base + mmap_seek)) = val;
+			break;
+
+		case PI_MODEL_RV2:
+
+			mmap_base = (addr & 0xfffff000);
+			mmap_seek = (addr - mmap_base);
+			if(mmap_base == KYX1_GPIO_BASE)
+				*((unsigned int *)((unsigned char *)kyx1_soc_info_t.gpio_base + mmap_seek)) = val;
+			else if(mmap_base == KYX1_IOMUX_BASE)
+				*((unsigned int *)((unsigned char *)kyx1_soc_info_t.iomux_base + mmap_seek)) = val;
 			break;
 
 		default:
@@ -6405,6 +6503,35 @@ int orangepi_get_gpio_mode(int pin)
 					return doen == JH7110_GPOEN_ENABLE ? 1 : 0;
 			}
 
+			break;
+
+		case PI_MODEL_RV2:
+			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
+				if(bank < 3)
+					phyaddr = KYX1_GPIO_BASE + bank * 4 + 0xc;
+				else
+					phyaddr = KYX1_GPIO_BASE +  0x100 + 0xc;
+
+				iomux_phyaddr = KYX1_IOMUX_BASE + (pin + 1) * 4;
+
+				regval = readR(iomux_phyaddr);
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x index:%d\n", iomux_phyaddr, regval, index);
+				mode = regval & 0x7;/*mask: bit[2:0]*/
+				if(pin >= 70 && pin <= 73)
+					regval = 1;
+				else
+					regval = 0;
+				if(mode == regval) {
+					regval = readR(phyaddr);
+					if (wiringPiDebug)
+						printf("Register[%#x]: %#x index:%d\n", phyaddr, regval, index);
+					return (regval >> index) & 0x1;
+				}
+
+				return mode + 1;
+
+			}
 			break;
 
 		default:
@@ -7614,6 +7741,34 @@ int orangepi_set_gpio_mode(int pin, int mode)
 
 			break;
 
+		case PI_MODEL_RV2:
+			if(bank < 3)
+				phyaddr = KYX1_GPIO_BASE + bank * 4;
+			else
+				phyaddr = KYX1_GPIO_BASE +  0x100;
+
+			iomux_phyaddr = KYX1_IOMUX_BASE + (pin + 1) * 4;
+
+			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
+				regval = ~(0x7) & readR(iomux_phyaddr);
+				if(pin >= 70 && pin <= 73)
+					regval |= 1;
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x index:%d\n", iomux_phyaddr, regval, index);
+				writeR(regval, iomux_phyaddr);
+				if (INPUT == mode) {
+					phyaddr += 0x60;
+				} else {
+					phyaddr += 0x54;
+				}
+				regval = (1 << index) | readR(phyaddr);
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x index:%d\n", phyaddr, regval, index);
+				writeR(regval, phyaddr);
+			}
+
+			break;
+
 		default:
 
 			offset = ((index - ((index >> 3) << 3)) << 2);
@@ -8107,6 +8262,25 @@ int orangepi_digitalWrite(int pin, int value)
 
 			break;
 
+		case PI_MODEL_RV2:
+			if(bank < 3)
+				phyaddr = KYX1_GPIO_BASE + bank * 4;
+			else
+				phyaddr = KYX1_GPIO_BASE +  0x100;
+
+			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
+				if(0 == value)
+					phyaddr += 0x24;
+				else
+					phyaddr += 0x18;
+				regval = (1 << index) | readR(phyaddr);
+				if (wiringPiDebug)
+					printf("Register[%#x]: %#x index:%d\n", phyaddr, regval, index);
+				writeR(regval, phyaddr);
+			}
+
+			break;
+
 		default:
 			
 			if (bank == 11)
@@ -8261,6 +8435,14 @@ int orangepi_digitalRead(int pin)
 
 			break;
 
+		case PI_MODEL_RV2:
+			if(bank < 3)
+				phyaddr = KYX1_GPIO_BASE + bank * 4;
+			else
+				phyaddr = KYX1_GPIO_BASE +  0x100;
+
+			break;
+
 		default:
 
 			if (bank == 11) 
@@ -8275,6 +8457,8 @@ int orangepi_digitalRead(int pin)
 	if (ORANGEPI_PIN_MASK[bank][index] != -1)
 	{
 		val = readR(phyaddr);
+		if (wiringPiDebug)
+			printf("Register[%#x]: %#x index:%d\n", phyaddr, val, index);
 
 		if (OrangePiModel == PI_MODEL_3_PLUS) {
 			val = val >> S905D3_GPIO_IN_OFFSET;
@@ -8448,6 +8632,22 @@ void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 			regval |= (bit_value & 3) << offset;
 			writeR(regval, phyaddr);
 
+			return ;
+		case PI_MODEL_RV2:
+			phyaddr = KYX1_IOMUX_BASE + (pin + 1) * 4;
+			regval = readR(phyaddr);
+			regval &= ~(7 << 13);
+
+			/* */if (PUD_UP == pud)
+				regval |= KYX1_PULL_UP;
+			else if (PUD_DOWN == pud)
+				regval |= KYX1_PULL_DOWN;
+			else if (PUD_OFF == pud)
+				regval |= KYX1_PULL_DIS;
+
+			if (wiringPiDebug)
+				printf("Register[%#x]: %#x index:%d\n", phyaddr, regval, index);
+			writeR(regval, phyaddr);
 			return ;
 
 		default:
