@@ -2236,6 +2236,7 @@ int OrangePi_set_gpio_pullUpDnControl(int pin, int pud)
 	else if (PUD_OFF == pud) {
 			bit_value = 0;
 	}
+#elif (defined CONFIG_ORANGEPI_R1PLUS)
 #else
 	unsigned int pullOffset = 0x1C;
 	switch (pud)
