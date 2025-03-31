@@ -1,0 +1,4 @@
+debian/tmp/usr/bin
+debian/tmp/usr/share/man	usr/share
+README.md		usr/share/doc/wiringpi-opi
+People			usr/share/doc/wiringpi-opi
