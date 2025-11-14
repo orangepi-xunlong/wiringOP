@@ -5749,6 +5749,38 @@ int wiringPiSetupSys (void)
 			pinToGpio =  pinToGpio_4_LTS;
 			physToGpio = physToGpio_4_LTS;
 			break;
+		case PI_MODEL_5:
+			pinToGpio =  pinToGpio_5;
+			physToGpio = physToGpio_5;
+			break;
+		case PI_MODEL_5B:
+			pinToGpio =  pinToGpio_5B;
+			physToGpio = physToGpio_5B;
+			break;
+		case PI_MODEL_5_PRO:
+			pinToGpio =  pinToGpio_5PRO;
+			physToGpio = physToGpio_5PRO;
+			break;
+		case PI_MODEL_5_MAX:
+			pinToGpio =  pinToGpio_5MAX;
+			physToGpio = physToGpio_5MAX;
+			break;
+		case PI_MODEL_5_ULTRA:	
+			pinToGpio =  pinToGpio_5ULTRA;
+			physToGpio = physToGpio_5ULTRA;
+			break;
+		case PI_MODEL_5_PLUS:
+			pinToGpio =  pinToGpio_5PLUS;
+			physToGpio = physToGpio_5PLUS;
+			break;
+		case PI_MODEL_CM5:
+			pinToGpio =  pinToGpio_CM5;
+			physToGpio = physToGpio_CM5;
+			break;
+		case PI_MODEL_CM5_TABLET:
+			pinToGpio =  pinToGpio_CM5_TABLET;
+			physToGpio = physToGpio_CM5_TABLET;
+			break;
 		case PI_MODEL_RK3399:
 			pinToGpio =  pinToGpio_RK3399;
 			physToGpio = physToGpio_RK3399;
