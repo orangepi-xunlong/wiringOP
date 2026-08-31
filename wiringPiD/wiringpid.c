@@ -50,7 +50,7 @@ static int doDaemon = FALSE ;
 
 //
 
-static void logMsg (const char *message, ...)
+static void __attribute__((format(printf, 1, 2))) logMsg (const char *message, ...)
 {
   va_list argp ;
   char buffer [1024] ;
@@ -300,7 +300,7 @@ int main (int argc, char *argv [])
 
   if (strlen (argv [1]) < 6)
   {
-    logMsg ("Password too short - at least 6 chars, not %d", strlen (argv [1])) ;
+    logMsg ("Password too short - at least 6 chars, not %zu", strlen (argv [1])) ;
     exit (EXIT_FAILURE) ;
   }
 

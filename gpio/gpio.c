@@ -251,7 +251,7 @@ static void checkDevTree (char *argv [])
   }
 }
 
-static void _doLoadUsage (char *argv [])
+static void __attribute__((noreturn)) _doLoadUsage (char *argv [])
 {
   fprintf (stderr, "Usage: %s load <spi/i2c> [I2C baudrate in Kb/sec]\n", argv [0]) ;
   exit (1) ;
@@ -333,7 +333,7 @@ static void doLoad (int argc, char *argv [])
  *********************************************************************************
  */
 
-static void _doUnLoadUsage (char *argv [])
+static void __attribute__((noreturn)) _doUnLoadUsage (char *argv [])
 {
   fprintf (stderr, "Usage: %s unload <spi/i2c>\n", argv [0]) ;
   exit (1) ;
@@ -943,6 +943,8 @@ static void doPadDrive (int argc, char *argv [])
 
 static void doUsbP (int argc, char *argv [])
 {
+  (void)argc ;
+  (void)argv ;
 	return;
 }
 

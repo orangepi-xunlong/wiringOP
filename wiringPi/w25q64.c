@@ -77,10 +77,9 @@ void W25Q64_begin(uint8_t spich) {
 //
 uint8_t W25Q64_readStatusReg1(void) {
   uint8_t data[2];
-  int rc;
   data[0] = CMD_READ_STATUS_R1;
   data[1] = 0xff;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
 //  spcDump("readStatusReg1",rc,data,2);
   return data[1];
 }
@@ -91,10 +90,9 @@ uint8_t W25Q64_readStatusReg1(void) {
 //
 uint8_t W25Q64_readStatusReg2(void) {
   uint8_t data[2];
-  int rc;
   data[0] = CMD_READ_STATUS_R2;
   data[1] = 0xff;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
 //  spcDump("readStatusReg2",rc,data,2);
   return data[1];
 }
@@ -105,10 +103,9 @@ uint8_t W25Q64_readStatusReg2(void) {
 //
 void W25Q64_readManufacturer(uint8_t* d) {
   uint8_t data[4];
-  int rc;
   memset(data,0,sizeof(data));
   data[0] = CMD_JEDEC_ID;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
 //  spcDump("readManufacturer",rc,data,4);
   memcpy(d,&data[1],3);
 }
@@ -119,10 +116,9 @@ void W25Q64_readManufacturer(uint8_t* d) {
 //
 void W25Q64_readUniqieID(uint8_t* d) {
   uint8_t data[12];
-  int rc;
   memset(data,0,sizeof(data));
   data[0] = CMD_READ_UNIQUE_ID;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
 //  spcDump("readUniqieID",rc,data,12);
   memcpy(d,&data[5],7);
 }
@@ -133,10 +129,9 @@ void W25Q64_readUniqieID(uint8_t* d) {
 //
 bool W25Q64_IsBusy() {
   uint8_t data[2];
-  int rc;
   data[0] = CMD_READ_STATUS_R1;
   data[1] = 0xff;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
 //  spcDump("IsBusy",rc,data,2);
   uint8_t r1;
   r1 = data[1];
@@ -150,9 +145,8 @@ bool W25Q64_IsBusy() {
 //
 void W25Q64_powerDown(void) {
   uint8_t data[1];
-  int rc;
   data[0] = CMD_POWER_DOWN;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
 //  spcDump("powerDown",rc,data,1);
 }
 
@@ -161,9 +155,8 @@ void W25Q64_powerDown(void) {
 //
 void W25Q64_WriteEnable(void) {
   uint8_t data[1];
-  int rc;
   data[0] = CMD_WRIRE_ENABLE;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
 //  spcDump("WriteEnable",rc,data,1);
 }
 
@@ -172,9 +165,8 @@ void W25Q64_WriteEnable(void) {
 //
 void W25Q64_WriteDisable(void) {
   uint8_t data[1];
-  int rc;
   data[0] = CMD_WRITE_DISABLE;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
 //  spcDump("WriteDisable",rc,data,1);
 }
 
@@ -187,7 +179,7 @@ uint16_t W25Q64_read(uint32_t addr,uint8_t *buf,uint16_t n){
   uint8_t *data;
   int rc;
 
-  data = (char*)malloc(n+4);
+  data = malloc(n+4);
   data[0] = CMD_READ_DATA;
   data[1] = (addr>>16) & 0xFF;     // A23-A16
   data[2] = (addr>>8) & 0xFF;      // A15-A08
@@ -208,7 +200,7 @@ uint16_t W25Q64_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
   uint8_t *data;
   int rc;
 
-  data = (char*)malloc(n+5);
+  data = malloc(n+5);
   data[0] = CMD_FAST_READ;
   data[1] = (addr>>16) & 0xFF;     // A23-A16
   data[2] = (addr>>8) & 0xFF;      // A15-A08
@@ -230,7 +222,6 @@ uint16_t W25Q64_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
 //
 bool W25Q64_eraseSector(uint16_t sect_no, bool flgwait) {
   uint8_t data[4];
-  int rc;
   uint32_t addr = sect_no;
   addr<<=12;
 
@@ -239,7 +230,7 @@ bool W25Q64_eraseSector(uint16_t sect_no, bool flgwait) {
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
   data[3] = addr & 0xff;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
  
   // 処理待ち
   while(W25Q64_IsBusy() & flgwait) {
@@ -258,7 +249,6 @@ bool W25Q64_eraseSector(uint16_t sect_no, bool flgwait) {
 //
 bool W25Q64_erase64Block(uint16_t blk_no, bool flgwait) {
   uint8_t data[4];
-  int rc;
   uint32_t addr = blk_no;
   addr<<=16;
 
@@ -267,7 +257,7 @@ bool W25Q64_erase64Block(uint16_t blk_no, bool flgwait) {
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
   data[3] = addr & 0xff;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
  
   // 処理待ち
   while(W25Q64_IsBusy() & flgwait) {
@@ -286,7 +276,6 @@ bool W25Q64_erase64Block(uint16_t blk_no, bool flgwait) {
 //
 bool W25Q64_erase32Block(uint16_t blk_no, bool flgwait) {
   uint8_t data[4];
-  int rc;
   uint32_t addr = blk_no;
   addr<<=15;
 
@@ -295,7 +284,7 @@ bool W25Q64_erase32Block(uint16_t blk_no, bool flgwait) {
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
   data[3] = addr & 0xff;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
  
   // 処理待ち
   while(W25Q64_IsBusy() & flgwait) {
@@ -312,11 +301,10 @@ bool W25Q64_erase32Block(uint16_t blk_no, bool flgwait) {
 //
 bool W25Q64_eraseAll(bool flgwait) {
   uint8_t data[1];
-  int rc;
 
   W25Q64_WriteEnable();  
   data[0] = CMD_CHIP_ERASE;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+  (void)wiringPiSPIDataRW (_spich,data,sizeof(data));
 
   // 処理待ち
   while(W25Q64_IsBusy() & flgwait) {
@@ -337,7 +325,6 @@ uint16_t W25Q64_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, uint8
   int rc;
 
   uint32_t addr = sect_no;
-  int i;
   addr<<=12;
   addr += inaddr;
 
@@ -347,7 +334,7 @@ uint16_t W25Q64_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, uint8
     return 0;  
   }
 
-  data = (char*)malloc(n+4);
+  data = malloc(n+4);
   data[0] = CMD_PAGE_PROGRAM;
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
