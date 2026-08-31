@@ -1800,9 +1800,9 @@ static const uint8_t font3_data[][5] = {
 };
   
  
-static struct font_info font1 = { 5, 7, 1, 0, (uint8_t *)font1_data };
-static struct font_info font2 = { 6, 8, 0, 32, (uint8_t *)font2_data };
-static struct font_info font3 = { 5, 8, 0, 31, (uint8_t *)font3_data };
+static struct font_info font1 __attribute__((unused)) = { 5, 7, 1, 0, (uint8_t *)font1_data };
+static struct font_info font2 __attribute__((unused)) = { 6, 8, 0, 32, (uint8_t *)font2_data };
+static struct font_info font3 __attribute__((unused)) = { 5, 8, 0, 31, (uint8_t *)font3_data };
 
 #endif // FONT_H
 
