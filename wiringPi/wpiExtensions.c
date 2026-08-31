@@ -86,7 +86,7 @@ struct extensionFunctionStruct
  *********************************************************************************
  */
 
-static void verbError (const char *message, ...)
+static void __attribute__((format(printf, 1, 2))) verbError (const char *message, ...)
 {
   va_list argp ;
   va_start (argp, message) ;

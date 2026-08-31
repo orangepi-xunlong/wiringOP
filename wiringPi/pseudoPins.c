@@ -40,14 +40,34 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdint.h>
 
 #include <wiringPi.h>
 
 #include "pseudoPins.h"
 
+/*
+ * wiringPiNodeStruct predates 64-bit Linux and its generic data slots are
+ * 32-bit unsigned ints. pseudoPins historically cast an mmap pointer directly
+ * into data0, truncating it on AArch64. Keep the public struct ABI unchanged
+ * and store/reconstruct the pointer across data0:data1 instead.
+ */
+static int *pseudoPinsData (const struct wiringPiNodeStruct *node)
+{
+  uint64_t raw = (uint64_t) node->data0 | ((uint64_t) node->data1 << 32) ;
+  return (int *) (uintptr_t) raw ;
+}
+
+static void pseudoPinsSetData (struct wiringPiNodeStruct *node, void *ptr)
+{
+  uint64_t raw = (uint64_t) (uintptr_t) ptr ;
+  node->data0 = (unsigned int) (raw & UINT32_C (0xFFFFFFFF)) ;
+  node->data1 = (unsigned int) (raw >> 32) ;
+}
+
 static int myAnalogRead (struct wiringPiNodeStruct *node, int pin)
 {
-  int *ptr   = (int *)node->data0 ;
+  int *ptr   = pseudoPinsData (node) ;
   int  myPin = pin - node->pinBase ;
 
   return *(ptr + myPin) ;
@@ -56,7 +76,7 @@ static int myAnalogRead (struct wiringPiNodeStruct *node, int pin)
 
 static void myAnalogWrite (struct wiringPiNodeStruct *node, int pin, int value)
 {
-  int *ptr   = (int *)node->data0 ;
+  int *ptr   = pseudoPinsData (node) ;
   int  myPin = pin - node->pinBase ;
 
   *(ptr + myPin) = value ;
@@ -86,7 +106,7 @@ int pseudoPinsSetup (const int pinBase)
 
   ptr = mmap (NULL, PSEUDO_PINS * sizeof (int), PROT_READ | PROT_WRITE, MAP_SHARED, node->fd, 0) ;
 
-  node->data0 = (unsigned int)ptr ;
+  pseudoPinsSetData (node, ptr) ;
 
   node->analogRead  = myAnalogRead ;
   node->analogWrite = myAnalogWrite ;

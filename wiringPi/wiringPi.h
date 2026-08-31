@@ -967,7 +967,7 @@ extern "C" {
 extern void piGpioLayoutOops (const char *why);
 #endif
 
-extern int wiringPiFailure (int fatal, const char *message, ...) ;
+extern int wiringPiFailure (int fatal, const char *message, ...) __attribute__((format(printf, 2, 3))) ;
 
 // Core wiringPi functions
 
