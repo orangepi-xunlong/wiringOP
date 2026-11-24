@@ -33,7 +33,9 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
+#include <stdarg.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
