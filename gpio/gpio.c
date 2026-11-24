@@ -49,6 +49,7 @@ extern int wiringPiDebug ;
 
 extern void doReadall    (void) ;
 extern void doAllReadall (void) ;
+extern void doPinout     (int argc, char *argv []) ;
 extern void doQmode      (int argc, char *argv []) ;
 
 #ifndef TRUE
@@ -95,6 +96,8 @@ char *usage = "Usage: gpio -v\n"
      //		  "       gpio <mode/qmode/read/write> ...\n"
               "       gpio <toggle/blink> <pin>\n"
 	      "       gpio readall\n"
+	      "       gpio pinout [--wpi] [--gpio] [--monochrome] [--color]\n"
+	      "       gpio pinout --demo [board]\n"
 	      "       gpio unexportall/exports\n"
 	      "       gpio export/edge/unexport ...\n"
 	//      "       gpio wfi <pin> <mode>\n"
@@ -1471,6 +1474,16 @@ int main (int argc, char *argv [])
     exit (EXIT_SUCCESS) ;
   }
 
+// pinout --demo only prints from tables: no root, no hardware needed
+
+  if (strcasecmp (argv [1], "pinout") == 0)
+    for (i = 2 ; i < argc ; ++i)
+      if (strcasecmp (argv [i], "--demo") == 0)
+      {
+	doPinout (argc, argv) ;
+	return 0 ;
+      }
+
   if (geteuid () != 0)
   {
     fprintf (stderr, "%s: Must be root to run. Program should be suid root. This is an error.\n", argv [0]) ;
@@ -1619,6 +1632,7 @@ int main (int argc, char *argv [])
   else if (strcasecmp (argv [1], "readall"  ) == 0) doReadall    () ;
   else if (strcasecmp (argv [1], "nreadall" ) == 0) doReadall    () ;
   else if (strcasecmp (argv [1], "pins"     ) == 0) doReadall    () ;
+  else if (strcasecmp (argv [1], "pinout"   ) == 0) doPinout     (argc, argv) ;
   else if (strcasecmp (argv [1], "qmode"    ) == 0) doQmode      (argc, argv) ;
   else if (strcasecmp (argv [1], "i2cdetect") == 0) doI2Cdetect  (argc, argv) ;
   else if (strcasecmp (argv [1], "i2cd"     ) == 0) doI2Cdetect  (argc, argv) ;

@@ -15,6 +15,89 @@
 ```
 
 ---
+## The gpio pinout command
+
+`gpio pinout` is a colour coded view of the board headers, in the spirit of the
+`pinout` command on a Raspberry Pi. It shows the same data as `gpio readall`,
+laid out like the physical header: odd pins on the left, even pins on the
+right. Each pin has its name, its SoC pin, and its current mode and value.
+Pins that are in use are bold, unclaimed pins show a dim "off". `gpio readall`
+is unchanged.
+
+![gpio pinout on an Orange Pi Zero](assets/gpio-pinout-orangepi-zero.png)
+
+```
+# gpio pinout                 the default view
+# gpio pinout --wpi           add the wPi numbers
+# gpio pinout --gpio          add the Linux GPIO numbers
+# gpio pinout --monochrome    no colour
+# gpio pinout --color         force colour, for example into "less -R"
+```
+
+Colour is only used on a terminal, and never when the `NO_COLOR` environment
+variable is set. A header that carries no GPIOs (the 13-pin header of the
+Orange Pi Zero: USB, audio, video, IR) is listed next to the main header, or
+below it when the terminal is too narrow.
+
+### Verified boards
+
+Only one so far: the **Orange Pi Zero** (Allwinner H2+, Armbian), the only board
+the contributor had at hand. There every pin was compared against `gpio readall`:
+name, wPi number, GPIO number, mode and value.
+
+On any other board `gpio pinout` does not guess. It says that the board has not
+been verified yet and points to `gpio readall` and to the demo below.
+
+### Preview any board without hardware
+
+```
+$ gpio pinout --demo              list the boards
+$ gpio pinout --demo pc-2         preview one of them
+$ gpio pinout --demo 5-plus --wpi
+```
+
+The demo prints from wiringOP's own pin tables, the same ones `gpio readall`
+uses, for every board wiringOP knows. It needs no root rights and no Orange Pi,
+so it also runs on a PC. The pin names and wPi numbers are real. The pin state
+is a placeholder, and the SoC and GPIO columns are left out because they are
+only known on the real board.
+
+To try it on a machine without installing anything:
+
+```
+$ git clone https://github.com/orangepi-xunlong/wiringOP.git
+$ cd wiringOP
+$ (cd wiringPi && make && ln -sf libwiringPi.so.* libwiringPi.so)
+$ (cd devLib && make INCLUDE="-I. -I../wiringPi" && ln -sf libwiringPiDev.so.* libwiringPiDev.so)
+$ (cd gpio && make INCLUDE="-I../wiringPi -I../devLib" LDFLAGS="-L../wiringPi -L../devLib")
+$ cd gpio
+$ LD_LIBRARY_PATH=../wiringPi:../devLib ./gpio pinout --demo zero
+```
+
+### How to verify and add your board
+
+1. Build wiringOP on the board and look at `gpio pinout --demo <board>` next to
+   `gpio readall`. The names and wPi numbers have to agree.
+2. Add one row for the board to the `pinoutModels` table in `gpio/readall.c`:
+   the model, its two pin tables, the mode names (`alts_...`) that
+   `OrangePiReadAll ()` uses for that model, the pin count, a function that turns
+   a GPIO number into a SoC pin name, and the device tree model string
+   (`cat /proc/device-tree/model`). `pinoutSunxiPinName` fits the Allwinner
+   boards (12 becomes PA12). Other SoC families need a small function of their
+   own.
+3. Optional: the board facts and a secondary header, see `pinoutBoard_ZERO`.
+   They are only shown when the device tree model string matches, because one
+   wiringOP model can cover several boards.
+4. Build, then compare `gpio pinout --wpi --gpio` with `gpio readall` row by
+   row. Change a spare pin with `gpio mode <pin> out` and check that both
+   commands follow.
+5. Send a pull request that says which board and which OS image it was checked
+   on.
+
+The rendering is in `gpio/pinout.c` and has no hardware access. It can be built
+and tried on its own with a few lines of test data.
+
+---
 ## The output of the gpio readall command
 
 ## Allwinner H2+

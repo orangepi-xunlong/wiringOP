@@ -29,6 +29,14 @@ gpio \- Command-line access to Raspberry Pi's GPIO
 .B readall
 .PP
 .B gpio
+.B pinout
+.B [ \-\-wpi ] [ \-\-gpio ] [ \-\-monochrome ] [ \-\-color ]
+.PP
+.B gpio
+.B pinout \-\-demo
+.B [ board ]
+.PP
+.B gpio
 .B unexportall/exports
 .PP
 .B gpio
@@ -172,6 +180,36 @@ mode.
 The readall command is usable with an extension module (via the -x parameter),
 but it's unable to determine pin modes or states, so will perform both a
 digital and analog read on each pin in-turn.
+
+.TP
+.B pinout [\-\-wpi] [\-\-gpio] [\-\-monochrome] [\-\-color]
+Output a colour coded view of the board headers, laid out like the physical
+header: odd pins on the left, even pins on the right. Each pin shows its name,
+its SoC pin, and its current mode and value. Pins that are in use are shown in
+bold, unclaimed pins as "off". The colours group the pins by function (power,
+ground, GPIO, I2C, UART, SPI). On boards that are known in detail a short list
+of board facts is printed first, and headers that carry no GPIOs (USB, audio,
+video) are listed next to the main header, or below it on a narrow terminal.
+
+.B \-\-wpi
+adds the wiringPi pin numbers,
+.B \-\-gpio
+adds the Linux GPIO numbers. Colour is only used on a terminal and never when
+the NO_COLOR environment variable is set;
+.B \-\-monochrome
+turns it off,
+.B \-\-color
+forces it on, for example when piping into a pager.
+
+This command is available for the boards it has been verified on, the others
+can use readall. It does not work with extension modules.
+
+.TP
+.B pinout \-\-demo [board]
+Preview the pinout view of any board from the pin tables alone. This needs no
+root rights and no Orange Pi hardware, so it runs on any machine. The pin names
+and wiringPi numbers are real, the pin state is a placeholder and the SoC and
+GPIO columns are left out. Without a board name, the known boards are listed.
 
 .TP
 .B pwm <pin> <value>

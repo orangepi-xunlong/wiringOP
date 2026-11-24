@@ -42,7 +42,7 @@ LIBS    = -lwiringPi -lwiringPiDev -lpthread -lrt -lm -lcrypt
 # May not need to  alter anything below this line
 ###############################################################################
 
-SRC	=	gpio.c readall.c
+SRC	=	gpio.c readall.c pinout.c
 
 OBJ	=	$(SRC:.c=.o)
 

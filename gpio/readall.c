@@ -35,6 +35,8 @@
 
 #include <wiringPi.h>
 
+#include "pinout.h"
+
 extern int wpMode ;
 
 #ifndef TRUE
@@ -2771,6 +2773,334 @@ void doReadall (void)
 	piBoardId (&model) ;
 
 	OrangePiReadAll(model);
+}
+
+
+/*
+ * doPinout:
+ *	A colour coded view of the board headers, the rendering is in pinout.c.
+ *	This leaves readall alone: boards are added to the table below one
+ *	row at a time, once they have been checked on real hardware.
+ *
+ *	The board facts (and the secondary header) are only shown when the
+ *	device tree model string matches, because one wiringOP model can
+ *	cover more than one board (PI_MODEL_ZERO is the Zero and the R1).
+ *********************************************************************************
+ */
+
+// Orange Pi Zero, 13-pin header. Listed as it sits on the board when
+//	pin 1 of the 26-pin header is at the top: 13 first, 1 last.
+
+static const pinout_aux_pin pinoutAux_ZERO [13] =
+{
+	{ 13, "CIR-RX",   PINOUT_KIND_GPIO  },
+	{ 12, "MIC1N",    PINOUT_KIND_AUDIO },
+	{ 11, "MIC1P",    PINOUT_KIND_AUDIO },
+	{ 10, "MIC-BIAS", PINOUT_KIND_AUDIO },
+	{  9, "TV-OUT",   PINOUT_KIND_VIDEO },
+	{  8, "LINEOUTL", PINOUT_KIND_AUDIO },
+	{  7, "LINEOUTR", PINOUT_KIND_AUDIO },
+	{  6, "USB-DP3",  PINOUT_KIND_USB   },
+	{  5, "USB-DM3",  PINOUT_KIND_USB   },
+	{  4, "USB-DP2",  PINOUT_KIND_USB   },
+	{  3, "USB-DM2",  PINOUT_KIND_USB   },
+	{  2, "GND",      PINOUT_KIND_GND   },
+	{  1, "5V",       PINOUT_KIND_5V    },
+} ;
+
+static const pinout_board pinoutBoard_ZERO =
+{
+	"Orange Pi Zero", "Allwinner H2+ (sun8i)", "MicroSD",
+	"1", "(+2 on the 13-pin header)",
+	"1 (10/100)", "True (XR819)", "False",
+	"26-pin, 13-pin, debug UART",
+	"13-pin header", pinoutAux_ZERO, 13
+} ;
+
+typedef struct
+{
+	int                  model ;
+	int                 *physToWpi ;
+	char               **physNames ;
+	char               **alts ;
+	int                  pinCount ;
+	void               (*socName) (int gpio, char *buf, size_t size) ;
+	const char          *dtModel ;
+	const pinout_board  *board ;
+} pinoutModel ;
+
+static const pinoutModel pinoutModels [] =
+{
+	{ PI_MODEL_ZERO, physToWpi_ZERO, physNames_ZERO, alts_common, 26,
+	  pinoutSunxiPinName, "Xunlong Orange Pi Zero", &pinoutBoard_ZERO },
+} ;
+
+// Every board readall knows, for "pinout --demo". This mirrors the table and
+//	last-pin choices of the switch statements in OrangePiReadAll (), model by
+//	model, and must be kept in step with them. lastPin is the value of the
+//	readall loop ("pin <= lastPin" in steps of two).
+
+typedef struct
+{
+	int          model ;
+	const char  *key ;
+	const char  *label ;
+	int         *physToWpi ;
+	char       **physNames ;
+	int          lastPin ;
+} pinoutDemoBoard ;
+
+static const pinoutDemoBoard pinoutDemoBoards [] =
+{
+	{ PI_MODEL_PC_2,         "pc-2",          "OPi PC2",     physToWpi_PC_2,          physNames_PC_2,          40 },
+	{ PI_MODEL_PRIME,        "prime",         "PRIME",       physToWpi_PRIME,         physNames_PRIME,         40 },
+	{ PI_MODEL_ZERO_PLUS,    "zero-plus",     "ZEROPLUS",    physToWpi_ZERO_PLUS,     physNames_ZERO_PLUS,     26 },
+	{ PI_MODEL_ZERO_PLUS_2,  "zero-plus-2",   "ZEROPLUS 2",  physToWpi_ZERO_PLUS_2,   physNames_ZERO_PLUS_2,   26 },
+	{ PI_MODEL_H3,           "h3",            "OrangePiH3",  physToWpi_H3,            physNames_H3,            40 },
+	{ PI_MODEL_ZERO,         "zero",          "OPi H2",      physToWpi_ZERO,          physNames_ZERO,          26 },
+	{ PI_MODEL_WIN,          "win",           "OPi Win",     physToWpi_WIN,           physNames_WIN,           40 },
+	{ PI_MODEL_LTIE_2,       "lite-2",        "OPi H6",      physToWpi_LITE_2,        physNames_LITE_2,        26 },
+	{ PI_MODEL_3,            "3",             "OPi 3",       physToWpi_3,             physNames_3,             26 },
+	{ PI_MODEL_ZERO_2,       "zero-2",        "H616",        physToWpi_ZERO_2,        physNames_ZERO_2,        34 },
+	{ PI_MODEL_ZERO_2_W,     "zero-2-w",      "ZERO2W",      physToWpi_ZERO_2_W,      physNames_ZERO_2_W,      40 },
+	{ PI_MODEL_ZERO_3_W,     "zero-3-w",      "ZERO3W",      physToWpi_ZERO_3_W,      physNames_ZERO_3_W,      40 },
+	{ PI_MODEL_ZERO_4,       "zero-4",        "ZERO 4",      physToWpi_ZERO_4,        physNames_ZERO_4,        35 },
+	{ PI_MODEL_ZERO_3_PLUS,  "zero-3-plus",   "ZERO3PLUS",   physToWpi_ZERO_3_PLUS,   physNames_ZERO_3_PLUS,   26 },
+	{ PI_MODEL_4A,           "4a",            "OPI 4A",      physToWpi_4A,            physNames_4A,            40 },
+	{ PI_MODEL_4_PRO,        "4-pro",         "OPI 4PRO",    physToWpi_4_PRO,         physNames_4_PRO,         40 },
+	{ PI_MODEL_RK3399,       "rk3399",        "OPi RK3399",  physToWpi_RK3399,        physNames_RK3399,        40 },
+	{ PI_MODEL_4,            "4",             "OrangePi 4",  physToWpi_4,             physNames_4,             40 },
+	{ PI_MODEL_4_LTS,        "4-lts",         "OPi 4 LTS",   physToWpi_4_LTS,         physNames_4_LTS,         26 },
+	{ PI_MODEL_800,          "800",           "opi800",      physToWpi_800,           physNames_800,           26 },
+	{ PI_MODEL_R1_PLUS,      "r1-plus",       "R1 Plus",     physToWpi_R1_PLUS,       physNames_R1_PLUS,       13 },
+	{ PI_MODEL_5,            "5",             "OPI5",        physToWpi_5,             physNames_5,             26 },
+	{ PI_MODEL_5B,           "5b",            "PI5B",        physToWpi_5B,            physNames_5B,            26 },
+	{ PI_MODEL_5_PRO,        "5-pro",         "PI5 PRO",     physToWpi_5PRO,          physNames_5PRO,          40 },
+	{ PI_MODEL_5_MAX,        "5-max",         "PI5 MAX",     physToWpi_5MAX,          physNames_5MAX,          40 },
+	{ PI_MODEL_5_ULTRA,      "5-ultra",       "OPI5-ULTRA",  physToWpi_5ULTRA,        physNames_5ULTRA,        40 },
+	{ PI_MODEL_5_PLUS,       "5-plus",        "PI5 PLUS",    physToWpi_5PLUS,         physNames_5PLUS,         40 },
+	{ PI_MODEL_AI_MAX,       "ai-max",        "AI MAX",      physToWpi_AIMAX,         physNames_AIMAX,         40 },
+	{ PI_MODEL_900,          "900",           "PI 900",      physToWpi_900,           physNames_900,           40 },
+	{ PI_MODEL_CM5,          "cm5",           "PI CM5",      physToWpi_CM5,           physNames_CM5,            8 },
+	{ PI_MODEL_CM5_TABLET,   "cm5-tablet",    "CM5 Tablet",  physToWpi_CM5_TABLET,    physNames_CM5_TABLET,    26 },
+	{ PI_MODEL_CM4,          "cm4",           "PI CM4",      physToWpi_3B,            physNames_3B,            40 },
+	{ PI_MODEL_3B,           "3b",            "PI3B",        physToWpi_CM4,           physNames_CM4,           40 },
+	{ PI_MODEL_3_PLUS,       "3-plus",        "PI3 PLUS",    physToWpi_3PLUS,         physNames_3PLUS,         40 },
+	{ PI_MODEL_AI_PRO,       "ai-pro",        "AI PRO",      physToWpi_AIPRO,         physNames_AIPRO,         40 },
+	{ PI_MODEL_KUNPENG_PRO,  "kunpeng-pro",   "KP PRO",      physToWpi_AIPRO,         physNames_AIPRO,         40 },
+	{ PI_MODEL_AI_STATION,   "ai-station",    "AI STATION",  physToWpi_AISTATION,     physNames_AISTATION,     40 },
+	{ PI_MODEL_RV,           "rv",            "PIRV",        physToWpi_RV,            physNames_RV,            40 },
+	{ PI_MODEL_RV2,          "rv2",           "PI RV2",      physToWpi_RV2,           physNames_RV2,           26 },
+} ;
+
+#define	PINOUT_DEMO_COUNT	((int)(sizeof (pinoutDemoBoards) / sizeof (pinoutDemoBoards [0])))
+#define	PINOUT_MODEL_COUNT	((int)(sizeof (pinoutModels) / sizeof (pinoutModels [0])))
+
+// The header size to show: the highest pin that has a name. The readall
+//	loop bound can run one past it (13-pin and 35-pin tables exist).
+
+static int pinoutDemoPins (const pinoutDemoBoard *d)
+{
+	int phys, last = 0 ;
+
+	for (phys = 1 ; phys <= ((d->lastPin + 1) / 2) * 2 ; ++phys)
+		if ((d->physNames [phys] != NULL) && (strspn (d->physNames [phys], " ") != strlen (d->physNames [phys])))
+			last = phys ;
+	return last ;
+}
+
+static const pinoutModel *pinoutFindModel (int model)
+{
+	int i ;
+
+	for (i = 0 ; i < PINOUT_MODEL_COUNT ; ++i)
+		if (pinoutModels [i].model == model)
+			return &pinoutModels [i] ;
+	return NULL ;
+}
+
+static int pinoutDtModelIs (const char *wanted)
+{
+	char  buf [128] ;
+	FILE *fd ;
+	size_t n ;
+
+	if ((wanted == NULL) || ((fd = fopen ("/proc/device-tree/model", "r")) == NULL))
+		return FALSE ;
+
+	n = fread (buf, 1, sizeof (buf) - 1, fd) ;
+	fclose (fd) ;
+	buf [n] = 0 ;
+
+	return strcmp (buf, wanted) == 0 ;
+}
+
+static long pinoutRamMB (void)
+{
+	char  line [128] ;
+	long  kb = 0 ;
+	FILE *fd ;
+
+	if ((fd = fopen ("/proc/meminfo", "r")) == NULL)
+		return 0 ;
+
+	while (fgets (line, sizeof (line), fd) != NULL)
+		if (sscanf (line, "MemTotal: %ld kB", &kb) == 1)
+			break ;
+
+	fclose (fd) ;
+	return kb / 1024 ;
+}
+
+static void pinoutUsage (const char *prog)
+{
+	fprintf (stderr, "Usage: %s pinout [--wpi] [--gpio] [--monochrome] [--color]\n", prog) ;
+	fprintf (stderr, "       %s pinout --demo [board] [--wpi] [--monochrome] [--color]\n", prog) ;
+	exit (EXIT_FAILURE) ;
+}
+
+/*
+ * pinoutDemo:
+ *	Render a board from the tables alone: no root, no hardware, works on
+ *	any machine. Names and wPi numbers are real, the pin state is not read
+ *	and the GPIO numbers are left out (they need an initialised wiringPi).
+ *	Without a board name, list the boards.
+ */
+
+static void pinoutDemo (const char *prog, const char *key, int flags)
+{
+	const pinoutDemoBoard *d = NULL ;
+	const pinoutModel *m ;
+	pinout_pin pins [64] ;
+	int i, phys, count ;
+
+	if (key == NULL)
+	{
+		printf ("Boards for \"%s pinout --demo <board>\":\n\n", prog) ;
+		for (i = 0 ; i < PINOUT_DEMO_COUNT ; ++i)
+		{
+			d = &pinoutDemoBoards [i] ;
+			printf ("  %-14s %-12s %2d pins%s\n", d->key, d->label, pinoutDemoPins (d),
+				(pinoutFindModel (d->model) != NULL) ? "   verified on hardware" : "") ;
+		}
+		return ;
+	}
+
+	for (i = 0 ; i < PINOUT_DEMO_COUNT ; ++i)
+		if (strcasecmp (pinoutDemoBoards [i].key, key) == 0)
+			d = &pinoutDemoBoards [i] ;
+
+	if (d == NULL)
+	{
+		fprintf (stderr, "%s: unknown board \"%s\", \"%s pinout --demo\" lists them.\n", prog, key, prog) ;
+		exit (EXIT_FAILURE) ;
+	}
+
+	count = pinoutDemoPins (d) ;
+	memset (pins, 0, sizeof (pins)) ;
+
+	for (phys = 1 ; phys <= count ; ++phys)
+	{
+		pinout_pin *p = &pins [phys - 1] ;
+
+		p->name = (d->physNames [phys] != NULL) ? d->physNames [phys] : "" ;
+		p->wpi  = d->physToWpi [phys] ;
+		p->gpio = -1 ;
+		p->mode = (p->wpi == -1) ? NULL : "OFF" ;
+	}
+
+	printf ("Demo of %s (%s): names and wPi numbers are wiringOP's own tables,\n", d->label, d->key) ;
+	printf ("no hardware was read, so the pin state below is a placeholder.\n\n") ;
+
+	m = pinoutFindModel (d->model) ;
+	pinoutRender (stdout, (m != NULL) ? m->board : NULL, pins, count, 0, 0,
+		(flags & ~PINOUT_SHOW_GPIO) | PINOUT_DEMO) ;
+}
+
+void doPinout (int argc, char *argv [])
+{
+	const pinoutModel *m ;
+	const char *demoKey = NULL ;
+	pinout_pin pins [64] ;
+	int model = -1, flags = 0, demo = FALSE ;
+	int i, phys, pin, tmp ;
+
+	for (i = 2 ; i < argc ; ++i)
+	{
+		/**/ if (strcasecmp (argv [i], "--wpi")        == 0) flags |= PINOUT_SHOW_WPI ;
+		else if (strcasecmp (argv [i], "--gpio")       == 0) flags |= PINOUT_SHOW_GPIO ;
+		else if (strcasecmp (argv [i], "--monochrome") == 0) flags |= PINOUT_MONOCHROME ;
+		else if (strcasecmp (argv [i], "--color")      == 0) flags |= PINOUT_FORCE_COLOR ;
+		else if (strcasecmp (argv [i], "--demo")       == 0)
+		{
+			demo = TRUE ;
+			if ((i + 1 < argc) && (argv [i + 1][0] != '-'))
+				demoKey = argv [++i] ;
+		}
+		else
+			pinoutUsage (argv [0]) ;
+	}
+
+	if (demo)
+	{
+		pinoutDemo (argv [0], demoKey, flags) ;
+		return ;
+	}
+
+	if (wiringPiNodes != NULL)
+	{
+		fprintf (stderr, "%s: pinout does not work with extension modules, use readall.\n", argv [0]) ;
+		exit (EXIT_FAILURE) ;
+	}
+
+	piBoardId (&model) ;
+
+	if ((m = pinoutFindModel (model)) == NULL)
+	{
+		fprintf (stderr, "%s: pinout has not been verified on this board yet.\n", argv [0]) ;
+		for (i = 0 ; i < PINOUT_DEMO_COUNT ; ++i)
+			if (pinoutDemoBoards [i].model == model)
+				fprintf (stderr, "Preview it with \"%s pinout --demo %s\", the README says how to add a board.\n",
+					argv [0], pinoutDemoBoards [i].key) ;
+		fprintf (stderr, "\"%s readall\" works on every board.\n", argv [0]) ;
+		exit (EXIT_FAILURE) ;
+	}
+
+	tmp = wiringPiDebug ;
+	wiringPiDebug = FALSE ;
+
+	memset (pins, 0, sizeof (pins)) ;
+
+	for (phys = 1 ; phys <= m->pinCount ; ++phys)
+	{
+		pinout_pin *p = &pins [phys - 1] ;
+
+		p->name = (m->physNames [phys] != NULL) ? m->physNames [phys] : "" ;
+		p->wpi  = m->physToWpi [phys] ;
+		p->gpio = -1 ;
+		p->mode = NULL ;
+
+		if (p->wpi == -1)
+			continue ;
+
+		p->gpio = physPinToGpio (phys) ;
+
+		if (wpMode == WPI_MODE_GPIO)
+			pin = p->gpio ;
+		else if (wpMode == WPI_MODE_PHYS)
+			pin = phys ;
+		else
+			pin = p->wpi ;
+
+		p->mode  = m->alts [getAlt (pin)] ;
+		p->value = digitalRead (pin) ;
+		m->socName (p->gpio, p->soc, sizeof (p->soc)) ;
+	}
+
+	wiringPiDebug = tmp ;
+
+	pinoutRender (stdout, pinoutDtModelIs (m->dtModel) ? m->board : NULL,
+		pins, m->pinCount, pinoutRamMB (), 0, flags) ;
 }
 
 
