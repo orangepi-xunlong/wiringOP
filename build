@@ -84,6 +84,7 @@ fi
 
 if [ x$1 = "xdebian" ]; then
   here=`pwd`
+  ./newVersion
   echo "removing old libs"
   cd debian-template/wiringPi
   rm -rf usr

@@ -3,7 +3,7 @@ Version: 2.58
 Section: libraries
 Priority: optional
 Architecture: arm64
-Depends: libc6
+Depends: libc6 (>= 2.31), libcrypt1
 Maintainer: Boby Lee <leeboby@aliyun.com>
 Description: The wiringPi libraries for the OrangePi, headers and gpio command
   Libraries to allow GPIO access on a Raspberry Pi from C and C++

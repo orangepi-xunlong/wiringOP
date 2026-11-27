@@ -440,6 +440,60 @@ typedef struct {
 
 /*********** Rockchip RK3566 *************/
 
+/*********** Rockchip RK3576 *************/
+
+//gpio0~gpio4 register base addr
+#define RK3576_GPIO0_BASE                       0x27320000U
+#define RK3576_GPIO1_BASE                       0x2ae10000U
+#define RK3576_GPIO2_BASE                       0x2ae20000U
+#define RK3576_GPIO3_BASE                       0x2ae30000U
+#define RK3576_GPIO4_BASE                       0x2ae40000U
+
+//gpio offset
+#define RK3576_GPIO_SWPORT_DR_L_OFFSET          0x00U
+#define RK3576_GPIO_SWPORT_DR_H_OFFSET          0x04U
+#define RK3576_GPIO_SWPORT_DDR_L_OFFSET         0x08U
+#define RK3576_GPIO_SWPORT_DDR_H_OFFSET         0x0cU
+#define RK3576_GPIO_EXT_PORT_OFFSET             0x70U
+
+#define RK3576_PMU0_IOC_BASE                    0x26040000U
+#define RK3576_PMU1_IOC_BASE                    0x26042000U
+#define RK3576_TOP_IOC_BASE                     0x26044000U
+#define RK3576_VCCIO_IOC_BASE                   0x26046000U
+#define RK3576_VCCIO6_IOC_BASE                  0x2604a000U
+#define RK3576_VCCIO7_IOC_BASE                  0x2604b000U
+#define RK3576_GPIO4C_IOMUX_OFFSET              0x390U
+#define RK3576_GPIO4D_IOMUX_OFFSET              0x398U
+
+#define RK3576_CRU_BASE                         0x27200000U
+#define RK3576_PMU1CRU_BASE                     0x27220000U
+
+//clock
+#define RK3576_CRU_GATE_CON18_OFFSET            0x848U
+#define RK3576_CRU_GATE_CON18                   (RK3576_CRU_BASE + RK3576_CRU_GATE_CON18_OFFSET)
+#define RK3576_PMUCRU_GATE_CON07_OFFSET         0x81CU
+#define RK3576_PMUCRU_GATE_CON07                (RK3576_PMU1CRU_BASE + 0x81CU)
+
+//iomux + pull up/down
+#define RK3576_GRF_GPIO1A_IOMUX_L_OFFSET        0x00U
+#define RK3576_GRF_GPIO1A_P_OFFSET              0x80U
+#define RK3576_PMU_GRF_GPIO0A_IOMUX_L_OFFSET    0x00U
+#define RK3576_PMU_GRF_GPIO0A_P_OFFSET          0x20U
+
+typedef struct {
+	unsigned int * gpio0_base;
+	unsigned int * gpio1_base;
+	unsigned int * gpio2_base;
+	unsigned int * gpio3_base;
+	unsigned int * gpio4_base;
+
+	unsigned int * pmu0_ioc_base;
+	unsigned int * cru_base;
+	unsigned int * pmu1_cru_base;
+} rk3576_soc_info;
+
+/*********** Rockchip RK3576 *************/
+
 
 /*********** Rockchip RK3399 *************/
 
@@ -888,6 +942,10 @@ extern int wiringPiDebug;
 #define PI_MODEL_ZERO_3_W        111
 #define PI_MODEL_ZERO_4          112
 
+/* Rockchip RK3576 */
+#define PI_MODEL_4_ULTRA         120
+#define PI_MODEL_ZERO_3_W_PRO     123
+
 extern const char *piModelNames    [16] ;
 
 extern const char *piRevisionNames [16] ;
@@ -921,7 +979,7 @@ struct wiringPiNodeStruct
   int     pinMax ;
 
   int          fd ;	// Node specific
-  unsigned int data0 ;	//  ditto
+  unsigned long data0 ;	//  ditto (pointer-sized: pseudoPins stores a pointer here)
   unsigned int data1 ;	//  ditto
   unsigned int data2 ;	//  ditto
   unsigned int data3 ;	//  ditto

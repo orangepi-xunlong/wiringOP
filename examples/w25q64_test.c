@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "w25q64.h"
+#include "wiringPiSPI.h"
 
 #define SPI_SPEED 2000000
 
@@ -65,7 +66,7 @@ int main(int argc, char *argv[]) {
     const char *spi_dev = "/dev/spidev0.0";
     int channel = 0, port = 0;
     uint8_t buf[256];    
-    uint8_t wdata[16];   
+    uint8_t wdata[26];
     uint8_t i;
     uint16_t n;          
     int opt;

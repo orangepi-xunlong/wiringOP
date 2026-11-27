@@ -284,6 +284,25 @@ static int ORANGEPI_PIN_MASK_4A[12][32] =  //[BANK]  [INDEX]
 	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PE
 };
 
+static int ORANGEPI_PIN_MASK_4_ULTRA[5][32] =  //[BANK]	[INDEX]
+{
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1, 6,-1, -1, 1, 2,-1, 4, 5,-1,-1,  0, 1,-1,-1, 4, 5,-1,-1,},//GPIO0
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO1
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1, 3,-1,-1,-1,-1,  0, 1, 2, 3, 4, 5, 6, 7,  0, 1, 2, 3, 4, 5, 6, 7,},//GPIO2
+	{-1,-1, 2, 3,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO3
+	{-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1, 4, 5,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,},//GPIO4
+};
+
+/* Only the 28 GPIOs routed to the Zero 3W Pro GP40 header. */
+static int ORANGEPI_PIN_MASK_ZERO_3_W_PRO[5][32] =
+{
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 6,-1,-1, 1, 2,-1, 4, 5,-1,-1,-1,-1,-1,-1, 4, 5,-1,-1,},//GPIO0
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//GPIO1
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 3,-1,-1,-1,-1, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7,},//GPIO2
+	{-1,-1, 2, 3,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//GPIO3
+	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 4, 5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//GPIO4
+};
+
 static int ORANGEPI_PIN_MASK_4_PRO[12][32] =  //[BANK]  [INDEX]
 {
 	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},//PA
@@ -725,6 +744,7 @@ rk3328_soc_info rk3328_soc_info_t;
 rk3399_soc_info rk3399_soc_info_t;
 rk3588_soc_info rk3588_soc_info_t;
 rk3566_soc_info rk3566_soc_info_t;
+rk3576_soc_info rk3576_soc_info_t;
 s905d3_gpio_info s905d3_gpio_info_t;
 a310b_gpio_info a310b_gpio_info_t;
 a310p_gpio_info a310p_gpio_info_t;
@@ -1003,6 +1023,29 @@ int pinToGpio_4A[64] =
 	266,  44,     //24,25
 	 39,  40,     //26,27
 
+	-1,  -1,      //28,29
+	-1,  -1,      //30,31
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 47
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 63
+};
+
+int pinToGpio_4_ULTRA[64] =
+{
+	89,  88,     // 0, 1
+	86,  28,     // 2, 3
+	29,  87,     // 4  5
+	92,  90,     // 6, 7
+	91,  93,     // 8, 9
+	94,  82,     //10,11
+	83,  80,     //12,13
+	85,  84,     //14,15
+	81,  18,     //16,17
+	17,  75,     //18,19
+	20,  14,     //20,21
+	95,  21,     //22,23
+	98,  99,     //24,25
+	148, 149,     //26,27
 	-1,  -1,      //28,29
 	-1,  -1,      //30,31
 
@@ -1946,6 +1989,34 @@ int physToGpio_4A[64] =
 	 38, 266,
 	 44,  39,
 	 -1,  40,
+
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	   // ... 56
+	-1, -1, -1, -1, -1, -1, -1, 			 		   // ... 63
+};
+
+int physToGpio_4_ULTRA[64] =
+{
+	 -1,
+	 -1,  -1,
+	 89,  -1,
+	 88,  -1,
+	 86,  28,
+	 -1,  29,
+	 87,  92,
+	 90,  -1,
+	 91,  93,
+	 -1,  94,
+	 82,  -1,
+	 83,  80,
+	 85,  84,
+	 -1,  81,
+	 18,  17,
+	 75,  -1,
+	 20,  14,
+	 95,  -1,
+	 21,  98,
+	 99, 148,
+	 -1, 149,
 
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	   // ... 56
 	-1, -1, -1, -1, -1, -1, -1, 			 		   // ... 63
@@ -3027,6 +3098,7 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepizero2.",           14) == 0) { *model = PI_MODEL_ZERO_2; }
 	else if (strncmp(revision, "orangepizero2w.",          14) == 0) { *model = PI_MODEL_ZERO_2_W; }
 	else if (strncmp(revision, "orangepizero3.",           14) == 0) { *model = PI_MODEL_ZERO_2; }
+	else if (strncmp(revision, "orangepizero3wpro.",       18) == 0) { *model = PI_MODEL_ZERO_3_W_PRO; }
 	else if (strncmp(revision, "orangepizero3w.",          14) == 0) { *model = PI_MODEL_ZERO_3_W; }
 	else if (strncmp(revision, "orangepizero4.",           13) == 0) { *model = PI_MODEL_ZERO_4; }
 	else if (strncmp(revision, "orangepizero3plus.",       18) == 0) { *model = PI_MODEL_ZERO_3_PLUS; }
@@ -3036,6 +3108,7 @@ void piBoardId (int * model)
 	else if (strncmp(revision, "orangepi4.",               10) == 0) { *model = PI_MODEL_4; }
 	else if (strncmp(revision, "orangepi4a.",              11) == 0) { *model = PI_MODEL_4A; }
 	else if (strncmp(revision, "orangepi4pro.",            13) == 0) { *model = PI_MODEL_4_PRO; }
+	else if (strncmp(revision, "orangepi4ultra.",          15) == 0) { *model = PI_MODEL_4_ULTRA; }
 	else if (strncmp(revision, "orangepi4-lts.",           14) == 0) { *model = PI_MODEL_4_LTS; }
 	else if (strncmp(revision, "orangepir1plus.",          15) == 0) { *model = PI_MODEL_R1_PLUS; }
 	else if (strncmp(revision, "orangepi-r1plus.",         16) == 0) { *model = PI_MODEL_R1_PLUS; }
@@ -5425,6 +5498,17 @@ int wiringPiSetup (void)
 			physToGpio = physToGpio_4A;
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_4A;
 			break;
+		case PI_MODEL_ZERO_3_W_PRO:
+			/* GP40 numbering matches 4 Ultra; allowed GPIOs remain board-specific. */
+			pinToGpio = pinToGpio_4_ULTRA;
+			physToGpio = physToGpio_4_ULTRA;
+			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_ZERO_3_W_PRO;
+			break;
+		case PI_MODEL_4_ULTRA:
+			pinToGpio =  pinToGpio_4_ULTRA;
+			physToGpio = physToGpio_4_ULTRA;
+			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_4_ULTRA;
+			break;
 		case PI_MODEL_4_PRO:
 			pinToGpio =  pinToGpio_4_PRO;
 			physToGpio = physToGpio_4_PRO;
@@ -5547,7 +5631,7 @@ int wiringPiSetup (void)
 			ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_RV2;
 			break;
 		default:
-			printf ("Oops - unable to determine board type... model: %d\n", OrangePiModel);
+			printf ("1 Oops - unable to determine board type... model: %d\n", OrangePiModel);
 			break ;
 	}
 
@@ -5779,6 +5863,44 @@ int wiringPiSetup (void)
 				physToGpio = physToGpio_3B;
 				ORANGEPI_PIN_MASK = ORANGEPI_PIN_MASK_3B;
 			}
+
+			break;
+
+		case PI_MODEL_ZERO_3_W_PRO:
+		case PI_MODEL_4_ULTRA:
+
+			/* GPIO Register */
+			rk3576_soc_info_t.gpio0_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3576_GPIO0_BASE);
+			if ((int32_t)(unsigned long)rk3576_soc_info_t.gpio0_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3576_GPIO0_BASE) failed: %s\n", strerror(errno));
+
+			rk3576_soc_info_t.gpio1_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3576_GPIO1_BASE);
+			if ((int32_t)(unsigned long)rk3576_soc_info_t.gpio1_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3576_GPIO1_BASE) failed: %s\n", strerror(errno));
+
+			rk3576_soc_info_t.gpio2_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3576_GPIO2_BASE);
+			if ((int32_t)(unsigned long)rk3576_soc_info_t.gpio2_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3566_GPIO2_BASE) failed: %s\n", strerror(errno));
+
+			rk3576_soc_info_t.gpio3_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3576_GPIO3_BASE);
+			if ((int32_t)(unsigned long)rk3576_soc_info_t.gpio3_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3576_GPIO3_BASE) failed: %s\n", strerror(errno));
+
+			rk3576_soc_info_t.gpio4_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3576_GPIO4_BASE);
+			if ((int32_t)(unsigned long)rk3576_soc_info_t.gpio4_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3576_GPIO4_BASE) failed: %s\n", strerror(errno));
+
+			rk3576_soc_info_t.cru_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3576_CRU_BASE);
+			if ((int32_t)(unsigned long)rk3576_soc_info_t.cru_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3576_CRU_BASE) failed: %s\n", strerror(errno));
+
+			rk3576_soc_info_t.pmu0_ioc_base = (uint32_t *)mmap(0, BLOCK_SIZE * 12, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3576_PMU0_IOC_BASE);
+			if ((int32_t)(unsigned long)rk3576_soc_info_t.pmu0_ioc_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3576_PMU0_IOC_BASE) failed: %s\n", strerror(errno));
+
+			rk3576_soc_info_t.pmu1_cru_base = (uint32_t *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, RK3576_PMU1CRU_BASE);
+			if ((int32_t)(unsigned long)rk3576_soc_info_t.pmu1_cru_base == -1)
+				return wiringPiFailure(WPI_ALMOST, "wiringPiSetup: mmap (RK3576_PMU_CRU_BASE) failed: %s\n", strerror(errno));
 
 			break;
 
@@ -6074,6 +6196,14 @@ int wiringPiSetupSys (void)
 			pinToGpio =  pinToGpio_4A;
 			physToGpio = physToGpio_4A;
 			break;
+		case PI_MODEL_ZERO_3_W_PRO:
+			pinToGpio = pinToGpio_4_ULTRA;
+			physToGpio = physToGpio_4_ULTRA;
+			break;
+		case PI_MODEL_4_ULTRA:
+			pinToGpio =  pinToGpio_4_ULTRA;
+			physToGpio = physToGpio_4_ULTRA;
+			break;
 		case PI_MODEL_4_PRO:
 			pinToGpio =  pinToGpio_4_PRO;
 			physToGpio = physToGpio_4_PRO;
@@ -6266,6 +6396,46 @@ unsigned int readR(unsigned int addr)
 				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.pwm2_base + mmap_seek));
 			else if(mmap_base == RK3566_PWM3_BASE)
 				val = *((unsigned int *)((unsigned char *)rk3566_soc_info_t.pwm3_base + mmap_seek));
+
+			if (wiringPiDebug)
+				printf("read %#x from [%#x]\n",val,addr);
+
+			return val;
+
+			break;
+
+		case PI_MODEL_ZERO_3_W_PRO:
+		case PI_MODEL_4_ULTRA:
+
+			mmap_base = (addr & (0xfffff000));
+			mmap_seek = (addr - mmap_base);
+
+			if(mmap_base == RK3576_GPIO0_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio0_base + mmap_seek));
+			else if(mmap_base == RK3576_GPIO1_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio1_base + mmap_seek));
+			else if(mmap_base == RK3576_GPIO2_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio2_base + mmap_seek));
+			else if(mmap_base == RK3576_GPIO3_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio3_base + mmap_seek));
+			else if(mmap_base == RK3576_GPIO4_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio4_base + mmap_seek));
+			else if(mmap_base == RK3576_CRU_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.cru_base + mmap_seek));
+			else if(mmap_base == RK3576_PMU1CRU_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu1_cru_base + mmap_seek));
+			else if(mmap_base == RK3576_PMU0_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + mmap_seek));
+			else if(mmap_base == RK3576_PMU1_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0x2000 + mmap_seek));
+			else if(mmap_base == RK3576_TOP_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0x4000 + mmap_seek));
+			else if(mmap_base == RK3576_VCCIO_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0x6000 + mmap_seek));
+			else if(mmap_base == RK3576_VCCIO6_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0xa000 + mmap_seek));
+			else if(mmap_base == RK3576_VCCIO7_IOC_BASE)
+				val = *((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0xb000 + mmap_seek));
 
 			if (wiringPiDebug)
 				printf("read %#x from [%#x]\n",val,addr);
@@ -6548,6 +6718,44 @@ void writeR(unsigned int val, unsigned int addr)
 
 			break;
 
+		case PI_MODEL_ZERO_3_W_PRO:
+		case PI_MODEL_4_ULTRA:
+
+			mmap_base = (addr & (~0xfff));
+			mmap_seek = (addr - mmap_base);
+
+			if(mmap_base == RK3576_GPIO0_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio0_base + mmap_seek)) = val;
+			else if(mmap_base == RK3576_GPIO1_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio1_base + mmap_seek)) = val;
+			else if(mmap_base == RK3576_GPIO2_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio2_base + mmap_seek)) = val;
+			else if(mmap_base == RK3576_GPIO3_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio3_base + mmap_seek)) = val;
+			else if(mmap_base == RK3576_GPIO4_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.gpio4_base + mmap_seek)) = val;
+			else if(mmap_base == RK3576_CRU_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.cru_base + mmap_seek)) = val;
+			else if(mmap_base == RK3576_PMU1CRU_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu1_cru_base + mmap_seek)) = val;
+			else if(mmap_base == RK3576_PMU0_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + mmap_seek)) = val;
+			else if(mmap_base == RK3576_PMU1_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0x2000 + mmap_seek)) = val;
+			else if(mmap_base == RK3576_TOP_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0x4000 + mmap_seek)) = val;
+			else if(mmap_base == RK3576_VCCIO_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0x6000 + mmap_seek)) = val;
+			else if(mmap_base == RK3576_VCCIO6_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0xa000 + mmap_seek)) = val;
+			else if(mmap_base == RK3576_VCCIO7_IOC_BASE)
+				*((unsigned int *)((unsigned char *)rk3576_soc_info_t.pmu0_ioc_base + 0xb000 + mmap_seek)) = val;
+
+			if (wiringPiDebug)
+				printf("write %#x to [%#x]\n",val,addr);
+
+			break;
+
 		case PI_MODEL_3_PLUS:
 
 			mmap_base = (addr & 0xfffff000);
@@ -6770,6 +6978,53 @@ int orangepi_get_gpio_mode(int pin)
 				}
 
 				return mode + 1; //如果不是gpio模式，返回的alt，从2开始，0和1是in和out
+			}
+			break;
+
+		case PI_MODEL_ZERO_3_W_PRO:
+		case PI_MODEL_4_ULTRA:
+
+			rk3588_bus_ioc_phyaddr = RK3576_TOP_IOC_BASE + (0x20 * bank) + ((index >> 2) << 2);
+			if(bank == 0){
+				if (index >= 12)
+					rk3588_pmu1_ioc_phyaddr = RK3576_PMU1_IOC_BASE + ((index - 12) >> 2 << 2);
+				else
+					rk3588_pmu1_ioc_phyaddr = RK3576_PMU0_IOC_BASE + (index >> 2 << 2);
+
+				ddr_phyaddr = RK3576_GPIO0_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+			}
+			else if(bank == 1){
+				ddr_phyaddr = RK3576_GPIO1_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+			}
+			else if(bank == 2){
+				ddr_phyaddr = RK3576_GPIO2_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+			}
+			else if(bank == 3){
+				ddr_phyaddr = RK3576_GPIO3_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+			}
+			else if(bank == 4){
+				/* GPIO4_C/D mux registers live in VCCIO6/7, not TOP_IOC. */
+				if (index >= 24)
+					rk3588_bus_ioc_phyaddr = RK3576_VCCIO7_IOC_BASE + RK3576_GPIO4D_IOMUX_OFFSET + (((index - 24) >> 2) << 2);
+				else if (index >= 16)
+					rk3588_bus_ioc_phyaddr = RK3576_VCCIO6_IOC_BASE + RK3576_GPIO4C_IOMUX_OFFSET + (((index - 16) >> 2) << 2);
+				ddr_phyaddr = RK3576_GPIO4_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+			}
+
+			if (ORANGEPI_PIN_MASK[bank][index] != -1) {
+
+				if (bank == 0)
+					regval = readR(rk3588_pmu1_ioc_phyaddr);
+				else
+					regval = readR(rk3588_bus_ioc_phyaddr);
+
+				mode = (regval >> ((index % 4) << 2)) & 0xf;
+				if(mode == 0){
+					regval = readR(ddr_phyaddr);
+					return (regval >> (index % 16)) & 0x1;
+				}
+
+				return mode + 1;
 			}
 			break;
 
@@ -7630,6 +7885,111 @@ int orangepi_set_gpio_mode(int pin, int mode)
 			}
 
 			break;
+		case PI_MODEL_ZERO_3_W_PRO:
+		case PI_MODEL_4_ULTRA:
+
+			rk3588_bus_ioc_phyaddr = RK3576_TOP_IOC_BASE + (0x20 * bank) + ((index >> 2) << 2);
+			if(bank == 0){
+				if (index >= 12)
+					rk3588_bus_ioc_phyaddr = RK3576_PMU1_IOC_BASE + ((index - 12) >> 2 << 2);
+				else
+					rk3588_bus_ioc_phyaddr = RK3576_PMU0_IOC_BASE + (index >> 2 << 2);
+
+				if (wiringPiDebug)
+					printf("%#x\n", rk3588_bus_ioc_phyaddr);
+				ddr_phyaddr = RK3576_GPIO0_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+				cru_phyaddr = RK3576_PMUCRU_GATE_CON07;
+				cru_val = 0xffff9fff;
+			}
+			else if(bank == 1){
+				ddr_phyaddr = RK3576_GPIO1_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+				cru_phyaddr = RK3576_CRU_GATE_CON18;
+				cru_val = 0xffff3fff;
+			}
+			else if(bank == 2){
+				ddr_phyaddr = RK3576_GPIO2_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+				cru_phyaddr = RK3576_CRU_GATE_CON18;
+				cru_val = 0xffffffc0;
+			}
+			else if(bank == 3){
+				ddr_phyaddr = RK3576_GPIO3_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+				cru_phyaddr = RK3576_CRU_GATE_CON18;
+				cru_val = 0xffffffc0;
+			}
+			else if(bank == 4){
+				/* GPIO4_C/D mux registers live in VCCIO6/7, not TOP_IOC. */
+				if (index >= 24)
+					rk3588_bus_ioc_phyaddr = RK3576_VCCIO7_IOC_BASE + RK3576_GPIO4D_IOMUX_OFFSET + (((index - 24) >> 2) << 2);
+				else if (index >= 16)
+					rk3588_bus_ioc_phyaddr = RK3576_VCCIO6_IOC_BASE + RK3576_GPIO4C_IOMUX_OFFSET + (((index - 16) >> 2) << 2);
+				ddr_phyaddr = RK3576_GPIO4_BASE + RK3576_GPIO_SWPORT_DDR_L_OFFSET + ((index / 16) << 2);
+				cru_phyaddr = RK3576_CRU_GATE_CON18;
+				cru_val = 0xffffffc0;
+			}
+
+			/* Ignore unused gpio */
+			if (ORANGEPI_PIN_MASK[bank][index] != -1)
+			{
+				if(INPUT == mode)
+				{
+					//regval = readR(cru_phyaddr);
+					//regval |= 0xffff0000;
+					//regval &= cru_val;
+					//writeR(regval, cru_phyaddr);
+					//regval = readR(cru_phyaddr);
+
+					regval = readR(rk3588_bus_ioc_phyaddr);
+					regval |= 0xffff0000;
+					regval &= ~(0xf << ((index % 4) << 2));
+					writeR(regval, rk3588_bus_ioc_phyaddr);
+					regval = readR(rk3588_bus_ioc_phyaddr);
+
+					regval = readR(ddr_phyaddr);
+					regval |= 0xffff0000;
+					regval &= ~(1 << (index % 16));
+					writeR(regval, ddr_phyaddr);
+
+					if (wiringPiDebug) {
+						regval = readR(ddr_phyaddr);
+						printf("Input mode set over reg val: %#x\n",regval);
+					}
+				} 
+				else if(OUTPUT == mode)
+				{
+					//regval = readR(cru_phyaddr);
+					//regval |= 0xffff0000;
+					//regval &= cru_val;
+					//writeR(regval, cru_phyaddr);
+					//regval = readR(cru_phyaddr);
+
+					regval = readR(rk3588_bus_ioc_phyaddr);
+					regval |= 0xffff0000;
+					regval &= ~(0xf << ((index % 4) << 2));
+
+					writeR(regval, rk3588_bus_ioc_phyaddr);
+					regval = readR(rk3588_bus_ioc_phyaddr);
+
+					regval = readR(ddr_phyaddr);
+					regval |= 0xffff0000;
+					regval |= (1 << (index % 16));
+					writeR(regval, ddr_phyaddr);
+
+					if (wiringPiDebug){
+						regval = readR(ddr_phyaddr);
+						printf("OUTPUT mode set over reg val: %#x\n",regval);
+					}
+				}
+				else
+				{
+					printf("Unknow mode\n");
+				}
+			}
+			else
+			{
+				printf("Pin mode failed!\n");
+			}
+
+			break;
 
 		case PI_MODEL_800: case PI_MODEL_4_LTS:
 		case PI_MODEL_4:   case PI_MODEL_RK3399:
@@ -8156,7 +8516,7 @@ int orangepi_set_gpio_mode(int pin, int mode)
 						else
 							iomux_val = 3;
 
-						if( (index <= 1) && PWM_OUTPUT == mode )
+						if( (index <=1) && PWM_OUTPUT == mode )
 							iomux_val = 0;
 
 						break;
@@ -8673,6 +9033,70 @@ int orangepi_digitalWrite(int pin, int value)
 
 			break;
 
+		case PI_MODEL_ZERO_3_W_PRO:
+		case PI_MODEL_4_ULTRA:
+
+			if(bank == 0){
+				dr_phyaddr = RK3576_GPIO0_BASE + RK3576_GPIO_SWPORT_DR_L_OFFSET + ((index / 16) << 2);
+				//cru_phyaddr = RK3588_PMU1CRU_BASE + RK3588_PMU1CRU_GATE_CON5_OFFSET;
+				//cru_val = 0xffff9fff;
+			}
+			else if(bank == 1){
+				dr_phyaddr = RK3576_GPIO1_BASE + RK3576_GPIO_SWPORT_DR_L_OFFSET + ((index / 16) << 2);
+				//cru_phyaddr = RK3588_CRU_BASE + RK3588_CRU_GATE_CON16_OFFSET;
+				//cru_val = 0xffff3fff;
+			}
+			else if(bank == 2){
+				dr_phyaddr = RK3576_GPIO2_BASE + RK3576_GPIO_SWPORT_DR_L_OFFSET + ((index / 16) << 2);
+				//cru_phyaddr = RK3588_CRU_BASE + RK3588_CRU_GATE_CON17_OFFSET;
+				//cru_val = 0xffffffc0;
+			}
+			else if(bank == 3){
+				dr_phyaddr = RK3576_GPIO3_BASE + RK3576_GPIO_SWPORT_DR_L_OFFSET + ((index / 16) << 2);
+				//cru_phyaddr = RK3588_CRU_BASE + RK3588_CRU_GATE_CON17_OFFSET;
+				//cru_val = 0xffffffc0;
+			}
+			else if(bank == 4){
+				dr_phyaddr = RK3576_GPIO4_BASE + RK3576_GPIO_SWPORT_DR_L_OFFSET + ((index / 16) << 2);
+				//cru_phyaddr = RK3588_CRU_BASE + RK3588_CRU_GATE_CON17_OFFSET;
+				//cru_val = 0xffffffc0;
+			}
+
+			/* Ignore unused gpio */
+			if (ORANGEPI_PIN_MASK[bank][index] != -1)
+			{
+				//regval = readR(cru_phyaddr);
+				//regval &= cru_val;
+				//writeR(regval, cru_phyaddr);
+
+				if(0 == value)
+				{
+					regval = readR(dr_phyaddr);
+					regval |= 0xffff0000;
+					regval &= ~(1 << (index % 16));
+					writeR(regval, dr_phyaddr);
+					regval = readR(dr_phyaddr);
+					if (wiringPiDebug)
+						printf("LOW val set over reg val: 0x%x\n", regval);
+				}
+				else
+				{
+					regval = readR(dr_phyaddr);
+					regval |= 0xffff0000;
+					regval |= (1 << (index % 16));
+					writeR(regval, dr_phyaddr);
+					regval = readR(dr_phyaddr);
+					if (wiringPiDebug)
+						printf("HIGH val set over reg val: 0x%x\n", regval);
+				}
+			} 
+			else
+			{
+				printf("Pin mode failed!\n");
+			}
+
+			break;
+
 		case PI_MODEL_800: case PI_MODEL_4_LTS:
 		case PI_MODEL_4:   case PI_MODEL_RK3399:
 
@@ -9077,6 +9501,22 @@ int orangepi_digitalRead(int pin)
 
 			break;
 
+		case PI_MODEL_ZERO_3_W_PRO:
+		case PI_MODEL_4_ULTRA:
+
+			if(bank == 0)
+				phyaddr = RK3576_GPIO0_BASE + RK3576_GPIO_EXT_PORT_OFFSET;
+			else if(bank == 1)
+				phyaddr = RK3576_GPIO1_BASE + RK3576_GPIO_EXT_PORT_OFFSET;
+			else if(bank == 2)
+				phyaddr = RK3576_GPIO2_BASE + RK3576_GPIO_EXT_PORT_OFFSET;
+			else if(bank == 3)
+				phyaddr = RK3576_GPIO3_BASE + RK3576_GPIO_EXT_PORT_OFFSET;
+			else if(bank == 4)
+				phyaddr = RK3576_GPIO4_BASE + RK3576_GPIO_EXT_PORT_OFFSET;
+
+			break;
+
 		case PI_MODEL_800: case PI_MODEL_4_LTS:
 		case PI_MODEL_4:   case PI_MODEL_RK3399:
 
@@ -9246,6 +9686,31 @@ void OrangePi_set_gpio_pullUpDnControl (int pin, int pud)
 				phyaddr = RK3588_VCCIO3_5_IOC_BASE + RK3588_VCCIO3_5_IOC_GPIO2A_P + (((pin - 64) >> 3) << 2);
 			else if(bank == 4 && index < 18)
 				phyaddr = RK3588_VCCIO6_IOC_BASE + RK3588_VCCIO6_IOC_GPIO4A_P + ((index >> 3) << 2);
+
+			offset = (index % 8) << 1;
+			bit_enable = 3 << ( 16 + offset);
+
+			/* */if (PUD_UP == pud)
+				bit_value = 3;
+			else if (PUD_DOWN == pud)
+				bit_value = 1;
+			else if (PUD_OFF == pud)
+				bit_value = 0;
+
+			break;
+
+		case PI_MODEL_ZERO_3_W_PRO:
+		case PI_MODEL_4_ULTRA:
+			if(bank == 0 && index < 12)
+				phyaddr = RK3576_PMU0_IOC_BASE + RK3588_PMU1_IOC_GPIO0A_P + ((index >> 3) << 2);
+			else if(bank == 0 && index > 11 && index < 31)
+				phyaddr = RK3576_PMU1_IOC_BASE + RK3588_PMU2_IOC_GPIO0B_P + (((index - 8) >> 3) << 2);
+			else if(bank < 4 || (bank == 4 && index < 14))
+				phyaddr = RK3576_VCCIO_IOC_BASE + RK3588_VCCIO1_4_IOC_GPIO1A_P + (((pin - 32) >> 3) << 2);
+			else if(bank == 4 && index < 24)
+				phyaddr = RK3576_VCCIO6_IOC_BASE + 0x148;
+			else if(bank == 4 && index < 26 )
+				phyaddr = RK3576_VCCIO7_IOC_BASE + 0x14c;
 
 			offset = (index % 8) << 1;
 			bit_enable = 3 << ( 16 + offset);

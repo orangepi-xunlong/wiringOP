@@ -115,7 +115,7 @@ install-deb:	$(DYNAMIC)
 	$Q echo "[Install Dynamic Lib: deb]"
 	install -m 0755 -d							$(CURDIR)/../debian-template/wiringPi/usr/lib
 	install -m 0755 libwiringPi.so.$(VERSION)				$(CURDIR)/../debian-template/wiringPi/usr/lib/libwiringPi.so.$(VERSION)
-	ln -sf $(CURDIR)/../debian-template/wiringPi/usr/lib/libwiringPi.so.$(VERSION)	$(CURDIR)/../debian-template/wiringPi/usr/lib/libwiringPi.so
+	ln -sf libwiringPi.so.$(VERSION)	$(CURDIR)/../debian-template/wiringPi/usr/lib/libwiringPi.so
 
 .PHONY:	uninstall
 uninstall:
