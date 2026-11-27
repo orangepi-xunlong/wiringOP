@@ -219,7 +219,6 @@ int wiringPiI2CSetupInterface (const char *device, int devId)
 
 int wiringPiI2CSetup (const int devId)
 {
-	int rev ;
 	const char *device ;
 	int model;
 

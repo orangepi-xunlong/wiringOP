@@ -42,6 +42,7 @@
 
 void myDigitalWrite (struct wiringPiNodeStruct *node, int pin, int value)
 {
+  (void)node ;
   digitalWrite (pin + 16, value) ;
 }
 
@@ -71,6 +72,7 @@ int myDigitalRead (struct wiringPiNodeStruct *node, int pin)
 
 void myPullUpDnControl (struct wiringPiNodeStruct *node, int pin, int pud)
 {
+  (void)node ;
   pullUpDnControl (pin + 16 + 8, pud) ;
 }
 

@@ -114,7 +114,7 @@ static int clientPstr (int fd, char *s)
   return (write (fd, s, len) == len) ? 0 : -1 ;
 }
 
-static int clientPrintf (const int fd, const char *message, ...)
+static int __attribute__((format(printf, 2, 3))) clientPrintf (const int fd, const char *message, ...)
 {
   va_list argp ;
   char buffer [1024] ;

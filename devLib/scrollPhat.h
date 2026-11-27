@@ -32,7 +32,7 @@ extern void scrollPhatClear      (void) ;
 extern int  scrollPhatPutchar    (int c) ;
 //extern void scrollPhatPutchar    (int c) ;
 extern void scrollPhatPuts       (const char *str) ;
-extern void scrollPhatPrintf     (const char *message, ...) ;
+extern void scrollPhatPrintf     (const char *message, ...) __attribute__((format(printf, 1, 2))) ;
 extern void scrollPhatPrintSpeed (const int cps10) ;
 
 extern void scrollPhatIntensity  (const int percent) ;

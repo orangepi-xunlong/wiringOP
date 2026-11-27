@@ -37,6 +37,7 @@ int oled_close(struct display_info *disp) {
 }
 
 void cleanup(int status, void *disp) {
+	(void)status;
 	oled_close((struct display_info *)disp);
 }
 
@@ -58,7 +59,6 @@ int oled_send(struct display_info *disp, struct sized_array *payload) {
 }
 
 int oled_init(struct display_info *disp) {
-	struct sched_param sch;
 	int status = 0;
 	struct sized_array payload;
 
@@ -109,7 +109,7 @@ void oled_clear(struct display_info *disp) {
 // put string to one of the 8 pages (128x8 px) 
 void oled_putstr(struct display_info *disp, uint8_t line, uint8_t *str) {
 	uint8_t a;
-	int slen = strlen(str);
+	int slen = strlen((const char *)str);
 	uint8_t fwidth = disp->font.width;
 	uint8_t foffset = disp->font.offset;
 	uint8_t fspacing = disp->font.spacing;

@@ -61,7 +61,12 @@ void daemonise (const char *pidFile)
 // Tidying up - reset umask, change to / and close all files
 
   umask (0) ;
-  chdir ("/") ;
+
+  if (chdir ("/") < 0)
+  {
+    syslog (LOG_DAEMON | LOG_ALERT, "Unable to change directory to /: %m") ;
+    exit (EXIT_FAILURE) ;
+  }
 
   for (i = 0 ; i < sysconf (_SC_OPEN_MAX) ; ++i)
     close (i) ;
